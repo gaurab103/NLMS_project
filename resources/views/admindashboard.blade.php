@@ -106,6 +106,7 @@
 </head>
 
 <body>
+    HEllo
     <aside class="sidebar" id="sidebar">
         <a href="{{route('admin')}}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="{{route('students')}}"><i class="fas fa-user-graduate"></i> Manage Students</a>
