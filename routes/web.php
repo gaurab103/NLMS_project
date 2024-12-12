@@ -3,6 +3,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\frontendControler;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('/', function () {
     return view('homepage');
@@ -25,6 +28,11 @@ Route::get('/attendance', function () {
 Route::get('/news', function () {
     return view('news');
 })->name('news');
+
+Route::get('/student/portal/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance.page');
+Route::get('/student/portal/attendance/fetch', [AttendanceController::class, 'fetchAttendance'])->name('attendance.fetch');
+Route::get('/student/portal', [StudentsController::class, 'index']);
+Route::get('/student/portal/profile', [StudentsController::class, 'profile']);
 
 
 
