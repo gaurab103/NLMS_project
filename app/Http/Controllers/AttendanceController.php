@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Attendance;
 
 class AttendanceController extends Controller
 {
+    // Method to fetch attendance data
+    // In AttendanceController.php
+    // In AttendanceController.php
     public function showAttendancePage()
     {
-        try {
-            $attendance = DB::table('attendances')->get();
+        $attendance = Attendance::all(); // Fetch all attendance records
 
-            return view('attendance', ['attendanceRecords' => $attendance]);
-        } catch (\Exception $e) {
-            return view('attendance', ['error' => $e->getMessage()]);
-        }
+        // Ensure attendance data is being passed to the view correctly
+        return view('attendance', ['attendance' => $attendance]);
     }
 }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-4">
         <h2>Attendance Records</h2>
@@ -22,8 +24,19 @@
                     <th>Updated At</th>
                 </tr>
             </thead>
-            <tbody id="attendanceTableBody">
-                
+            <tbody>
+                @foreach ($attendance as $row)
+                    <tr>
+                        <td>{{ $row->id }}</td>
+                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->Std_ID }}</td>
+                        <td>{{ $row->A_ID }}</td>
+                        <td>{{ $row->T_ID }}</td>
+                        <td>{{ $row->status }}</td>
+                        <td>{{ $row->created_at }}</td>
+                        <td>{{ $row->updated_at }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -62,4 +75,5 @@
         });
     </script>
 </body>
+
 </html>

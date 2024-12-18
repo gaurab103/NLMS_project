@@ -356,60 +356,28 @@
         });
 
         document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
-        box.addEventListener('click', () => {
-            document.getElementById('contentRow').style.display = 'none';
-            const profileContent = document.getElementById('profileContent');
-            profileContent.style.display = 'block';
+            box.addEventListener('click', () => {
+                document.getElementById('contentRow').style.display = 'none';
+                const profileContent = document.getElementById('profileContent');
+                profileContent.style.display = 'block';
 
-            fetch('student/portal/attendance')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(attendanceData => {
-                    let tableHTML = `
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Student ID</th>
-                                <th>Attendance ID</th>
-                                <th>Teacher ID</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                    attendanceData.forEach(row => {
-                        tableHTML += `
-                        <tr>
-                            <td>${row.id}</td>
-                            <td>${row.name}</td>
-                            <td>${row.Std_ID}</td>
-                            <td>${row.A_ID}</td>
-                            <td>${row.T_ID}</td>
-                            <td>${row.status}</td>
-                            <td>${row.created_at}</td>
-                            <td>${row.updated_at}</td>
-                        </tr>
-                    `;
+                fetch('/student/portal/attendance')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(htmlContent => {
+                        profileContent.innerHTML = htmlContent;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching profile content:', error);
+                        profileContent.innerHTML =
+                            '<p>Error loading profile content. Please try again later.</p>';
                     });
-                    tableHTML += '</tbody></table>';
-                    profileContent.innerHTML = tableHTML;
-                })
-                .catch(error => {
-                    console.error('Error fetching attendance data:', error);
-                    profileContent.innerHTML =
-                        '<p>Error loading attendance data. Please try again later.</p>';
-                });
+            });
         });
-        });
-
     </script>
 </body>
 
