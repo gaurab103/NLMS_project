@@ -32,6 +32,8 @@ Route::get('/news', function () {
 Route::get('/student/portal/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance.page');
 Route::get('/student/portal', [StudentsController::class, 'index']);
 Route::get('/student/portal/profile', [StudentsController::class, 'profile']);
+Route::get('/student/profile/{id}', [ProfileController::class, 'showProfile'])->name('student.profile');
+
 
 
 

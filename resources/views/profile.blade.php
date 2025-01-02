@@ -3,59 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Student Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
-<style>
-    body{
-        background-color: red;
-    }
-</style>
 <body>
-    <div id="profileContent" class="container mt-4">
-        <header>
-            <h1>Student Profile</h1>
-        </header>
-        <section class="profile">
-            <img src="https://via.placeholder.com/120" alt="Student Image">
-            <div class="details">
-                <h2>John Doe</h2>
-                <p><strong>Age:</strong> 16</p>
-                <p><strong>Grade:</strong> 10</p>
-                <p><strong>Email:</strong> johndoe@student.com</p>
-                <p><strong>Phone:</strong> +1 234 567 890</p>
+    <div class="container mt-5">
+        <h1>Student Profile</h1>
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ $student->name }}</h3>
             </div>
-        </section>
-        <section class="parents">
-            <h3>Parental Details</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Parent Name</th>
-                        <th>Relationship</th>
-                        <th>Occupation</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Jane Doe</td>
-                        <td>Mother</td>
-                        <td>Teacher</td>
-                        <td>+1 234 567 891</td>
-                        <td>janedoe@parent.com</td>
-                    </tr>
-                    <tr>
-                        <td>John Smith</td>
-                        <td>Father</td>
-                        <td>Engineer</td>
-                        <td>+1 234 567 892</td>
-                        <td>johnsmith@parent.com</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+            <div class="card-body">
+                <p><strong>Student ID:</strong> {{ $student->id }}</p>
+                <p><strong>Class ID:</strong> {{ $student->C_ID }}</p>
+                <p><strong>Name:</strong> {{ $student->name }}</p>
+                <p><strong>Address:</strong> {{ $student->Address }}</p>
+                <p><strong>Parent's Name:</strong> {{ $student->Parent_Name }}</p>
+                <p><strong>Contact:</strong> {{ $student->Contact_No }}</p>
+                <p><strong>Email:</strong> {{ $student->Email }}</p>
+                <p><strong>Status:</strong> {{ $student->Stats }}</p>
+                {{-- <p><strong>Name:</strong> {{ $student->name }}</p> --}}
+            </div>
+        </div>
     </div>
 </body>
 </html>
