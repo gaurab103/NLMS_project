@@ -33,6 +33,8 @@ Route::get('/student/portal/attendance', [AttendanceController::class, 'showAtte
 Route::get('/student/portal', [StudentsController::class, 'index']);
 Route::get('/student/portal/profile', [StudentsController::class, 'profile']);
 Route::get('/student/profile/{id}', [ProfileController::class, 'showProfile'])->name('student.profile');
+Route::get('/student/portal/{studentId}', [StudentController::class, 'showPortal']);
+
 
 
 

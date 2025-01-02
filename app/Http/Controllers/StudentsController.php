@@ -41,4 +41,5 @@ class StudentsController extends Controller
             return view('profile', ['error' => 'Error loading student data. Please try again later.']);
         }
     }
+    
 }
