@@ -54,15 +54,11 @@ class StudentsController extends Controller
         }
     }
 
-    // Update student profile
     public function updatepro(Request $request, $id)
     {
         Log::info('Update profile route hit');
         try {
-            // Log incoming request data for debugging
             Log::info('Update request data:', $request->all());
-
-            // Validate the incoming request data
             $request->validate([
                 'name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
@@ -70,11 +66,7 @@ class StudentsController extends Controller
                 'contact_no' => 'required|string|max:20',
                 'email' => 'required|email|max:255',
             ]);
-
-            // Find the student by ID
             $student = Student::findOrFail($id);
-
-            // Update the student's details
             $student->update([
                 'name' => $request->input('name'),
                 'Address' => $request->input('address'),
@@ -82,12 +74,9 @@ class StudentsController extends Controller
                 'Contact_No' => $request->input('contact_no'),
                 'Email' => $request->input('email'),
             ]);
-
-            // Redirect back to the profile with a success message
             return redirect()->route('profile')->with('success', 'Profile updated successfully.');
 
         } catch (\Exception $e) {
-            // Log the error and redirect with an error message if something goes wrong
             Log::error('Error updating student profile: ' . $e->getMessage());
             return redirect()->route('profile')->with('error', 'Error updating profile.');
         }
