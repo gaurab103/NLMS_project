@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Log;
 
 class StudentsController extends Controller
 {
-    // Display student portal
+    // Display the student portal
     public function index()
     {
-        return view("layout");
+        return view('layout');
     }
 
-    // Show student profile
+    // Show the student profile
     public function profile()
     {
         try {
@@ -36,29 +36,31 @@ class StudentsController extends Controller
                 return view('profile')->with('error', 'Student not found.');
             }
 
-            return view('profile')->with('student', $student);
+            return view('profile', compact('student'));
         } catch (\Exception $e) {
             Log::error('Error fetching student profile: ' . $e->getMessage());
-            return view('portal', ['error' => 'Error loading student data. Please try again later.']);
+            return view('profile', ['error' => 'Error loading student data. Please try again later.']);
         }
     }
 
+    // Edit the student profile
     public function editpro($id)
-    {
-        try {
-            $student = Student::findOrFail($id);
-            return view('profileedit', compact('student'));
-        } catch (\Exception $e) {
-            Log::error('Error fetching student for editing: ' . $e->getMessage());
-            return redirect()->route('profile')->with('error', 'Student not found.');
-        }
+{
+    try {
+        $student = Student::findOrFail($id); // Fetch student by ID
+        return view('profileedit', compact('student')); // Pass student data to view
+    } catch (\Exception $e) {
+        Log::error('Error fetching student for editing: ' . $e->getMessage());
+        return redirect()->route('profile')->with('error', 'Student not found.');
     }
+}
 
+
+    // Update the student profile
     public function updatepro(Request $request, $id)
     {
         Log::info('Update profile route hit');
         try {
-            Log::info('Update request data:', $request->all());
             $request->validate([
                 'name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
@@ -66,7 +68,10 @@ class StudentsController extends Controller
                 'contact_no' => 'required|string|max:20',
                 'email' => 'required|email|max:255',
             ]);
+
             $student = Student::findOrFail($id);
+            Log::info('Student before update:', $student->toArray());
+
             $student->update([
                 'name' => $request->input('name'),
                 'Address' => $request->input('address'),
@@ -74,8 +79,10 @@ class StudentsController extends Controller
                 'Contact_No' => $request->input('contact_no'),
                 'Email' => $request->input('email'),
             ]);
-            return redirect()->route('profile')->with('success', 'Profile updated successfully.');
 
+            Log::info('Student after update:', $student->toArray());
+
+            return redirect()->route('profile')->with('success', 'Profile updated successfully.');
         } catch (\Exception $e) {
             Log::error('Error updating student profile: ' . $e->getMessage());
             return redirect()->route('profile')->with('error', 'Error updating profile.');
