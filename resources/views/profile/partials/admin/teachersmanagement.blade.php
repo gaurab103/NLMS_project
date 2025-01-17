@@ -1,4 +1,3 @@
-@include('nav_aside');
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,10 +12,11 @@
             font-family: 'Roboto', sans-serif;
             background-color: #f9f9f9;
         }
+
         .container {
             margin-top: 50px;
-            margin-left: 250px;
         }
+
         .card {
             border-radius: 8px;
             border: none;
@@ -32,22 +32,6 @@
         .table th {
             vertical-align: middle;
         }
-
-        .btn-responsive {
-            font-size: 14px;
-            padding: 6px 12px;
-        }
-
-        @media (max-width: 768px) {
-            h3 {
-                font-size: 18px;
-            }
-
-            .btn-responsive {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-        }
     </style>
 </head>
 
@@ -56,7 +40,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3>Manage Teachers</h3>
-            <button class="btn btn-primary btn-responsive" data-toggle="modal" data-target="#addTeacherModal">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addTeacherModal">
                 <i class="fas fa-plus"></i> Add Teacher
             </button>
         </div>
@@ -65,48 +49,63 @@
         <div class="card mb-4">
             <div class="card-body">
                 <form id="filterForm" class="form-inline">
-                    <label class="mr-2">Filter by level:</label>
+                    <label class="mr-2">Filter by Department:</label>
                     <select class="form-control mr-3" id="departmentFilter">
                         <option value="">All</option>
-                        <option value="Mathematics">primary level</option>
-                        <option value="Science">basic level</option>
-                        <option value="English">Secondary level</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
                     </select>
 
                     <input type="text" class="form-control mr-3" id="searchInput" placeholder="Search by Name or ID">
-                    <button type="button" class="btn btn-secondary btn-responsive" onclick="applyFilters()">Apply</button>
+                    <button type="button" class="btn btn-secondary" onclick="applyFilters()">Apply</button>
                 </form>
             </div>
         </div>
+
+        <!-- Teacher Table -->
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>S.N</th>
-                                <th>Teacher Name</th>
-                                <th>Teacher ID</th>
-                                <th>Subject</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Address</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="teacherTable">
-                            <!-- Dynamic Rows Go Here -->
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Teaher Name</th>
+                            <th>Teacher ID</th>
+                            <th>Subject</th>
+                            <th>Email</th>
+                            <th>Phone number</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    {{-- <tbody id="teacherTable">
+                        <tr>
+                            <td>1</td>
+                            <td>Jane Smith</td>
+                            <td>101</td>
+                            <td>Mathematics</td>
+                            <td>jane.smith@example.com</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editTeacher(101)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteTeacher(101)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody> --}}
+                </table>
             </div>
         </div>
     </div>
 
     <!-- Add Teacher Modal -->
-    <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addTeacherModalLabel">Add Teacher</h5>
@@ -116,31 +115,25 @@
                 </div>
                 <div class="modal-body">
                     <form id="addTeacherForm">
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label for="teacherName">Teacher Name</label>
-                                <input type="text" class="form-control" id="teacherName" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="teacherID">Teacher ID</label>
-                                <input type="text" class="form-control" id="teacherID" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="subject">Teacher Subject</label>
-                                <input type="text" class="form-control" id="teachersubject" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="teacherEmail">Email</label>
-                                <input type="email" class="form-control" id="teacherEmail" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="teacherPhone">Phone Number</label>
-                                <input type="text" class="form-control" id="teacherPhone" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="teacherAddress">Address</label>
-                                <input type="text" class="form-control" id="teacherAddress" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="teacherName">Teacher Name</label>
+                            <input type="text" class="form-control" id="teacherName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherID">Teacher ID</label>
+                            <input type="text" class="form-control" id="teacherID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Teacher Subject</label>
+                            <input type="text" class="form-control" id="teachersubject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherEmail">Email</label>
+                            <input type="email" class="form-control" id="teacherEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacheraddress">Address</label>
+                            <input type="text" class="form-control" id="teacheraddress" reqired>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Teacher</button>
                     </form>
@@ -174,20 +167,23 @@
         // Edit Teacher
         function editTeacher(teacherID) {
             alert(`Edit Teacher with ID: ${teacherID}`);
+            // Populate form and show edit modal
         }
 
         // Delete Teacher
         function deleteTeacher(teacherID) {
             if (confirm(`Are you sure you want to delete Teacher ID: ${teacherID}?`)) {
                 alert(`Teacher ID ${teacherID} deleted.`);
+                // Implement delete logic here
             }
         }
 
         // Add Teacher Form Submission
-        document.getElementById('addTeacherForm').addEventListener('submit', function (e) {
+        document.getElementById('addTeacherForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('New Teacher Added!');
             $('#addTeacherModal').modal('hide');
+            // Add new teacher logic
         });
     </script>
 </body>

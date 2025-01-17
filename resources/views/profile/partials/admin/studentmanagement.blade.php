@@ -16,13 +16,12 @@
         }
 
         .content {
-            margin-left: 250px;
-            /* Adjust to match the width of the sidebar */
+            margin-left: 250px; /* Adjust to match the width of the sidebar */
             padding: 20px;
             transition: margin-left 0.3s ease;
         }
 
-        .sidebar.hidden+.content {
+        .sidebar.hidden + .content {
             margin-left: 0;
         }
 
@@ -63,9 +62,6 @@
 
             .class-title {
                 font-size: 16px;
-
-
-                
             }
         }
 
@@ -80,28 +76,27 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row" id="classCards">
-                <!-- Dynamic Class Cards -->
+                <!-- Example Class Card -->
                 <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                    <a href="{{ route('manageclass') }}" class="card"
-                        onclick="openClass('Class 1', 'https://via.placeholder.com/300x150?text=Class+1')">
+                    <div class="card" onclick="openClass('Class 1')">
                         <img src="https://via.placeholder.com/300x150?text=Class+1" alt="Class 1">
                         <div class="card-body text-center">
                             <h4 class="class-title">Class 1</h4>
                         </div>
-                    </a>
-                </div>
-            </div>
-            <!-- Additional Cards -->
-            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card" onclick="openClass('Class 2', 'https://via.placeholder.com/300x150?text=Class+2')">
-                    <img src="https://via.placeholder.com/300x150?text=Class+2" alt="Class 2">
-                    <div class="card-body text-center">
-                        <h4 class="class-title">Class 2</h4>
                     </div>
                 </div>
+                <!-- Repeat Class Cards -->
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card" onclick="openClass('Class 2')">
+                        <img src="https://via.placeholder.com/300x150?text=Class+2" alt="Class 2">
+                        <div class="card-body text-center">
+                            <h4 class="class-title">Class 2</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more cards as needed -->
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Class Modal -->
@@ -117,11 +112,11 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <img id="classImage" src="" alt="Class Image">
+                            <img src="https://via.placeholder.com/300x150?text=Class+1" alt="Class Image">
                         </div>
                         <div class="col-md-6">
-                            <h4 id="modalClassTitle" class="class-title">Class Title</h4>
-                            <p id="classDescription">Detailed description of the class goes here.</p>
+                            <h4 class="class-title">Class Details</h4>
+                            <p>Description of the class goes here.</p>
                             <button type="button" class="btn btn-primary btn-class">View Students</button>
                         </div>
                     </div>
@@ -136,14 +131,12 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function openClass(className, classImage) {
-            document.getElementById('modalClassTitle').innerText = className;
-            document.getElementById('classImage').src = classImage;
-            document.getElementById('classDescription').innerText = `Description for ${className} can be added here.`;
+    {{-- <script>
+        function openClass(className) {
+            $('#classModalLabel').text(className);
             $('#classModal').modal('show');
         }
-    </script>
+    </script> --}}
 </body>
 
 </html>

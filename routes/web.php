@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('homepage');
 });
-// Route::get('/admin', function () {
-//     return view('admindashboard');
-// });
 Route::get('/admin', function () {
     return view('admindashboard');
 })->name('admin');
@@ -25,7 +22,9 @@ Route::get('/attendance', function () {
 Route::get('/news', function () {
     return view('news');
 })->name('news');
-
+Route::get('/manageclass', function () {
+    return view('manageclassstudent');
+})->name('manageclass');
 
 
 // Route::get('/dashboard', function () {
