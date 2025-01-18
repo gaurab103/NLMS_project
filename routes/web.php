@@ -31,6 +31,14 @@ Route::get('/news', function () {
     return view('news');
 })->name('news');
 
+Route::get('/pannel', function () {
+    return view('pannel');
+})->name('pannel');
+
+Route::get('/loginpage', function () {
+    return view('loginpage');
+})->name('login');
+
 Route::get('/student/portal/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance.page');
 Route::get('/student/portal', [StudentsController::class, 'index'])->name('portal');
 Route::get('/student/portal/profile', [StudentsController::class, 'profile'])->name('profile');

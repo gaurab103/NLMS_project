@@ -14,7 +14,9 @@ class AddUpdatedAtToStudentsTable extends Migration
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->timestamp('updated_at')->nullable();
+            if (!Schema::hasColumn('students', 'updated_at')) {
+                $table->timestamp('updated_at')->nullable();
+            }
         });
     }
 
@@ -26,7 +28,9 @@ class AddUpdatedAtToStudentsTable extends Migration
     public function down()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
+            if (Schema::hasColumn('students', 'updated_at')) {
+                $table->dropColumn('updated_at');
+            }
         });
     }
 }
