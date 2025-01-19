@@ -12,9 +12,6 @@ use App\Http\Controllers\AttendanceController;
 Route::get('/', function () {
     return view('homepage');
 });
-// Route::get('/admin', function () {
-//     return view('admindashboard');
-// });
 Route::get('/admin', function () {
     return view('admindashboard');
 })->name('admin');
@@ -33,6 +30,13 @@ Route::get('/attendance', function () {
 Route::get('/news', function () {
     return view('news');
 })->name('news');
+
+Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
+Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+
+
 
 
 

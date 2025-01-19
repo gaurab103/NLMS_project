@@ -27,22 +27,22 @@ class NewsController extends Controller
 
 
 
-    public function edit(Request $request, $id)
+    public function update(Request $request, $id)
     {
-        $notice = Notice::find($id);
-        $notice->title = $request->title;
-        $notice->content = $request->content;
-        $notice->save();
+        $notice = Notice::findOrFail($id); // Fetch notice by ID
+        $notice->title = $request->title; // Update title
+        $notice->content = $request->content; // Update content
+        $notice->save(); // Save changes to the database
 
         return redirect()->route('news')->with('success', 'Notice updated successfully!');
     }
 
-    // Delete a notice
+
     public function destroy($id)
     {
-        $notice = Notice::find($id);
+        $notice = Notice::findOrFail($id);
         $notice->delete();
-
         return redirect()->route('news')->with('success', 'Notice deleted successfully!');
     }
+
 }

@@ -10,7 +10,6 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            /* background-color: #f9f9f9; */
             margin: 0;
             padding: 0;
         }
@@ -65,20 +64,11 @@
             background-color: #0056b3;
         }
 
-        .success-message {
-            background-color: #d4edda;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
         .form-container {
             display: none;
             margin-top: 20px;
             padding: 20px;
-            background-color: aqua;
+            background-color: #f9f9f9;
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -107,20 +97,15 @@
         .notice-item {
             margin-top: 20px;
             padding: 20px;
-            background-color: aquamarine;
+            background-color: #e7f3fe;
             border: 2px solid #ddd;
             border-radius: 4px;
         }
 
         .notice-item h4 {
             margin: 0;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             font-size: 24px;
             font-weight: 600;
-        }
-
-        .notice-item .actions {
-            margin-top: 15px;
         }
 
         .actions button {
@@ -166,17 +151,34 @@
                 </form>
             </div>
 
+            <!-- Edit Notice Form -->
+            <div class="form-container" id="editNoticeForm">
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="editNoticeId">
+                    <div class="form-group">
+                        <label for="editTitle">Title</label>
+                        <input type="text" name="title" id="editTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editContent">Content</label>
+                        <textarea name="content" id="editContent" rows="4" required></textarea>
+                    </div>
+                    <button type="submit">Update Notice</button>
+                </form>
+            </div>
+
             <!-- Display Notices -->
             <h3>Posted Notices</h3>
-            @foreach($notices as $notice)
+            @foreach ($notices as $notice)
                 <div class="notice-item">
                     <h4>{{ $notice->title }}</h4>
                     <p>{{ $notice->content }}</p>
                     <p><small>Added on: {{ $notice->created_at }} | Updated on: {{ $notice->updated_at }}</small></p>
                     <div class="actions">
-                        <a href="{{ route('news.edit', $notice->id) }}">
-                            <button>Edit</button>
-                        </a>
+                        <button type="button"
+                            onclick="openEditForm('{{ $notice->id }}', '{{ $notice->title }}', '{{ $notice->content }}')">Edit</button>
                         <form action="{{ route('news.destroy', $notice->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
@@ -191,7 +193,13 @@
     <script>
         const addNoticeButton = document.getElementById('addNoticeButton');
         const addNoticeForm = document.getElementById('addNoticeForm');
+        const editNoticeForm = document.getElementById('editNoticeForm');
+        const editForm = document.getElementById('editForm');
+        const editNoticeId = document.getElementById('editNoticeId');
+        const editTitle = document.getElementById('editTitle');
+        const editContent = document.getElementById('editContent');
 
+        // Toggle Add Notice Form
         addNoticeButton.addEventListener('click', () => {
             addNoticeForm.classList.toggle('active');
             if (addNoticeForm.classList.contains('active')) {
@@ -200,6 +208,15 @@
                 addNoticeButton.textContent = 'Add Notice';
             }
         });
+
+        // Open Edit Form
+        function openEditForm(id, title, content) {
+            editNoticeId.value = id;
+            editTitle.value = title;
+            editContent.value = content;
+            editNoticeForm.style.display = 'block';
+            editForm.action = `/news/${id}`;
+        }
     </script>
 </body>
 
