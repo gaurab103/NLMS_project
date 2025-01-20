@@ -22,9 +22,18 @@ Route::get('/students', function () {
 Route::get('/attendance', function () {
     return view('attendance');
 })->name('attendance');
+
 Route::get('/news', function () {
     return view('news');
 })->name('news');
+
+Route::get('/pannel', function () {
+    return view('pannel');
+})->name('pannel');
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::post('/news', [NewsController::class, 'store'])->name('news.store');
