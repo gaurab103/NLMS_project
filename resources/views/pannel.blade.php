@@ -122,7 +122,7 @@
 </head>
 <body class="transition-fade">
 
-<a href="loginpage">
+<a href="login">
     <div class="card">
         <img src="/images/pannel/admin.jpg" class="card-img-top" alt="Admin">
         <div class="card-body">
@@ -130,7 +130,7 @@
         </div>
     </div>
 </a>
-<a href="loginpage">
+<a href="login">
     <div class="card">
         <img src="/images/pannel/teacher.png" class="card-img-top" style="margin-top: 25px;" alt="Teacher">
         <div class="card-body">
@@ -138,7 +138,7 @@
         </div>
     </div>
 </a>
-<a href="loginpage">
+<a href="login">
     <div class="card">
         <img src="/images/pannel/students.png" class="card-img-top" style="margin-top: 26px;" alt="Student">
         <div class="card-body">
