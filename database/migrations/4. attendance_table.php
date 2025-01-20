@@ -26,10 +26,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('admin')
                 ->onDelete('cascade');
-            
+
             $table->foreign('T_ID')
                 ->references('id')
-                ->on('teacher')
+                ->on('teachers')
                 ->onDelete('cascade');
         });
     }

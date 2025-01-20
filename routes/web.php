@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\AttendanceController;
 
-// Public Routes
 Route::get('/', function () {
     return view('homepage');
 });

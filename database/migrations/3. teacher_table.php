@@ -9,15 +9,15 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('teacher', function (Blueprint $table) {
+        Schema::create('teachers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            
-            $table->string('Name');
-            $table->string('Address');
-            $table->bigInteger('Contact_no');
             $table->unsignedBigInteger('A_ID');
+            $table->string('Teacher_Name');
+            $table->string('Address');
+            $table->string('Subject');
+            $table->bigInteger('Phone_Number');
             $table->string('Email');
-            $table->string('Status');
+            $table->boolean('Status');
             $table->timestamps();
 
 
