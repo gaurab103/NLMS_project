@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,16 +8,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id(); 
-            $table->unsignedBigInteger('A_ID');
+            $table->id();
+            $table->foreignId('A_ID')->constrained('admin')->onDelete('cascade'); // Foreign key
             $table->string('title');
-            $table->string('content');
-            $tabledate = date('Y-m-d H:i:s');
-
-            $table->foreign('A_ID')
-                ->references('id')
-                ->on('admin')
-                ->onDelete('cascade');
+            $table->text('content'); // Changed from string to text
+            $table->timestamps(); // Added timestamps
         });
     }
 

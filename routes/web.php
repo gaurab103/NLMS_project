@@ -4,6 +4,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\frontendControler;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\AttendanceController;
@@ -18,11 +19,6 @@ Route::get('/admin', function () {
 Route::get('/students', function () {
     return view('studentmanagement');
 })->name('students');
-
-Route::get('/teachers', function () {
-    return view('teachersmanagement');
-})->name('teachers');
-
 Route::get('/attendance', function () {
     return view('attendance');
 })->name('attendance');
@@ -34,6 +30,14 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::post('/news', [NewsController::class, 'store'])->name('news.store');
 Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
 Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+
+Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
+Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
+Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+
+
 
 
 

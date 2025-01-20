@@ -6,12 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('A_ID');
+            $table->unsignedBigInteger('A_ID')->nullable();
             $table->string('Teacher_Name');
             $table->string('Address');
             $table->string('Subject');
@@ -19,7 +18,6 @@ return new class extends Migration
             $table->string('Email');
             $table->boolean('Status');
             $table->timestamps();
-
 
             $table->foreign('A_ID')
                 ->references('id')
@@ -30,6 +28,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('teacher');
+        Schema::dropIfExists('teachers');
     }
 };

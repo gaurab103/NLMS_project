@@ -116,7 +116,7 @@
     <aside class="sidebar" id="sidebar">
         <a href="{{ route('admin') }}" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="{{ route('students') }}" id="studentsLink"><i class="fas fa-user-graduate"></i> Manage Students</a>
-        <a href="{{ route('teachers') }}" id="teachersLink"><i class="fas fa-chalkboard-teacher"></i> Manage Teachers</a>
+        <a href="{{ route('teachers.index') }}" id="teachersLink"><i class="fas fa-chalkboard-teacher"></i> Manage Teachers</a>
         <a href="{{ route('attendance') }}" id="attendanceLink"><i class="fas fa-calendar-check"></i> Attendance</a>
         <a href="{{ route('news') }}" id="newsLink"><i class="fas fa-newspaper"></i> News & Notices</a>
         <a href="#logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>

@@ -9,20 +9,16 @@ return new class extends Migration {
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('C_ID'); 
-            $table->unsignedBigInteger('A_ID');
+            $table->string('student_name', 191);
+            $table->enum('class', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+            $table->string('roll_no', 191)->unique();
+            $table->string('phone_no', 191);
+            $table->string('email', 191)->unique();
+            $table->text('address');
+            $table->date('dob');
+            $table->enum('gender', ['M', 'F', 'O']);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
-
-            $table->foreign('C_ID')
-                ->references('id')
-                ->on('courses')
-                ->onDelete('cascade');
-
-                $table->foreign('A_ID')
-                ->references('id')
-                ->on('admin')
-                ->onDelete('cascade');
         });
     }
 
@@ -31,4 +27,3 @@ return new class extends Migration {
         Schema::dropIfExists('students');
     }
 };
-
