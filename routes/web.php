@@ -46,7 +46,13 @@ Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('tea
 Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
 Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
-
+Route::get('/student/portal/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance.page');
+Route::get('/student/portal', [StudentsController::class, 'index'])->name('portal');
+Route::get('/student/portal/profile', [StudentsController::class, 'profile'])->name('profile');
+Route::get('/student/profile/{id}', [ProfileController::class, 'showProfile'])->name('student.profile');
+Route::get('/student/portal/{studentId}', [StudentsController::class, 'showPortal']);
+Route::get('/student/portal/profileedit/{id}', [StudentsController::class, 'editpro'])->name('edit.profile');
+Route::put('/student/update-profile/{id}', [StudentsController::class, 'updatepro'])->name('update.profile');
 
 
 
