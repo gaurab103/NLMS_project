@@ -17,6 +17,8 @@ return new class extends Migration
             $table->bigInteger('Phone_Number');
             $table->string('Email');
             $table->boolean('Status');
+            $table->string('Username', 191);
+            $table->string('Password', 255);
             $table->timestamps();
 
             $table->foreign('A_ID')

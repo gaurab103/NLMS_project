@@ -29,6 +29,10 @@
         .btn-toggle {
             display: none;
         }
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
         @media (max-width: 768px) {
             .btn-toggle {
                 display: block;
@@ -81,6 +85,14 @@
                         <label for="address">Address</label>
                         <input type="text" name="address" class="form-control" id="address" required>
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control" id="username" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" required>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Save Teacher</button>
             </form>
@@ -96,6 +108,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Address</th>
+                    <th>Username</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -108,9 +121,10 @@
                         <td>{{ $teacher->Email }}</td>
                         <td>{{ $teacher->Phone_Number }}</td>
                         <td>{{ $teacher->Address }}</td>
+                        <td>{{ $teacher->Username }}</td>
                         <td>
                             <!-- Edit Button -->
-                            <button class="btn btn-warning btn-sm edit-button" data-id="{{ $teacher->id }}" data-name="{{ $teacher->Teacher_Name }}" data-subject="{{ $teacher->Subject }}" data-email="{{ $teacher->Email }}" data-phone="{{ $teacher->Phone_Number }}" data-address="{{ $teacher->Address }}">
+                            <button class="btn btn-warning btn-sm edit-button" data-id="{{ $teacher->id }}" data-name="{{ $teacher->Teacher_Name }}" data-subject="{{ $teacher->Subject }}" data-email="{{ $teacher->Email }}" data-phone="{{ $teacher->Phone_Number }}" data-address="{{ $teacher->Address }}" data-username="{{ $teacher->Username }}">
                                 <i class="fas fa-edit"></i>
                             </button>
 
@@ -155,6 +169,7 @@
                 let email = $(this).data('email');
                 let phone = $(this).data('phone');
                 let address = $(this).data('address');
+                let username = $(this).data('username');
 
                 let editForm = `
                     <div class="card p-4">
@@ -181,6 +196,14 @@
                                 <div class="col-md-4 mb-3">
                                     <label>Address</label>
                                     <input type="text" name="address" class="form-control" value="${address}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Username</label>
+                                    <input type="text" name="username" class="form-control" value="${username}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Password</label>
+                                    <input type="password" name="password" class="form-control" required>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Update Teacher</button>

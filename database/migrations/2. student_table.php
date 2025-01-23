@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->date('dob');
             $table->enum('gender', ['M', 'F', 'O']);
             $table->boolean('is_active')->default(true);
+            $table->string('username',191);
+            $table->string('password',20);
             $table->timestamps();
         });
     }

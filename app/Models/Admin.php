@@ -5,21 +5,11 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Teacher extends Authenticatable
+class Admin extends Authenticatable
 {
     use Notifiable;
 
-    protected $fillable = [
-        'Teacher_Name',
-        'Subject',
-        'Email',
-        'Phone_Number',
-        'Address',
-        'Username',
-        'Password',
-        'Status',
-        'A_ID',
-    ];
+    protected $fillable = ['Admin_Name', 'Email', 'Username', 'Password'];
 
     protected $hidden = ['Password'];
 
