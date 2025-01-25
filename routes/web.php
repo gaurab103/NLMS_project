@@ -11,7 +11,8 @@ use App\Http\Controllers\AttendanceController;
 
 Route::get('/', function () {
     return view('homepage');
-});
+})->name('homepage');
+
 Route::get('/admin', function () {
     return view('admindashboard');
 })->name('admin');

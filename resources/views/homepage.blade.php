@@ -89,7 +89,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar">
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <img src="./images/logo/logo.png.jpg" alt="Naragram" style="height: 40px; width: 60px;">
@@ -190,9 +190,9 @@
     </div>
   </section>
 
-  </script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous">
+    crossorigin="anonymous"> </script>
 </body>
 
 </html>
