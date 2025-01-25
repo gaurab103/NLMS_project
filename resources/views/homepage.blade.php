@@ -4,106 +4,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Navbar Example</title>
+  <title>Shree Naragram Secondary School</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
     }
 
     .navbar {
-      background-color: yellow;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-          }
+      background: yellow;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
     .nav-link {
-      color: rgb(78, 62, 123) !important;
+      color: #4e3e7b !important;
+      font-weight: 600;
     }
 
     .nav-link:hover {
       color: #007BFF !important;
     }
 
-    .social-icons .fa {
-      font-size: 16px;
+    .carousel-inner img {
+      height: 85vh;
+      object-fit: cover;
     }
 
     .typewriter {
-      font-size: 30px;
+      font-size: 2rem;
       font-weight: bold;
-      color: black;
+      color: antiquewhite;
       text-align: center;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1050;
-      animation: typewriter 3s steps(40) 1s 1 normal both;
+      animation: fade-in 3s ease-in-out;
     }
 
-    @keyframes typewriter {
+    @keyframes fade-in {
       from {
-        width: 0;
+        opacity: 0;
       }
       to {
-        width: 100%;
+        opacity: 1;
       }
     }
 
-    .carousel-item img {
-      object-fit: cover;
-      opacity: 0.8;
+    #abus img {
+      transition: transform 0.3s;
     }
 
-    .header {
-      text-align: center;
-      color: white;
+    #abus img:hover {
+      transform: scale(1.05);
     }
 
-    .header-content {
-      position: relative;
-      z-index: 2;
-      top: 50%;
-      transform: translateY(-50%);
+    #cntus .fa {
+      font-size: 1.5rem;
+      color: #007bff;
+      margin-bottom: 10px;
     }
 
-    .contact-card i {
-      font-size: 40px;
-      color: #D500F9;
+    .contact-section {
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .btn a {
-      color: black;
+    .btn-outline-primary a {
+      color: #007bff;
       text-decoration: none;
     }
 
-    .btn a:hover {
+    .btn-outline-primary a:hover {
       color: white;
     }
-   
+
+    form input,
+    form textarea {
+      transition: box-shadow 0.3s;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      border-color: #007bff;
+    }
+
+    iframe {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      background: #4e3e7b;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
-  <nav class="navbar">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <img src="./images/logo/logo.png.jpg" alt="Naragram" style="height: 40px; width: 60px;">
+      <a class="navbar-brand" href="#">
+        <img src="{{ asset('images/logo/logo.png') }}" alt="Naragram" style="height: 40px; width: 60px;">
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="#abus" class="nav-link">About Us</a></li>
           <li class="nav-item"><a href="#cntus" class="nav-link">Contact Us</a></li>
-          <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=100088714107555" target="_blank" class="nav-link"><i class="fa fa-facebook"></i></a></li>
-          <li class="nav-item"><button class="btn btn-outline-primary"><a href="pannel">Login</a></button></li>
+          <li class="nav-item">
+            <a href="https://www.facebook.com/profile.php?id=100088714107555" target="_blank" class="nav-link">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-primary">
+              <a href="#">Login</a>
+            </button>
+          </li>
         </ul>
       </div>
     </div>
@@ -112,13 +142,13 @@
   <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="./images/logo/background.jpg" class="d-block w-100" alt="...">
+        <img src="{{ asset('images/logo/background.jpg') }}" class="d-block w-100" alt="Background">
       </div>
       <div class="carousel-item">
-        <img src="./images/logo/img.jpg" class="d-block w-100" alt="...">
+        <img src="{{ asset('images/logo/img.jpg') }}" class="d-block w-100" alt="Image 1">
       </div>
       <div class="carousel-item">
-        <img src="./images/logo/img3.jpg" class="d-block w-100" alt="...">
+        <img src="{{ asset('images/logo/img3.jpg') }}" class="d-block w-100" alt="Image 2">
       </div>
     </div>
     <div class="typewriter">Welcome To Shree Naragram Secondary School</div>
@@ -131,49 +161,33 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-<hr>
+
   <section id="abus" class="container my-5">
-    <h2>Shree Naragram Secondary School</h2>
+    <h2 class="text-center">Shree Naragram Secondary School</h2>
     <div class="row align-items-center">
-      <div class="col-md-4">
-        <img src="./images/logo/sir.jfif" class="img-fluid rounded" alt="Principal">
+      <div class="col-md-4 text-center">
+        <img src="{{ asset('images/logo/sir.jpg') }}" class="img-fluid rounded-circle" alt="Principal">
       </div>
       <div class="col-md-8">
         <p><strong>Principal:</strong> Mr. Kailash KC</p>
         <p><strong>Established:</strong> 1947 AD (2004 BS)</p>
         <p><strong>Affiliated to:</strong> National Examination Board (NEB)</p>
         <p><strong>Education Program:</strong> Playground to Grade 10</p>
-        <p><strong>Courses Offered:</strong> Ten (+2) Management and Education</p>
-        <p><strong>Salient Features:</strong> Library, Sports, Labs, Scholarships, etc.</p>
       </div>
     </div>
   </section>
-  <hr>
 
   <section id="cntus" class="contact-section text-center my-5">
     <h2>Contact Us</h2>
-    <p>Send us your questions and feedback!</p>
     <div class="row justify-content-center">
-      <div class="col-md-4 contact-card">
-        <i class="fa fa-map-marker"></i>
-        <h4>Location</h4>
-        <p>Budhiganga Municipality-1, Tankisinuwary, Morang, Nepal</p>
-      </div>
-      <div class="col-md-4 contact-card">
-        <i class="fa fa-envelope"></i>
-        <h4>Email</h4>
-        <p>naragramschool2004@gmail.com</p>
-      </div>
-      <div class="col-md-4 contact-card">
-        <i class="fa fa-phone"></i>
-        <h4>Phone</h4>
-        <p>+977-21-420440</p>
-      </div>
+      <div class="col-md-4"><i class="fa fa-map-marker"></i> Budhiganga Municipality-1, Morang, Nepal</div>
+      <div class="col-md-4"><i class="fa fa-envelope"></i> naragramschool2004@gmail.com</div>
+      <div class="col-md-4"><i class="fa fa-phone"></i> +977-21-420440</div>
     </div>
   </section>
-<hr>
+
   <section class="container my-5">
-    <h3>Contact Form</h3>
+    <h3 class="text-center">Contact Form</h3>
     <div class="row">
       <div class="col-md-6">
         <form>
@@ -181,18 +195,20 @@
           <input type="tel" name="mobile" class="form-control mb-3" placeholder="Mobile Number" required>
           <input type="email" name="email" class="form-control mb-3" placeholder="Email Address" required>
           <textarea name="message" class="form-control mb-3" placeholder="Message" rows="4" required></textarea>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
       </div>
       <div class="col-md-6">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3569.962913477244!2d87.28006300000004!3d26.52131719999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ef73b844fca2b5%3A0xc4b057eccd897060!2sShree%20Naragram%20Secondary%20School!5e0!3m2!1sen!2snp!4v1733458789952!5m2!1sen!2snp"  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2361.3817192879274!2d87.2774827087924!3d26.521317176786166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ef73b844fca2b5%3A0xc4b057eccd897060!2sShree%20Naragram%20Secondary%20School!5e1!3m2!1sen!2snp!4v1737782909920!5m2!1sen!2snp" width="100%" height="300" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"> </script>
+  <footer>
+    <p>&copy; 2025 Shree Naragram Secondary School. All Rights Reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
