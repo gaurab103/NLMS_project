@@ -89,7 +89,7 @@
 </head>
 
 <body>
-  <nav class="navbar">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <img src="./images/logo/logo.png.jpg" alt="Naragram" style="height: 40px; width: 60px;">
