@@ -21,15 +21,19 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:teachers,email',
             'phone_number' => 'required|digits_between:10,15',
             'address' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
         ]);
 
         Teacher::create([
-            'A_ID' => 1, // यहाँ डिफल्ट एडमिन ID राख्नुहोस् वा अनुरोधबाट पठाउनुहोस्।
+            'A_ID' => 1,
             'Teacher_Name' => $request->teacher_name,
             'Subject' => $request->subject,
             'Email' => $request->email,
             'Phone_Number' => $request->phone_number,
             'Address' => $request->address,
+            'Username' => $request->username,
+            'Password' => bcrypt($request->password), // Encrypt password
             'Status' => true,
         ]);
 
@@ -52,6 +56,8 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:teachers,email,' . $teacher->id,
             'phone_number' => 'required|digits_between:10,15',
             'address' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'password' => 'nullable|string|max:255',
         ]);
 
         $teacher->update([
@@ -60,6 +66,8 @@ class TeacherController extends Controller
             'Email' => $request->email,
             'Phone_Number' => $request->phone_number,
             'Address' => $request->address,
+            'Username' => $request->username,
+            'Password' => $request->password ? bcrypt($request->password) : $teacher->Password,
         ]);
 
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');

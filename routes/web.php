@@ -8,6 +8,8 @@ use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\AttendanceController;
+use Illuminate\Support\Facades\Auth;
+
 
 Route::get('/', function () {
     return view('homepage');
@@ -35,7 +37,12 @@ Route::get('/pannel', function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login');
-
+Route::get('/teacherportal', function () {
+    return view('teacherportal');
+})->name('teacherportal');
+Route::get('/studentportal', function () {
+    return view('layout');
+})->name('layout');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::post('/news', [NewsController::class, 'store'])->name('news.store');
 Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
@@ -71,3 +78,7 @@ Route::put('/student/update-profile/{id}', [StudentsController::class, 'updatepr
 // Route::get("/",[frontendControler::class,'index'])->name('home');
 
 // require __DIR__.'/auth.php';
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
