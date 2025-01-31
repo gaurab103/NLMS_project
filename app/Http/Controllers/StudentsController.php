@@ -2,90 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Student;
-use Illuminate\Support\Facades\Log;
+use App\Models\Note; // Assuming a Note model exists
+use App\Models\Assignment; // Assuming an Assignment model exists
+use App\Models\Message; // Assuming a Message model exists
+use App\Models\Subject; // Assuming a Subject model exists
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
-    // Display the student portal
     public function index()
     {
-        return view('layout');
+        return view ('layout');
     }
 
-    // Show the student profile
     public function profile()
     {
         try {
-            $student = Student::select([
-                'id', 
-                'name', 
-                'C_ID', 
-                'A_ID', 
-                'Address', 
-                'Parent_Name', 
-                'Contact_No', 
-                'Email', 
-                'Stats'
-            ])
-            ->where('id', 1)
-            ->first();
-
+            $student = Auth::user(); // Ensure the user is authenticated
+            
             if (!$student) {
-                return view('profile')->with('error', 'Student not found.');
+                return view('profile', ['error' => 'Student not found']);
             }
 
-            return view('profile', compact('student'));
+            // Fetch additional data
+            $notes = Note::where('student_id', $student->id)->get();
+            $assignments = Assignment::where('student_id', $student->id)->get();
+            $messages = Message::where('student_id', $student->id)->get();
+            $subjects = Subject::where('student_id', $student->id)->get();
+
+            return view('profile', compact('student', 'notes', 'assignments', 'messages', 'subjects'));
         } catch (\Exception $e) {
-            Log::error('Error fetching student profile: ' . $e->getMessage());
-            return view('profile', ['error' => 'Error loading student data. Please try again later.']);
+            return view('profile', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
         }
     }
 
-    // Edit the student profile
     public function editpro($id)
-{
-    try {
-        $student = Student::findOrFail($id); // Fetch student by ID
-        return view('profileedit', compact('student')); // Pass student data to view
-    } catch (\Exception $e) {
-        Log::error('Error fetching student for editing: ' . $e->getMessage());
-        return redirect()->route('profile')->with('error', 'Student not found.');
+    {
+        $student = Student::find($id);
+        
+        if (!$student) {
+            return redirect()->route('profile')->with('error', 'Student not found.');
+        }
+        
+        return view('profileedit', compact('student'));
     }
-}
 
-
-    // Update the student profile
     public function updatepro(Request $request, $id)
     {
-        Log::info('Update profile route hit');
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'address' => 'required|string|max:255',
-                'parent_name' => 'required|string|max:255',
-                'contact_no' => 'required|string|max:20',
-                'email' => 'required|email|max:255',
-            ]);
+        $student = Student::findOrFail($id);
 
-            $student = Student::findOrFail($id);
-            Log::info('Student before update:', $student->toArray());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email,' . $id,
+            'Contact_No' => 'required|string|max:15',
+            'Address' => 'required|string|max:500',
+            'Parent_Name' => 'required|string|max:255',
+        ]);
 
-            $student->update([
-                'name' => $request->input('name'),
-                'Address' => $request->input('address'),
-                'Parent_Name' => $request->input('parent_name'),
-                'Contact_No' => $request->input('contact_no'),
-                'Email' => $request->input('email'),
-            ]);
+        $student->update($request->all());
 
-            Log::info('Student after update:', $student->toArray());
-
-            return redirect()->route('profile')->with('success', 'Profile updated successfully.');
-        } catch (\Exception $e) {
-            Log::error('Error updating student profile: ' . $e->getMessage());
-            return redirect()->route('profile')->with('error', 'Error updating profile.');
-        }
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
 }
