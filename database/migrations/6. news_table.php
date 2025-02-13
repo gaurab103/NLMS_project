@@ -9,10 +9,9 @@ return new class extends Migration {
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('A_ID')->constrained('admin')->onDelete('cascade'); // Foreign key
             $table->string('title');
-            $table->text('content'); // Changed from string to text
-            $table->timestamps(); // Added timestamps
+            $table->text('content');
+            $table->timestamps();
         });
     }
 

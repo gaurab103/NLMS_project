@@ -3,46 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Notice;
+use App\Models\News;
 
 class NewsController extends Controller
 {
-    // Display the form and list of notices
+    // Display the list of news notices
     public function index()
     {
-        $notices = Notice::all(); // Fetch all notices from the database
+        // Retrieve all notices, ordering newest first
+        $notices = News::latest()->get();
         return view('news', compact('notices'));
     }
 
-    // Store new notice
+    // Store a new notice
     public function store(Request $request)
     {
-        $notice = new Notice();
-        $notice->title = $request->title;
-        $notice->content = $request->content;
-        $notice->save();
+        $request->validate([
+            'title'   => 'required|string|max:191',
+            'content' => 'required|string',
+        ]);
 
-        return redirect()->route('news')->with('success', 'Notice added successfully!');
+        News::create($request->all());
+
+        return redirect()->route('news.index')
+                         ->with('success', 'Notice added successfully!');
     }
 
-
-
+    // Update an existing notice
     public function update(Request $request, $id)
     {
-        $notice = Notice::findOrFail($id); // Fetch notice by ID
-        $notice->title = $request->title; // Update title
-        $notice->content = $request->content; // Update content
-        $notice->save(); // Save changes to the database
+        $request->validate([
+            'title'   => 'required|string|max:191',
+            'content' => 'required|string',
+        ]);
 
-        return redirect()->route('news')->with('success', 'Notice updated successfully!');
+        $notice = News::findOrFail($id);
+        $notice->update($request->all());
+
+        return redirect()->route('news.index')
+                         ->with('success', 'Notice updated successfully!');
     }
 
-
+    // Delete a notice
     public function destroy($id)
     {
-        $notice = Notice::findOrFail($id);
+        $notice = News::findOrFail($id);
         $notice->delete();
-        return redirect()->route('news')->with('success', 'Notice deleted successfully!');
-    }
 
+        return redirect()->route('news.index')
+                         ->with('success', 'Notice deleted successfully!');
+    }
 }

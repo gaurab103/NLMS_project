@@ -5,26 +5,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
+    public function up()
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('student_name', 191);
-            $table->enum('class', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
-            $table->string('roll_no', 191)->unique();
-            $table->string('phone_no', 191);
-            $table->string('email', 191)->unique();
-            $table->text('address');
-            $table->date('dob');
-            $table->enum('gender', ['M', 'F', 'O']);
-            $table->boolean('is_active')->default(true);
-            $table->string('username',191);
-            $table->string('password',20);
+            $table->string('name');
+            $table->string('Address');
+            $table->string('Parent_Name');
+            $table->string('Contact_No');
+            $table->string('Email')->unique();
+            $table->unsignedBigInteger('C_ID')->nullable();
+            $table->unsignedBigInteger('A_ID')->nullable();
+            $table->string('Stats');
+            $table->string('Username')->unique();
+            $table->string('Password');
             $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('students');
     }

@@ -4,31 +4,27 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    public function up(): void
+return new class extends Migration {
+    public function up()
     {
         Schema::create('teachers', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('A_ID')->nullable();
             $table->string('Teacher_Name');
-            $table->string('Address');
             $table->string('Subject');
-            $table->bigInteger('Phone_Number');
-            $table->string('Email');
+            $table->string('Email')->unique();
+            $table->string('Phone_Number');
+            $table->string('Address');
             $table->boolean('Status');
-            $table->string('Username', 191);
-            $table->string('Password', 255);
+            $table->string('Username')->unique();
+            $table->string('Password');
             $table->timestamps();
 
-            $table->foreign('A_ID')
-                ->references('id')
-                ->on('admin')
-                ->onDelete('cascade');
+            $table->foreign('A_ID')->references('id')->on('admins')->onDelete('cascade');
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('teachers');
     }

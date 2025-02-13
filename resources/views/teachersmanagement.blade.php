@@ -3,216 +3,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <title>Manage Teachers</title>
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .content-wrapper {
-            margin-left: 260px;
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-        }
-        .sidebar.hidden + .content-wrapper {
-            margin-left: 0;
-        }
-        .card {
-            transition: transform 0.3s;
-        }
-        .card:hover {
-            transform: scale(1.02);
-        }
-        .btn-toggle {
-            display: none;
-        }
-        .table-responsive {
-            overflow-x: auto;
-            width: 100%;
-        }
-        @media (max-width: 768px) {
-            .btn-toggle {
-                display: block;
-            }
-            .content-wrapper {
-                margin-left: 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Teachers</title>
+  <!-- Bootstrap 5 and Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    /* Content wrapper positioned to the right of the sidebar */
+    .content-wrapper {
+      margin-left: 260px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+    .sidebar.hidden + .content-wrapper {
+      margin-left: 0;
+    }
+    /* Card hover effect */
+    .card {
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    /* Toggle button visible only on smaller screens */
+    .btn-toggle {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .btn-toggle {
+        display: block;
+      }
+      .content-wrapper {
+        margin-left: 0;
+      }
+    }
+    /* Table responsiveness */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    /* Modal header styling */
+    .modal-header {
+      background: #4093e7;
+      color: #fff;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="content-wrapper">
-        <button class="btn btn-primary btn-toggle mb-3" id="toggleSidebar">☰ Menu</button>
-        <h2 class="mb-4">Teacher Management</h2>
+  <div class="content-wrapper">
+    <!-- Mobile Sidebar Toggle Button -->
+    <button class="btn btn-primary btn-toggle mb-3" id="toggleSidebar">☰ Menu</button>
+    <h2 class="mb-4">Teacher Management</h2>
 
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+    <!-- Success Message -->
+    @if (session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-        <!-- Add Teacher Button -->
-        <button class="btn btn-success mb-3" id="toggleAddForm">
-            <i class="fas fa-user-plus"></i> Add Teacher
-        </button>
+    <!-- Button to trigger Add Teacher Modal -->
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+      <i class="fas fa-user-plus"></i> Add Teacher
+    </button>
 
-        <!-- Add Teacher Form -->
-        <div id="addTeacherForm" class="card p-4" style="display: none;">
-            <form action="{{ route('teachers.store') }}" method="POST">
+    <!-- Teachers Table -->
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($teachers as $teacher)
+          <tr>
+            <td>{{ $teacher->id }}</td>
+            <td>{{ $teacher->Teacher_Name }}</td>
+            <td>{{ $teacher->Subject }}</td>
+            <td>{{ $teacher->Email }}</td>
+            <td>{{ $teacher->Phone_Number }}</td>
+            <td>{{ $teacher->Address }}</td>
+            <td>{{ $teacher->Username }}</td>
+            <td>{{ $teacher->Password }}</td>
+            <td>
+              <!-- Edit Button: triggers the edit modal -->
+              <button class="btn btn-warning btn-sm edit-button"
+                data-bs-toggle="modal"
+                data-bs-target="#editTeacherModal"
+                data-id="{{ $teacher->id }}"
+                data-name="{{ $teacher->Teacher_Name }}"
+                data-subject="{{ $teacher->Subject }}"
+                data-email="{{ $teacher->Email }}"
+                data-phone="{{ $teacher->Phone_Number }}"
+                data-address="{{ $teacher->Address }}"
+                data-username="{{ $teacher->Username }}"
+                data-password="{{ $teacher->Password }}">
+                <i class="fas fa-edit"></i>
+              </button>
+              <!-- Delete Form -->
+              <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this teacher?');">
                 @csrf
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="teacher_name">Teacher Name</label>
-                        <input type="text" name="teacher_name" class="form-control" id="teacher_name" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="subject">Subject</label>
-                        <input type="text" name="subject" class="form-control" id="subject" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="phone_number">Phone Number</label>
-                        <input type="text" name="phone_number" class="form-control" id="phone_number" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" class="form-control" id="address" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" class="form-control" id="username" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Save Teacher</button>
-            </form>
-        </div>
-
-        <!-- Teachers Table -->
-        <table class="table table-striped table-responsive mt-4">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Subject</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Username</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($teachers as $teacher)
-                    <tr>
-                        <td>{{ $teacher->id }}</td>
-                        <td>{{ $teacher->Teacher_Name }}</td>
-                        <td>{{ $teacher->Subject }}</td>
-                        <td>{{ $teacher->Email }}</td>
-                        <td>{{ $teacher->Phone_Number }}</td>
-                        <td>{{ $teacher->Address }}</td>
-                        <td>{{ $teacher->Username }}</td>
-                        <td>
-                            <!-- Edit Button -->
-                            <button class="btn btn-warning btn-sm edit-button" data-id="{{ $teacher->id }}" data-name="{{ $teacher->Teacher_Name }}" data-subject="{{ $teacher->Subject }}" data-email="{{ $teacher->Email }}" data-phone="{{ $teacher->Phone_Number }}" data-address="{{ $teacher->Address }}" data-username="{{ $teacher->Username }}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-
-                            <!-- Delete Form -->
-                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Toggle Add Teacher Form
-            $('#toggleAddForm').click(function () {
-                $('#addTeacherForm').toggle(300);
-                let btnText = $('#toggleAddForm').text().trim();
-                $('#toggleAddForm').html(btnText === 'Add Teacher' ? '<i class="fas fa-times"></i> Hide Form' : '<i class="fas fa-user-plus"></i> Add Teacher');
-            });
+  <!-- Add Teacher Modal -->
+  <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addTeacherModalLabel">Add Teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ route('teachers.store') }}" method="POST">
+          @csrf
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="teacher_name" class="form-label">Teacher Name</label>
+                <input type="text" name="teacher_name" id="teacher_name" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" name="subject" id="subject" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="phone_number" class="form-label">Phone Number</label>
+                <input type="text" name="phone_number" id="phone_number" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" name="address" id="address" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Teacher</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-            // Toggle Sidebar
-            $('#toggleSidebar').click(function () {
-                $('#sidebar').toggleClass('hidden');
-                $('.content-wrapper').toggleClass('sidebar-hidden');
-            });
+  <!-- Edit Teacher Modal -->
+  <div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="editTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editTeacherModalLabel">Edit Teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editTeacherForm" method="POST">
+          @csrf
+          @method('PUT')
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="edit_teacher_name" class="form-label">Teacher Name</label>
+                <input type="text" name="teacher_name" id="edit_teacher_name" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_subject" class="form-label">Subject</label>
+                <input type="text" name="subject" id="edit_subject" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_email" class="form-label">Email</label>
+                <input type="email" name="email" id="edit_email" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_phone_number" class="form-label">Phone Number</label>
+                <input type="text" name="phone_number" id="edit_phone_number" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_address" class="form-label">Address</label>
+                <input type="text" name="address" id="edit_address" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_username" class="form-label">Username</label>
+                <input type="text" name="username" id="edit_username" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="edit_password" class="form-label">Password</label>
+                <input type="password" name="password" id="edit_password" class="form-control">
+                <small class="text-muted">Leave blank to keep existing password</small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update Teacher</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-            // Edit Button Click Handler
-            $('.edit-button').click(function () {
-                let id = $(this).data('id');
-                let name = $(this).data('name');
-                let subject = $(this).data('subject');
-                let email = $(this).data('email');
-                let phone = $(this).data('phone');
-                let address = $(this).data('address');
-                let username = $(this).data('username');
+  <!-- Bootstrap 5 Bundle with Popper and jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Toggle sidebar on mobile devices
+    $('#toggleSidebar').click(function () {
+      $('#sidebar').toggleClass('hidden');
+    });
 
-                let editForm = `
-                    <div class="card p-4">
-                        <form action="/teachers/${id}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label>Teacher Name</label>
-                                    <input type="text" name="teacher_name" class="form-control" value="${name}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Subject</label>
-                                    <input type="text" name="subject" class="form-control" value="${subject}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" value="${email}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone_number" class="form-control" value="${phone}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Address</label>
-                                    <input type="text" name="address" class="form-control" value="${address}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Username</label>
-                                    <input type="text" name="username" class="form-control" value="${username}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Password</label>
-                                    <input type="password" name="password" class="form-control" required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Teacher</button>
-                        </form>
-                    </div>`;
+    // Populate the Edit Teacher Modal with data from the clicked row
+    $('.edit-button').click(function () {
+      let id = $(this).data('id');
+      let name = $(this).data('name');
+      let subject = $(this).data('subject');
+      let email = $(this).data('email');
+      let phone = $(this).data('phone');
+      let address = $(this).data('address');
+      let username = $(this).data('username');
+      let password = $(this).data('password');
 
-                $('#addTeacherForm').html(editForm).show();
-            });
-        });
-    </script>
+      // Set the form action URL (now including the admin prefix)
+      $('#editTeacherForm').attr('action', '/admin/teachers/' + id);
+
+      // Populate the form fields
+      $('#edit_teacher_name').val(name);
+      $('#edit_subject').val(subject);
+      $('#edit_email').val(email);
+      $('#edit_phone_number').val(phone);
+      $('#edit_address').val(address);
+      $('#edit_username').val(username);
+      $('#edit_password').val(password); // Leave password blank to keep existing password
+    });
+  </script>
 </body>
 </html>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <title>Naragram LMS Admin Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -127,6 +128,7 @@
     <div class="main-content" id="mainContent">
         <div class="welcome-banner">
             <h3> Admin Dashboard</h3>
+<a href="{{ route('admin.dashboard') }}" class="hover:underline">Dashboard</a>
             <i class="fas fa-user-shield"></i>
         </div>
         <div class="grid-container" id="dashboardGrid">

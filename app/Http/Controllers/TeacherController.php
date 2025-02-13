@@ -33,7 +33,7 @@ class TeacherController extends Controller
             'Phone_Number' => $request->phone_number,
             'Address' => $request->address,
             'Username' => $request->username,
-            'Password' => bcrypt($request->password), // Encrypt password
+            'Password' => ($request->password), // Encrypt password
             'Status' => true,
         ]);
 
@@ -67,7 +67,7 @@ class TeacherController extends Controller
             'Phone_Number' => $request->phone_number,
             'Address' => $request->address,
             'Username' => $request->username,
-            'Password' => $request->password ? bcrypt($request->password) : $teacher->Password,
+            'Password' => $request->password ? ($request->password) : $teacher->Password,
         ]);
 
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');

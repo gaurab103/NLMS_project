@@ -19,14 +19,14 @@ class StudentsController extends Controller
     {
         try {
             $student = Student::select([
-                'id', 
-                'name', 
-                'C_ID', 
-                'A_ID', 
-                'Address', 
-                'Parent_Name', 
-                'Contact_No', 
-                'Email', 
+                'id',
+                'name',
+                'C_ID',
+                'A_ID',
+                'Address',
+                'Parent_Name',
+                'Contact_No',
+                'Email',
                 'Stats'
             ])
             ->where('id', 1)

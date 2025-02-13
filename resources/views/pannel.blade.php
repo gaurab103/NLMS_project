@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="view-transition" content="same-origin">
     <script src="node_modules/swup/dist/swup.main.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
     <title>Login</title>
     <style>
         body {
             background-color: #e4f1fe;
             display: flex;
-            justify-content: center; /* Horizontal centering */
-            align-items: center;    /* Vertical centering */
-            flex-wrap: wrap;        /* Allow wrapping of cards for smaller screens */
+            justify-content: center;
+            /* Horizontal centering */
+            align-items: center;
+            /* Vertical centering */
+            flex-wrap: wrap;
+            /* Allow wrapping of cards for smaller screens */
             height: 100vh;
             margin: 0;
         }
 
         .card {
             width: 15rem;
-            margin: 10px; /* Small gap between cards */
+            margin: 10px;
+            /* Small gap between cards */
             border: 1px solid #ddd;
             border-radius: 10px;
             overflow: hidden;
@@ -84,116 +92,122 @@
             0% {
                 transform: translateX(50%);
             }
-         
+
         }
 
         @media (max-width: 768px) {
-    .card {
-        width: 12rem; /* Adjust card width for medium devices */
-        margin: 8px 4px; /* Reduce vertical and horizontal gaps */
-    }
-}
-
-            .card-text {
-                font-size: 0.9rem;
+            .card {
+                width: 12rem;
+                /* Adjust card width for medium devices */
+                margin: 8px 4px;
+                /* Reduce vertical and horizontal gaps */
             }
+        }
 
-            footer {
-                font-size: 0.8rem;
-            }
+        .card-text {
+            font-size: 0.9rem;
+        }
+
+        footer {
+            font-size: 0.8rem;
+        }
         }
 
         @media (max-width: 480px) {
-    .card {
-        width: 10rem; /* Adjust card width for small devices */
-        margin: 5px 2px; /* Further reduce gaps for smaller screens */
-    }
-}
-
-            .card-text {
-                font-size: 0.8rem;
+            .card {
+                width: 10rem;
+                /* Adjust card width for small devices */
+                margin: 5px 2px;
+                /* Further reduce gaps for smaller screens */
             }
+        }
 
-            footer {
-                font-size: 0.7rem;
-            }
+        .card-text {
+            font-size: 0.8rem;
+        }
+
+        footer {
+            font-size: 0.7rem;
+        }
         }
     </style>
 </head>
+
 <body class="transition-fade">
 
-<a href="login">
-    <div class="card">
-        <img src="/images/pannel/admin.jpg" class="card-img-top" alt="Admin">
-        <div class="card-body">
-            <p class="card-text">Login as ADMIN</p>
+    <a href="{{ route('admin.login') }}">
+        <div class="card">
+            <img src="/images/pannel/admin.jpg" class="card-img-top" alt="Admin">
+            <div class="card-body">
+                <p class="card-text">Login as ADMIN</p>
+            </div>
         </div>
-    </div>
-</a>
-<a href="login">
-    <div class="card">
-        <img src="/images/pannel/teacher.png" class="card-img-top" style="margin-top: 25px;" alt="Teacher">
-        <div class="card-body">
-            <p class="card-text">Login as Teacher</p>
+    </a>
+    <a href="{{ route('teacher.login') }}">
+        <div class="card">
+            <img src="/images/pannel/teacher.png" class="card-img-top" style="margin-top: 25px;" alt="Teacher">
+            <div class="card-body">
+                <p class="card-text">Login as Teacher</p>
+            </div>
         </div>
-    </div>
-</a>
-<a href="login">
-    <div class="card">
-        <img src="/images/pannel/students.png" class="card-img-top" style="margin-top: 26px;" alt="Student">
-        <div class="card-body">
-            <p class="card-text">Login as Student</p>
+    </a>
+    <a href="{{ route('student.login') }}">
+        <div class="card">
+            <img src="/images/pannel/students.png" class="card-img-top" style="margin-top: 26px;" alt="Student">
+            <div class="card-body">
+                <p class="card-text">Login as Student</p>
+            </div>
         </div>
-    </div>
-</a>
+    </a>
 
-<footer>
-    <div class="marquee">
-        <div class="marquee-content">
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <footer>
+        <div class="marquee">
+            <div class="marquee-content">
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Naragram Learning Management System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const anchors = document.querySelectorAll("a");
-        const body = document.body;
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const anchors = document.querySelectorAll("a");
+            const body = document.body;
 
-        anchors.forEach(anchor => {
-            anchor.addEventListener("click", event => {
-                event.preventDefault();
-                const href = anchor.getAttribute("href");
+            anchors.forEach(anchor => {
+                anchor.addEventListener("click", event => {
+                    event.preventDefault();
+                    const href = anchor.getAttribute("href");
 
-                body.classList.add("is-animating");
+                    body.classList.add("is-animating");
 
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 500);
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
+
 </html>

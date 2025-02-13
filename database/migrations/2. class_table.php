@@ -8,17 +8,17 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->string('course_name');
             $table->unsignedBigInteger('A_ID');
             $table->timestamps();
 
             $table->foreign('A_ID')
                 ->references('id')
-                ->on('admin')
+                ->on('admins')
                 ->onDelete('cascade');
 
-            
+
         });
     }
 
