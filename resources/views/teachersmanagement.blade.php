@@ -10,46 +10,22 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    /* Content wrapper positioned to the right of the sidebar */
+    body { background-color: #f8f9fa; }
     .content-wrapper {
       margin-left: 260px;
       padding: 20px;
       transition: margin-left 0.3s ease;
     }
-    .sidebar.hidden + .content-wrapper {
-      margin-left: 0;
-    }
-    /* Card hover effect */
-    .card {
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: scale(1.02);
-    }
-    /* Toggle button visible only on smaller screens */
-    .btn-toggle {
-      display: none;
-    }
+    .sidebar.hidden + .content-wrapper { margin-left: 0; }
+    .card { transition: transform 0.3s; }
+    .card:hover { transform: scale(1.02); }
+    .btn-toggle { display: none; }
     @media (max-width: 768px) {
-      .btn-toggle {
-        display: block;
-      }
-      .content-wrapper {
-        margin-left: 0;
-      }
+      .btn-toggle { display: block; }
+      .content-wrapper { margin-left: 0; }
     }
-    /* Table responsiveness */
-    .table-responsive {
-      overflow-x: auto;
-    }
-    /* Modal header styling */
-    .modal-header {
-      background: #4093e7;
-      color: #fff;
-    }
+    .table-responsive { overflow-x: auto; }
+    .modal-header { background: #4093e7; color: #fff; }
   </style>
 </head>
 <body>
@@ -80,7 +56,6 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Username</th>
-            <th>Password</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -94,9 +69,8 @@
             <td>{{ $teacher->Phone_Number }}</td>
             <td>{{ $teacher->Address }}</td>
             <td>{{ $teacher->Username }}</td>
-            <td>{{ $teacher->Password }}</td>
             <td>
-              <!-- Edit Button: triggers the edit modal -->
+              <!-- Edit Button -->
               <button class="btn btn-warning btn-sm edit-button"
                 data-bs-toggle="modal"
                 data-bs-target="#editTeacherModal"
@@ -106,8 +80,7 @@
                 data-email="{{ $teacher->Email }}"
                 data-phone="{{ $teacher->Phone_Number }}"
                 data-address="{{ $teacher->Address }}"
-                data-username="{{ $teacher->Username }}"
-                data-password="{{ $teacher->Password }}">
+                data-username="{{ $teacher->Username }}">
                 <i class="fas fa-edit"></i>
               </button>
               <!-- Delete Form -->
@@ -217,7 +190,7 @@
               <div class="col-md-6">
                 <label for="edit_password" class="form-label">Password</label>
                 <input type="password" name="password" id="edit_password" class="form-control">
-                <small class="text-muted">Leave blank to keep existing password</small>
+                <small class="text-muted">Leave blank to keep the existing password</small>
               </div>
             </div>
           </div>
@@ -248,19 +221,15 @@
       let phone = $(this).data('phone');
       let address = $(this).data('address');
       let username = $(this).data('username');
-      let password = $(this).data('password');
 
-      // Set the form action URL (now including the admin prefix)
       $('#editTeacherForm').attr('action', '/admin/teachers/' + id);
-
-      // Populate the form fields
       $('#edit_teacher_name').val(name);
       $('#edit_subject').val(subject);
       $('#edit_email').val(email);
       $('#edit_phone_number').val(phone);
       $('#edit_address').val(address);
       $('#edit_username').val(username);
-      $('#edit_password').val(password); // Leave password blank to keep existing password
+      $('#edit_password').val('');
     });
   </script>
 </body>

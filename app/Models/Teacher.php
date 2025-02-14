@@ -16,10 +16,17 @@ class Teacher extends Authenticatable
         'Address', 'Username', 'Password', 'Status', 'A_ID'
     ];
 
+    // Hide the password attribute when serializing
     protected $hidden = ['Password'];
 
     public function getAuthPassword()
     {
         return $this->Password;
+    }
+
+    // Mutator to automatically hash passwords
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['Password'] = bcrypt($value);
     }
 }

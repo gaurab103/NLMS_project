@@ -298,7 +298,7 @@
       editTitle.value = title;
       editContent.value = content;
       // Set the form action URL for updating (ensure a leading slash)
-      editForm.action = `/news/${id}`;
+      editForm.action = `news/${id}`;
       // Show the edit form
       editNoticeForm.classList.add('active');
       // Optionally, scroll into view for better UX

@@ -17,24 +17,27 @@ class TeacherController extends Controller
     {
         $request->validate([
             'teacher_name' => 'required|string|max:255',
-            'subject' => 'required|string|max:255',
-            'email' => 'required|email|unique:teachers,email',
+            'subject'      => 'required|string|max:255',
+            'email'        => 'required|email|unique:teachers,Email',
             'phone_number' => 'required|digits_between:10,15',
-            'address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
+            'address'      => 'required|string|max:255',
+            'username'     => 'required|string|max:255|unique:teachers,Username',
+            'password'     => 'required|string|max:255',
         ]);
 
+        // Use the currently logged-in admin's ID instead of hardcoding "1"
+        $adminId = auth()->guard('admin')->id();
+
         Teacher::create([
-            'A_ID' => 1,
+            'A_ID'         => $adminId,
             'Teacher_Name' => $request->teacher_name,
-            'Subject' => $request->subject,
-            'Email' => $request->email,
+            'Subject'      => $request->subject,
+            'Email'        => $request->email,
             'Phone_Number' => $request->phone_number,
-            'Address' => $request->address,
-            'Username' => $request->username,
-            'Password' => ($request->password), // Encrypt password
-            'Status' => true,
+            'Address'      => $request->address,
+            'Username'     => $request->username,
+            'Password'     => $request->password, // Will be hashed by the model mutator.
+            'Status'       => true,
         ]);
 
         return redirect()->route('teachers.index')->with('success', 'Teacher added successfully.');
@@ -52,23 +55,28 @@ class TeacherController extends Controller
 
         $request->validate([
             'teacher_name' => 'required|string|max:255',
-            'subject' => 'required|string|max:255',
-            'email' => 'required|email|unique:teachers,email,' . $teacher->id,
+            'subject'      => 'required|string|max:255',
+            'email'        => 'required|email|unique:teachers,Email,' . $teacher->id,
             'phone_number' => 'required|digits_between:10,15',
-            'address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'nullable|string|max:255',
+            'address'      => 'required|string|max:255',
+            'username'     => 'required|string|max:255|unique:teachers,Username,' . $teacher->id,
+            'password'     => 'nullable|string|max:255',
         ]);
 
-        $teacher->update([
+        $updateData = [
             'Teacher_Name' => $request->teacher_name,
-            'Subject' => $request->subject,
-            'Email' => $request->email,
+            'Subject'      => $request->subject,
+            'Email'        => $request->email,
             'Phone_Number' => $request->phone_number,
-            'Address' => $request->address,
-            'Username' => $request->username,
-            'Password' => $request->password ? ($request->password) : $teacher->Password,
-        ]);
+            'Address'      => $request->address,
+            'Username'     => $request->username,
+        ];
+
+        if ($request->filled('password')) {
+            $updateData['Password'] = $request->password;
+        }
+
+        $teacher->update($updateData);
 
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
