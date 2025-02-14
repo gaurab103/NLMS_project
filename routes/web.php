@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\Auth\TeacherAuthController;
-use App\Http\Controllers\Auth\StudentAuthController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\frontendControler;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
@@ -11,35 +10,45 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\AttendanceController;
+use Illuminate\Support\Facades\Auth;
 
-Route::get('/login', function () {
-    return redirect()->route('admin.login'); // Or any default login page
-})->name('login');
 
 Route::get('/', function () {
     return view('homepage');
-})->name('home');
+})->name('homepage');
+
+Route::get('/admin', function () {
+    return view('admindashboard');
+})->name('admin');
+
+Route::get('/students', function () {
+    return view('studentmanagement');
+})->name('students');
+Route::get('/attendance', function () {
+    return view('attendance');
+})->name('attendance');
+
+Route::get('/news', function () {
+    return view('news');
+})->name('news');
 
 Route::get('/pannel', function () {
     return view('pannel');
 })->name('pannel');
 
-// Admin Routes
-Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [AdminAuthController::class, 'login']);
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-
-    Route::middleware('auth:admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admindashboard');
-        })->name('admin.dashboard');
-
-        // Use the NewsController for admin news routes
-        Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-        Route::post('/news', [NewsController::class, 'store'])->name('news.store');
-        Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
-        Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+Route::get('/teacherportal', function () {
+    return view('teacherportal');
+})->name('teacherportal');
+Route::get('/studentportal', function () {
+    return view('layout');
+})->name('layout');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
+Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
 
         Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
         Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
@@ -47,51 +56,31 @@ Route::prefix('admin')->group(function () {
         Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
         Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
-        Route::get('/students', function () {
-            return view('studentmanagement');
-        })->name('students');
+Route::get('/student/portal/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance.page');
+Route::get('/student/portal', [StudentsController::class, 'index'])->name('portal');
+Route::get('/student/portal/profile', [StudentsController::class, 'profile'])->name('profile');
+Route::get('/student/profile/{id}', [ProfileController::class, 'showProfile'])->name('student.profile');
+Route::get('/student/portal/{studentId}', [StudentsController::class, 'showPortal']);
+Route::get('/student/portal/profileedit/{id}', [StudentsController::class, 'editpro'])->name('edit.profile');
+Route::put('/student/update-profile/{id}', [StudentsController::class, 'updatepro'])->name('update.profile');
 
-        Route::get('/attendance', function () {
-            return view('attendancemanagement');
-        })->name('attendance');
-    });
-});
 
-// Teacher Routes
-Route::prefix('teacher')->group(function () {
-    Route::get('/login', [TeacherAuthController::class, 'showLoginForm'])->name('teacher.login');
-    Route::post('/login', [TeacherAuthController::class, 'login']);
-    Route::post('/logout', [TeacherAuthController::class, 'logout'])->name('teacher.logout');
 
-    Route::middleware('auth:teacher')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('teacherportal');
-        })->name('teacher.dashboard');
-    });
-});
 
-// Student Routes
-Route::prefix('student')->group(function () {
-    Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
-    Route::post('/login', [StudentAuthController::class, 'login']);
-    Route::post('/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 
-    Route::middleware('auth:student')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('layout');
-        })->name('student.dashboard');
-    });
-});
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Remove the duplicate /news route below since it does not pass $notices
-// Route::get('/news', function () {
-//     return view('news');
-// })->name('news');
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
+// Route::get("/",[frontendControler::class,'index'])->name('home');
 
-Route::get('teachers', function () {
-    return view('teachersmanagement');
-})->name('teachers');
+// require __DIR__.'/auth.php';
 
-Route::get('logout', function () {
-    return view('homepage');
-})->name('settings');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

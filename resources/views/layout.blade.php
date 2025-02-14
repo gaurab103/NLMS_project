@@ -224,7 +224,7 @@
     <aside>
         <ul>
             <li><a href="#profileContent"><i class="fas fa-user"></i>Profile</a></li>
-            <li><a href="#"><i class="fas fa-calendar-check"></i>Attendance</a></li>
+            <li><a href="#" id="attendanceLink"><i class="fas fa-calendar-check"></i>Attendance</a></li>
             <li><a href="#"><i class="fas fa-file-alt"></i>Notes</a></li>
             <li><a href="#"><i class="fas fa-book"></i>Assignments</a></li>
             <li><a href="#"><i class="fas fa-comments"></i>Messages</a></li>
@@ -332,52 +332,63 @@
             });
         });
         document.querySelectorAll('.box[data-title="Profile"]').forEach(box => {
-            box.addEventListener('click', () => {
-                document.getElementById('contentRow').style.display = 'none';
-                const profileContent = document.getElementById('profileContent');
-                profileContent.style.display = 'block';
+    box.addEventListener('click', () => {
+        showSectionContent('profile', '/student/profile/1');
+    });
+});
 
-                fetch('/student/portal/profile')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.text();
-                    })
-                    .then(htmlContent => {
-                        profileContent.innerHTML = htmlContent;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching profile content:', error);
-                        profileContent.innerHTML =
-                            '<p>Error loading profile content. Please try again later.</p>';
-                    });
-            });
+document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('attendance', '/student/portal/attendance/1');
+    });
+});
+
+document.querySelectorAll('.box[data-title="Messages"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('messages', '/student/portal/messages');
+    });
+});
+
+document.querySelectorAll('.box[data-title="Notes"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('notes', '/student/portal/notes');
+    });
+});
+
+document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('assignments', '/student/portal/assignments');
+    });
+});
+
+document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('subjects', '/student/portal/subjects');
+    });
+});
+
+function showSectionContent(section, url) {
+    document.getElementById('contentRow').style.display = 'none';
+    const profileContent = document.getElementById('profileContent');
+    profileContent.style.display = 'block';
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(htmlContent => {
+            profileContent.innerHTML = htmlContent;
+        })
+        .catch(error => {
+            console.error(`Error fetching ${section} content:`, error);
+            profileContent.innerHTML =
+                `<p>Error loading ${section} content. Please try again later.</p>`;
         });
+}
 
-        document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
-            box.addEventListener('click', () => {
-                document.getElementById('contentRow').style.display = 'none';
-                const profileContent = document.getElementById('profileContent');
-                profileContent.style.display = 'block';
-
-                fetch('/student/portal/attendance')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.text();
-                    })
-                    .then(htmlContent => {
-                        profileContent.innerHTML = htmlContent;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching profile content:', error);
-                        profileContent.innerHTML =
-                            '<p>Error loading profile content. Please try again later.</p>';
-                    });
-            });
-        });
     </script>
 </body>
 
