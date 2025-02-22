@@ -25,7 +25,7 @@ class StudentAuthController extends Controller
 
         $student = Student::where('Username', $credentials['username'])->first();
 
-        if ($student && $student->Password === $credentials['password']) {
+        if ($student && Hash::check($credentials['password'], $student->Password)) {
             Auth::guard('student')->login($student);
             return redirect()->route('student.dashboard');
         }

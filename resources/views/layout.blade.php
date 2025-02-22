@@ -340,7 +340,7 @@
 
 document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('attendance', '/student/portal/attendance/1');
+        showSectionContent('attendance', '/student/attendance');
     });
 });
 
