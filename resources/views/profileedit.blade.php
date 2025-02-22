@@ -50,7 +50,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Update Profile</button>
-            <a href="{{ route('profile') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('student.profile') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

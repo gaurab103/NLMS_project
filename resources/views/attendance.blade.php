@@ -11,34 +11,38 @@
 <body>
     <div class="container mt-4">
         <h2>Attendance Records</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Student ID</th>
-                    <th>Attendance ID</th>
-                    <th>Teacher ID</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($attendance as $row)
+        @if (isset($attendance) && count($attendance) > 0)
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>{{ $row->id }}</td>
-                        <td>{{ $row->name }}</td>
-                        <td>{{ $row->Std_ID }}</td>
-                        <td>{{ $row->A_ID }}</td>
-                        <td>{{ $row->T_ID }}</td>
-                        <td>{{ $row->status }}</td>
-                        <td>{{ $row->created_at }}</td>
-                        <td>{{ $row->updated_at }}</td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Student ID</th>
+                        <th>Attendance ID</th>
+                        <th>Teacher ID</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($attendance as $row)
+                        <tr>
+                            <td>{{ $row->id }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->Std_ID }}</td>
+                            <td>{{ $row->A_ID }}</td>
+                            <td>{{ $row->T_ID }}</td>
+                            <td>{{ $row->status }}</td>
+                            <td>{{ $row->created_at }}</td>
+                            <td>{{ $row->updated_at }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No attendance records found.</p>
+        @endif
     </div>
 
     <script>

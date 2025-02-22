@@ -86,6 +86,10 @@ Route::prefix('student')->group(function () {
         Route::get('/dashboard', function () {
             return view('layout');
         })->name('student.dashboard');
+        Route::get('/profile', [StudentAuthController::class, 'profile'])->name('student.profile');
+        Route::get('/profile/edit/{id}', [StudentAuthController::class, 'editpro'])->name('edit.profile');
+        Route::put('/profile/update/{id}', [StudentAuthController::class, 'updatepro'])->name('update.profile');
+        Route::get('/attendance', [StudentAuthController::class, 'attendance'])->name('student.attendance');
     });
 });
 

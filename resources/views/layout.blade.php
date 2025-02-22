@@ -230,9 +230,10 @@
             <li><a href="#"><i class="fas fa-comments"></i>Messages</a></li>
             <li><a href="#"><i class="fas fa-chalkboard-teacher"></i>Subjects</a></li>
         </ul>
-        <div class="logout">
-            <button>Logout</button>
-        </div>
+        <form action="{{ route('admin.logout') }}" method="POST" class="inline">
+        @csrf
+        <button type="submit" class="logout">Logout</button>
+    </form>
     </aside>
 
     <main>
@@ -333,7 +334,7 @@
         });
         document.querySelectorAll('.box[data-title="Profile"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('profile', '/student/profile/1');
+        showSectionContent('profile', '/student/profile');
     });
 });
 
