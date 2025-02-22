@@ -346,25 +346,25 @@ document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Messages"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('messages', '/student/portal/messages');
+        showSectionContent('messages', '/student/messages');
     });
 });
 
 document.querySelectorAll('.box[data-title="Notes"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('notes', '/student/portal/notes');
+        showSectionContent('notes', '/student/notes');
     });
 });
 
 document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('assignments', '/student/portal/assignments');
+        showSectionContent('assignments', '/student/assignments');
     });
 });
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/portal/subjects');
+        showSectionContent('subjects', '/student/subjects');
     });
 });
 

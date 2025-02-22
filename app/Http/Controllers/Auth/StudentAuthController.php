@@ -25,10 +25,11 @@ class StudentAuthController extends Controller
 
         $student = Student::where('Username', $credentials['username'])->first();
 
-        if ($student && Hash::check($credentials['password'], $student->Password)) {
+        if ($student && $credentials['password'] === $student->Password) {
             Auth::guard('student')->login($student);
             return redirect()->route('student.dashboard');
         }
+        
 
         return back()->withErrors(['username' => 'Invalid credentials']);
     }
@@ -85,4 +86,39 @@ class StudentAuthController extends Controller
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
+    public function attendance()
+{
+    try {
+        $student = Auth::guard('student')->user();
+
+        if (!$student) {
+            return view('attendance', ['error' => 'Student not found']);
+        }
+
+        $attendance = Attendance::where('student_id', $student->id)->get();
+
+        return view('attendance', compact('student', 'attendance'));
+    } catch (\Exception $e) {
+        return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
+    }
+}
+
+public function fetchAttendance()
+{
+    $student = Auth::guard('student')->user(); // Get the logged-in student
+
+    if (!$student) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User not authenticated',
+        ]);
+    }
+    $attendance = Attendance::where('Std_ID', $student->id)->get();
+
+    return response()->json([
+        'success' => true,
+        'data' => $attendance,
+    ]);
+}
+
 }
