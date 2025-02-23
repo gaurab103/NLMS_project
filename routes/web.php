@@ -73,6 +73,12 @@ Route::prefix('teacher')->group(function () {
         Route::get('/dashboard', function () {
             return view('teacherportal');
         })->name('teacher.dashboard');
+        Route::get('/assignmentportalteacher', function () {
+            return view('assignmentportalteacher');
+        })->name('teacher.assignment');
+        Route::get('/notesteacher', function () {
+            return view('notesteacher');
+        })->name('teacher.notes');
     });
 });
 
