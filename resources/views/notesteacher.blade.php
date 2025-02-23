@@ -104,7 +104,7 @@
     <header>
         <div class="navbar">
             <div class="container d-flex align-items-center justify-content-between">
-                <img src="/image/IMG_5209-removebg-preview.png" alt="Logo">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo">
                 <a class="navbar-brand" href="#">Naragram Learning Management System</a>
             </div>
         </div>
@@ -122,6 +122,13 @@
         <a href="#" aria-label="Attendance" style="background-color: #007bff; color:white;">Notes</a>
         <a href="{{route ('teacher.assignment')}}" aria-label="Assignment">Assignments</a>
         <a href="#" aria-label="Communication">Communication</a>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+    <!-- Hidden logout form -->
+    <form id="logout-form" action="{{ route('teacher.logout') }}" method="POST" style="display: none;">
+      @csrf
+    </form>
     </div>
 
     <div class="container">

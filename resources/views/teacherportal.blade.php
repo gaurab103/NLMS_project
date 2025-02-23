@@ -161,9 +161,16 @@
         <a href="#" aria-label="Attendance">Attendance</a>
         <a href="{{ route('teacher.notes') }}" aria-label="Notes">Notes</a>
         <a href="{{ route('teacher.assignment') }}" aria-label="Assignments">Assignments</a>
-
-
         <a href="#" aria-label="Communication">Communication</a>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+    <!-- Hidden logout form -->
+    <form id="logout-form" action="{{ route('teacher.logout') }}" method="POST" style="display: none;">
+      @csrf
+    </form>
+
+    
     </div>
     <div class="box">
         <h1>Welcome Teacher</h1>
