@@ -230,9 +230,10 @@
             <li><a href="#"><i class="fas fa-comments"></i>Messages</a></li>
             <li><a href="#"><i class="fas fa-chalkboard-teacher"></i>Subjects</a></li>
         </ul>
-        <div class="logout">
-            <button>Logout</button>
-        </div>
+        <form action="{{ route('admin.logout') }}" method="POST" class="inline">
+        @csrf
+        <button type="submit" class="logout">Logout</button>
+    </form>
     </aside>
 
     <main>
@@ -333,37 +334,37 @@
         });
         document.querySelectorAll('.box[data-title="Profile"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('profile', '/student/profile/1');
+        showSectionContent('profile', '/student/profile');
     });
 });
 
 document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('attendance', '/student/portal/attendance/1');
+        showSectionContent('attendance', '/student/attendance');
     });
 });
 
 document.querySelectorAll('.box[data-title="Messages"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('messages', '/student/portal/messages');
+        showSectionContent('messages', '/student/messages');
     });
 });
 
 document.querySelectorAll('.box[data-title="Notes"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('notes', '/student/portal/notes');
+        showSectionContent('notes', '/student/notes');
     });
 });
 
 document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('assignments', '/student/portal/assignments');
+        showSectionContent('assignments', '/student/assignments');
     });
 });
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/portal/subjects');
+        showSectionContent('subjects', '/student/subjects');
     });
 });
 

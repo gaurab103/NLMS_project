@@ -11,28 +11,13 @@ class Student extends Authenticatable
 {
     use Notifiable;
 
-    protected $guard = 'student';
-
+    protected $table = 'students';
     protected $fillable = [
-        'name',
-        'dob',
-        'photo',
-        'Address',
-        'Parent_Name',
-        'Contact_No',
-        'Email',
-        'C_ID',
-        'A_ID',
-        'Stats',
-        'Username',
-        'Password'
+        'name', 'Address', 'Parent_Name', 'Contact_No',
+        'Email', 'C_ID', 'A_ID', 'Stats', 'Username', 'Password'
     ];
 
     protected $hidden = ['Password'];
-
-    protected $casts = [
-        'dob' => 'date',
-    ];
 
     public function getAuthPassword()
     {

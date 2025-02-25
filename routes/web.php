@@ -70,6 +70,12 @@ Route::prefix('teacher')->group(function () {
         Route::get('/dashboard', function () {
             return view('teacherportal');
         })->name('teacher.dashboard');
+        Route::get('/assignmentportalteacher', function () {
+            return view('assignmentportalteacher');
+        })->name('teacher.assignment');
+        Route::get('/notesteacher', function () {
+            return view('notesteacher');
+        })->name('teacher.notes');
     });
 });
 
@@ -83,8 +89,41 @@ Route::prefix('student')->group(function () {
         Route::get('/dashboard', function () {
             return view('layout');
         })->name('student.dashboard');
+        
+            Route::get('/profile', function () {
+                return view('profile'); 
+            })->name('student.profile');
+            
+            Route::get('/profile/edit/{id}', function ($id) {
+                return view('profile_edit', compact('id'));
+            })->name('edit.profile');
+            
+            Route::put('/profile/update/{id}', [StudentAuthController::class, 'updatepro'])->name('update.profile');
+            
+            Route::get('/attendance', function () {
+                return view('attendance'); 
+            })->name('student.attendance');
+            
+            Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
+            
+            Route::get('/notes', function () {
+                return view('notes'); 
+            })->name('student.notes');
+            
+            Route::get('/assignments', function () {
+                return view('assignments');
+            })->name('student.assignments');
+            
+            Route::get('/messages', function () {
+                return view('messages'); 
+            })->name('student.messages');
+            
+            Route::get('/subjects', function () {
+                return view('subjects'); 
+            })->name('student.subjects');
+        });
     });
-});
+
 
 Route::get('logout', function () {
     return view('homepage');

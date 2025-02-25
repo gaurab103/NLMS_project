@@ -13,129 +13,41 @@
         }
 
         body {
-            background: var(--gradient-bg);
-            min-height: 100vh;
+            background-color: #f4f6f9;
             display: flex;
-            align-items: center;
             justify-content: center;
+            height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
         }
-
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            padding: 2.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
             width: 100%;
-            max-width: 500px;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.6s ease forwards;
+            max-width: 450px;
         }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .login-header {
             text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .brand-logo {
-            height: 80px;
             margin-bottom: 1.5rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            color: #343a40;
         }
 
         .login-header h2 {
-            color: var(--primary-color);
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            position: relative;
-            display: inline-block;
+            font-weight: bold;
         }
-
-        .login-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--accent-color);
-        }
-
-        .form-control {
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 0.75rem 1.25rem;
-            transition: all 0.3s ease;
-        }
-
         .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(78, 62, 123, 0.15);
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
         }
-
-        .form-label {
-            color: var(--primary-color);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .btn-teacher {
-            background: var(--primary-color);
-            border: none;
-            padding: 0.75rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            color: white;
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
-
-        .btn-teacher:hover {
-            background: #3d2f60;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(78, 62, 123, 0.3);
-        }
-
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .invalid-feedback {
-            background: #ffe3e3;
-            color: #dc3545;
-            padding: 0.5rem;
-            border-radius: 5px;
-            margin-top: 0.5rem;
-            border: 1px solid #ffc9c9;
-        }
-
-        @media (max-width: 576px) {
-            .login-container {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .brand-logo {
-                height: 60px;
-            }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
     </style>
 </head>

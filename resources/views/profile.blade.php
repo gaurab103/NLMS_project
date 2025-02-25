@@ -13,8 +13,8 @@
             <a href="{{ route('edit.profile', $student->id) }}" class="btn btn-primary">Edit Profile</a>
             <div class="card mt-3">
                 <div class="card-body">
-                    <p><strong>Name:</strong> {{ $student->student_name }}</p>
-                    <p><strong>Email:</strong> {{ $student->email }}</p>
+                    <p><strong>Name:</strong> {{ $student->name }}</p>
+                    <p><strong>Email:</strong> {{ $student->Email }}</p>
                 </div>
             </div>
         @elseif(isset($error))
