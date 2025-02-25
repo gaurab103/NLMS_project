@@ -9,9 +9,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #4e3e7b;
-      --accent-color: #ffd700;
-      --hover-color: #6a5699;
+      --primary-color:rgb(255, 255, 255);
+      --accent-color:rgb(255, 247, 24);
+      --hover-color:rgb(255, 0, 0);
+      --add-color:rgb(0, 0, 0);
     }
 
     body {
@@ -21,13 +22,19 @@
     }
 
     .navbar {
-      background: linear-gradient(135deg, var(--accent-color), #ffe44d);
+      background: linear-gradient(135deg, var(--accent-color),var(--hover-color));
       padding: 0.8rem;
       transition: all 0.3s ease;
     }
 
     .navbar-brand img {
       transition: transform 0.3s ease;
+    }
+    .heading{
+      text-decoration: none;
+      font-weight:bold;
+      color: black;
+      font-size: x-large;
     }
 
     .navbar-brand img:hover {
@@ -60,7 +67,7 @@
     }
 
     .nav-link:hover {
-      color: var(--hover-color) !important;
+      color: var(--accent-color) !important;
       transform: translateY(-2px);
     }
 
@@ -118,11 +125,13 @@
     }
 
     #cntus {
-      background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+      display: flex;
+      justify-content:center;
+      padding:5%;
+      background: linear-gradient(135deg, var(--primary-color),var(--hover-color)) ;
       color: white;
-      padding: 3rem;
+      margin-bottom:2%;
       border-radius: 2rem;
-      margin: 4rem 0;
     }
 
     #cntus .fa {
@@ -150,7 +159,7 @@
     }
 
     .btn-outline-primary:hover {
-      background-color: var(--primary-color);
+      background-color: var(--accent-color);
       border-color: var(--primary-color);
       transform: translateY(-2px);
     }
@@ -199,7 +208,7 @@
     }
 
     footer {
-      background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+      background: black;
       color: white;
       padding: 1.5rem 0;
       text-align: center;
@@ -243,7 +252,9 @@
     <div class="container">
       <a class="navbar-brand" href="#">
         <img src="{{ asset('images/logo/logo.png') }}" alt="Naragram" style="height: 50px; width: 70px;">
+        
       </a>
+      <a class="heading">Shree Nagaram Secondary School</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -306,9 +317,10 @@
       </div>
     </div>
   </section>
+  <h2 class="container text-center section-title">Contact Us</h2>
 
   <section id="cntus" class="container">
-    <h2 class="text-center section-title">Contact Us</h2>
+    
     <div class="row justify-content-center text-center">
       <div class="col-md-4">
         <i class="fa fa-map-marker"></i>
