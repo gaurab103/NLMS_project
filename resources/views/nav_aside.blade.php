@@ -103,7 +103,7 @@
     <a href="{{ route('admin.dashboard') }}" id="dashboardLink">
       <i class="fas fa-tachometer-alt"></i> Dashboard
     </a>
-    <a href="{{ route('students') }}" id="studentsLink">
+    <a href="{{ route('students.index') }}" id="studentsLink">
       <i class="fas fa-user-graduate"></i> Manage Students
     </a>
     <a href="{{ route('teachers.index') }}" id="teachersLink">

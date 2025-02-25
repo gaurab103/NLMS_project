@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('Phone_Number');
             $table->string('Address');
             $table->boolean('Status');
+            $table->string('Photo')->nullable();
             $table->string('Username')->unique();
             $table->string('Password');
             $table->timestamps();

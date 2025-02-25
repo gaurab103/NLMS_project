@@ -17,18 +17,18 @@ class StudentAuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required'
         ]);
 
-        $student = Student::where('Email', $credentials['email'])->first();
+        $student = Student::where('Username', $credentials['username'])->first();
 
         if ($student && $student->Password === $credentials['password']) {
             Auth::guard('student')->login($student);
             return redirect()->route('student.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        return back()->withErrors(['username' => 'Invalid username or password']);
     }
 
     public function logout()

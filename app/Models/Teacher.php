@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class Teacher extends Authenticatable
 {
@@ -13,20 +14,13 @@ class Teacher extends Authenticatable
 
     protected $fillable = [
         'Teacher_Name', 'Subject', 'Email', 'Phone_Number',
-        'Address', 'Username', 'Password', 'Status', 'A_ID'
+        'Address', 'Username', 'Password', 'Status', 'A_ID', 'Photo'
     ];
-
-    // Hide the password attribute when serializing
-    protected $hidden = ['Password'];
-
-    public function getAuthPassword()
+    protected $appends = ['photo_url', 'all'];
+    public function getPhotoUrlAttribute()
     {
-        return $this->Password;
-    }
-
-    // Mutator to automatically hash passwords
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['Password'] = bcrypt($value);
+        return $this->photo
+            ? asset('storage/'.$this->photo)
+            : asset('images/default-user.png');
     }
 }
