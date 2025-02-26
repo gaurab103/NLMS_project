@@ -230,9 +230,10 @@
             <li><a href="#"><i class="fas fa-comments"></i>Messages</a></li>
             <li><a href="#"><i class="fas fa-chalkboard-teacher"></i>Subjects</a></li>
         </ul>
-        <form action="{{ route('admin.logout') }}" method="POST" class="inline">
-        @csrf
-        <button type="submit" class="logout">Logout</button>
+        <form action="{{ route('student.logout') }}" method="POST" class="inline">
+            @csrf
+            <button type="submit" class="hover:underline">Logout</button>
+        </form>
     </form>
     </aside>
 

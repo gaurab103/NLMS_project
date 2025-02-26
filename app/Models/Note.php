@@ -6,12 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    protected $table = 'notes';
+    protected $table = 'notes';  
 
     protected $fillable = [
-        'student_id',
-        'content',
-        'created_at',
-        'updated_at',
+        'content',  
+        'subject_id', 
     ];
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class); 
+    }
 }
+
