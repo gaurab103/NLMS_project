@@ -95,7 +95,6 @@ class TeacherController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            // Delete old photo
             if ($teacher->Photo && Storage::disk('public')->exists($teacher->Photo)) {
                 Storage::disk('public')->delete($teacher->Photo);
             }

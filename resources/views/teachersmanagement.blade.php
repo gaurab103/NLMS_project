@@ -1,5 +1,4 @@
 @include('nav_aside')
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +8,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
-        .content-wrapper { margin-left: 260px; padding: 25px; }
-        .card-shadow { box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); }
-        .table-hover tbody tr:hover { background-color: rgba(64, 147, 231, 0.05); }
-        .teacher-photo { width: 50px; height: 50px; object-fit: cover; }
-        .modal-header { background: #4093e7; color: white; border-radius: 0.3rem 0.3rem 0 0; }
-        .filter-container { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .form-select { min-width: 200px; }
-        .pagination { margin-bottom: 0; }
+        .content-wrapper {
+            margin-left: 260px;
+            padding: 25px;
+        }
+        .card-shadow {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(64, 147, 231, 0.05);
+        }
+        .teacher-photo {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .modal-header {
+            background: #4093e7;
+            color: white;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .form-select {
+            min-width: 200px;
+        }
+        .pagination {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -41,7 +64,9 @@
                         </button>
 
                         <div class="d-flex align-items-center gap-3">
-                            <div class="text-muted d-none d-md-block">Showing {{ $teachers->firstItem() }} - {{ $teachers->lastItem() }} of {{ $teachers->total() }}</div>
+                            <div class="text-muted d-none d-md-block">
+                                Showing {{ $teachers->firstItem() }} - {{ $teachers->lastItem() }} of {{ $teachers->total() }}
+                            </div>
                             <div class="filter-container">
                                 <form method="GET" class="d-flex mb-2 mb-md-0">
                                     <div class="input-group">
@@ -81,24 +106,22 @@
                             </thead>
                             <tbody>
                                 @forelse($teachers as $teacher)
-                                <tr>
-                                    <td>{{ ($teachers->currentPage() - 1) * $teachers->perPage() + $loop->iteration }}</td>
-                                    <td>
-                                        <img src="{{ $teacher->photo_url }}"
-                                             class="teacher-photo rounded-circle border"
-                                             alt="{{ $teacher->Teacher_Name }}">
-                                    </td>
-                                    <td>{{ $teacher->Teacher_Name }}</td>
-                                    <td>{{ $teacher->Subject }}</td>
-                                    <td>{{ $teacher->Email }}</td>
-                                    <td>{{ $teacher->Phone_Number }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ $teacher->Status ? 'success' : 'danger' }}">
-                                            {{ $teacher->Status ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-warning btn-sm edit-button"
+                                    <tr>
+                                        <td>{{ ($teachers->currentPage() - 1) * $teachers->perPage() + $loop->iteration }}</td>
+                                        <td>
+                                            <img src="{{ $teacher->photo_url }}" class="teacher-photo rounded-circle border" alt="{{ $teacher->Teacher_Name }}">
+                                        </td>
+                                        <td>{{ $teacher->Teacher_Name }}</td>
+                                        <td>{{ $teacher->Subject }}</td>
+                                        <td>{{ $teacher->Email }}</td>
+                                        <td>{{ $teacher->Phone_Number }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $teacher->Status ? 'success' : 'danger' }}">
+                                                {{ $teacher->Status ? 'Active' : 'Inactive' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm edit-button"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editTeacherModal"
                                                 data-id="{{ $teacher->id }}"
@@ -111,37 +134,34 @@
                                                 data-password="{{ $teacher->Password }}"
                                                 data-status="{{ $teacher->Status }}"
                                                 data-photo="{{ $teacher->Photo }}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <form action="{{ route('teachers.destroy', $teacher->id) }}"
-                                              method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure?')">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="8" class="text-center py-4">No teachers found</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-center py-4">No teachers found</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
 
                         @if($teachers->hasPages())
-                        <div class="mt-3 d-flex justify-content-between align-items-center">
-                            <div class="text-muted small">
-                                Showing {{ $teachers->firstItem() }} to {{ $teachers->lastItem() }} of {{ $teachers->total() }} entries
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <div class="text-muted small">
+                                    Showing {{ $teachers->firstItem() }} to {{ $teachers->lastItem() }} of {{ $teachers->total() }} entries
+                                </div>
+                                <nav>
+                                    {{ $teachers->appends(request()->query())->links() }}
+                                </nav>
                             </div>
-                            <nav>
-                                {{ $teachers->appends(request()->query())->links() }}
-                            </nav>
-                        </div>
                         @endif
                     </div>
                 </div>
@@ -278,6 +298,7 @@
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -302,16 +323,13 @@
 
                     // Set photo preview
                     const photoPreview = document.getElementById('currentPhotoPreview');
-                    photoPreview.src = this.dataset.photo
-                        ? `/storage/${this.dataset.photo}`
-                        : '/images/default-teacher.png';
+                    photoPreview.src = this.dataset.photo ? `/storage/${this.dataset.photo}` : '/images/default-teacher.png';
 
                     // Clear file input
                     document.getElementById('edit_photo').value = '';
                 });
             });
 
-            // Handle photo preview for edit modal
             document.getElementById('edit_photo').addEventListener('change', function(e) {
                 const reader = new FileReader();
                 reader.onload = function(event) {

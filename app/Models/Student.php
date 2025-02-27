@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 class Student extends Authenticatable
 {
@@ -13,11 +11,17 @@ class Student extends Authenticatable
 
     protected $table = 'students';
     protected $fillable = [
-        'name', 'Address', 'Parent_Name', 'Contact_No',
-        'Email', 'C_ID', 'A_ID', 'Stats', 'Username', 'Password'
+        'name', 'dob', 'Address', 'Parent_Name', 'Contact_No',
+        'Email', 'C_ID', 'A_ID', 'Stats', 'Username', 'Password', 'photo'
     ];
 
-    protected $hidden = ['Password'];
+    // Note: The Password field is no longer hidden so it can be displayed in the table.
+    // protected $hidden = ['Password'];
+
+    protected $dates = ['dob'];
+    protected $casts = [
+        'dob' => 'date:Y-m-d',
+    ];
 
     public function getAuthPassword()
     {
@@ -27,16 +31,17 @@ class Student extends Authenticatable
     public function getPhotoUrlAttribute()
     {
         return $this->photo
-            ? asset('storage/'.$this->photo)
+            ? asset('storage/' . $this->photo)
             : asset('images/default-user.png');
     }
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'C_ID');
+        return $this->belongsTo(\App\Models\Course::class, 'C_ID');
     }
+
     public function getFormattedDobAttribute()
     {
-        return $this->dob->format('d M Y');
+        return $this->dob ? $this->dob->format('d M Y') : 'N/A';
     }
 }
