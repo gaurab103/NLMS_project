@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Notes</title>
+    <title>News Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             font-family: Arial, sans-serif;
-            /* margin: 20px; */
         }
-        .notes-container {
+        .news-container {
             max-width: 800px;
             margin: 0 auto;
         }
-        .note-card {
+        .news-card {
             border: 1px solid #ddd;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
         }
-        .no-notes {
+        .no-news {
             color: #666;
             text-align: center;
             font-style: italic;
@@ -31,28 +31,25 @@
     </style>
 </head>
 <body>
-    <div class="notes-container">
-        <h1>My Notes</h1>
+    <div class="news-container">
+        <h1>News</h1>
+
         @if(session('error'))
             <p class="error-message">{{ session('error') }}</p>
         @endif
 
-        <!-- Display notes if available -->
-        @if($notes->isEmpty())
-            <p class="no-notes">You haven't created any notes yet.</p>
+        <!-- Display news if available -->
+        @if($news->isEmpty())
+            <p class="no-news">No news available at the moment.</p>
         @else
-            @foreach($notes as $note)
-                <div class="note-card">
-                    <h2>{{ $note->title ?? 'Untitled Note' }}</h2>
-                    <p>{{ $note->content ?? 'No content available for this note.' }}</p>
-                    <small>Created on: {{ $note->created_at->format('M d, Y') }}</small>
+            @foreach($news as $item)
+                <div class="news-card">
+                    <h2>{{ $item->title ?? 'No Title' }}</h2>
+                    <p>{{ $item->content ?? 'No content available for this news.' }}</p>
+                    <small>Posted on: {{ $item->created_at->format('M d, Y') }}</small>
                 </div>
             @endforeach
         @endif
-
-        <div>
-            <a href="{{ route('student.dashboard') }}">Back to Home</a>
-        </div>
     </div>
 </body>
 </html>

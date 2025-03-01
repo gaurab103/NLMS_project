@@ -171,6 +171,10 @@
             .toggle-btn i {
                 color: #333;
             }
+            aside .box {
+        width: 100%;
+        max-width: none;
+    }
         }
 
         @media (min-width: 769px) {
@@ -217,26 +221,72 @@
         table tr:hover {
             background-color: #f1f1f1;
         }
+        aside .box {
+    width: 100%;
+    max-width: 250px; 
+    margin-bottom: 10px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+aside .box h6 {
+    font-size: 14px; 
+    display: inline;
+}
+aside .box i {
+    font-size: 14px; 
+    display: inlin;
+
+}
     </style>
 </head>
 
 <body>
     <aside>
         <ul>
-            <li><a href="#profileContent"><i class="fas fa-user"></i>Profile</a></li>
-            <li><a href="#" id="attendanceLink"><i class="fas fa-calendar-check"></i>Attendance</a></li>
-            <li><a href="#"><i class="fas fa-file-alt"></i>Notes</a></li>
+            {{-- <li><a href="#"><i class="fas fa-user" data-title="Profile"></i>Profile</a></li> --}}
+            <div class="col-md-4 box" data-title="Profile">
+                <i class="fas fa-user"></i>
+                <h6>Profile</h6>
+            </div>
+            <div class="col-md-4 box" data-title="Attendance">
+                <i class="fas fa-calendar-check"></i>
+                <h6>Attendance</h6>
+            </div>
+            <div class="col-md-4 box" data-title="Notes">
+                <i class="fas fa-file-alt"></i>
+                <h6>Notes</h6>
+            </div>
+            <div class="col-md-4 box" data-title="Assignments">
+                <i class="fas fa-book"></i>
+                <h6>Assignments</h6>
+            </div>
+            <div class="col-md-4 box" data-title="Messages">
+                <i class="fas fa-comments"></i>
+                <h6>Messages</h6>
+            </div>
+            <div class="col-md-4 box" data-title="Subjects">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h6>Subjects</h6>
+            </div>
+            <div class="col-md-4 box" data-title="News">
+                <i class="fas fa-newspaper"></i>
+                <h6>News</h6>
+            </div>
+            {{-- <li><a href="#"><i class="fas fa-calendar-check"></i>Attendance</a></li>
             <li><a href="#"><i class="fas fa-book"></i>Assignments</a></li>
             <li><a href="#"><i class="fas fa-comments"></i>Messages</a></li>
             <li><a href="#"><i class="fas fa-chalkboard-teacher"></i>Subjects</a></li>
+            <li><a href="#"><i class="fas fa-newspaper"></i>News</a></li> --}}
         </ul>
         <form action="{{ route('student.logout') }}" method="POST" class="inline">
             @csrf
-            <button type="submit" class="hover:underline">Logout</button>
-        </form>
+            <div class="col-md-4 box">
+                <button type="submit" class="btn btn-danger w-100">Logout</button>
+            </div>
+        </form>        
     </form>
     </aside>
-
     <main>
         <header>
             <nav class="navbar navbar-expand-lg bg-warning">
@@ -297,6 +347,10 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     <h5>Subjects</h5>
                 </div>
+                <div class="col-md-4 box" data-title="News">
+                    <i class="fas fa-newspaper"></i>
+                    <h5>News</h5>
+                </div>
             </div>
         </div>
     </main>
@@ -333,8 +387,8 @@
                 box.style.display = title.includes(srch) ? 'block' : 'none';
             });
         });
-        document.querySelectorAll('.box[data-title="Profile"]').forEach(box => {
-    box.addEventListener('click', () => {
+        document.querySelectorAll('.box[data-title="Profile"], aside [data-title="Profile"]').forEach(element => {
+    element.addEventListener('click', () => {
         showSectionContent('profile', '/student/profile');
     });
 });
@@ -347,7 +401,7 @@ document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Messages"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('messages', '/student/messages');
+        showSectionContent('messages', '/student/message');
     });
 });
 
@@ -359,13 +413,19 @@ document.querySelectorAll('.box[data-title="Notes"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('assignments', '/student/assignments');
+        showSectionContent('assignments', '/student/assignment');
     });
 });
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/subjects');
+        showSectionContent('subjects', '/student/subject');
+    });
+});
+
+document.querySelectorAll('.box[data-title="News"]').forEach(box => {
+    box.addEventListener('click', () => {
+        showSectionContent('subjects', '/student/news');
     });
 });
 

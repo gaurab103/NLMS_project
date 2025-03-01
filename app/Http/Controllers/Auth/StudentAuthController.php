@@ -29,9 +29,8 @@ class StudentAuthController extends Controller
             Auth::guard('student')->login($student);
             return redirect()->route('student.dashboard');
         }
-        
 
-        return back()->withErrors(['username' => 'Invalid credentials']);
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
     public function logout()
@@ -39,7 +38,69 @@ class StudentAuthController extends Controller
         Auth::guard('student')->logout();
         return redirect('/');
     }
+    public function profile()
+    {
+        try {
+            $student = Auth::guard('student')->user();
 
+            if (!$student) {
+                return view('profile', ['error' => 'Student not found']);
+            }
+
+
+            return view('profile', compact('student'));
+        } catch (\Exception $e) {
+            return view('profile', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
+        }
+    }
+
+    public function editpro()
+    {
+        $student = Auth::guard('student')->user();
+
+        if (!$student) {
+            return redirect()->route('profile')->with('error', 'Student not found.');
+        }
+
+        return view('profileedit', compact('student'));
+    }
+
+    public function updatepro(Request $request)
+    {
+        $student = Auth::guard('student')->user();
+
+        if (!$student) {
+            return redirect()->route('profile')->with('error', 'Student not found.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email,' . $student->id,
+            'Contact_No' => 'required|string|max:15',
+            'Address' => 'required|string|max:500',
+            'Parent_Name' => 'required|string|max:255',
+        ]);
+
+        $student->update($request->all());
+
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+    }
+    public function attendance()
+{
+    try {
+        $student = Auth::guard('student')->user();
+
+        if (!$student) {
+            return view('attendance', ['error' => 'Student not found']);
+        }
+
+        $attendance = Attendance::where('student_id', $student->id)->get();
+
+        return view('attendance', compact('student', 'attendance'));
+    } catch (\Exception $e) {
+        return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
+    }
+}
 public function fetchAttendance()
 {
     $student = Auth::guard('student')->user();

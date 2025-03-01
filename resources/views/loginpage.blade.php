@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #e4f1fe;
+            background-color:rgb(124, 186, 249);
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -16,6 +16,7 @@
             justify-content: center;
         }
         .card {
+            
             width: 400px;
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

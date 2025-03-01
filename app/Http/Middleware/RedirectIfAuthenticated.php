@@ -18,7 +18,7 @@ class RedirectIfAuthenticated
                     'admin' => redirect()->route('admin.dashboard'),
                     'teacher' => redirect()->route('teacher.dashboard'),
                     'student' => redirect()->route('student.dashboard'),
-                    default => redirect('/home'),
+                    default => redirect('/'),
                 };
             }
         }

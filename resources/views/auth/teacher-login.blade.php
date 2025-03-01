@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>NLMS Teacher Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4e3e7b;
+            --accent-color: #ffd700;
+            --gradient-bg: linear-gradient(135deg, #4e3e7b 0%, #2a1b4e 100%);
+        }
+
         body {
             background-color: #f4f6f9;
             display: flex;
-            align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
@@ -27,6 +32,7 @@
             margin-bottom: 1.5rem;
             color: #343a40;
         }
+
         .login-header h2 {
             font-weight: bold;
         }
@@ -46,74 +52,67 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-container">
-            <div class="login-header">
-                <h2>Teacher Login</h2>
-            </div>
-            <form method="POST" action="{{ route('teacher.login') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input
-                        id="username"
-                        type="text"
-                        class="form-control @error('username') is-invalid @enderror"
-                        name="username"
-                        value="{{ old('username') }}"
-                        required
-                        autofocus
-                        placeholder="Enter your username"
-                    >
-                    @error('username')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        class="form-control @error('password') is-invalid @enderror"
-                        name="password"
-                        required
-                        placeholder="Enter your password"
-                    >
-                    @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="mb-3 form-check">
-                    <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="remember"
-                        name="remember"
-                    >
-                    <label class="form-check-label" for="remember">
-                        Remember me
-                    </label>
-                </div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        Login
-                    </button>
-                </div>
-
-                {{-- <div class="text-center mt-3">
-                    <a href="{{ route('password.request') }}" class="text-muted">
-                        Forgot your password?
-                    </a>
-                </div> --}}
-            </form>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="{{ asset('images/logo/logo.png') }}" alt="NLMS Logo" class="brand-logo">
+            <h2>Teacher Portal Login</h2>
         </div>
+        <form method="POST" action="{{ route('teacher.login') }}">
+            @csrf
+            <div class="mb-4">
+                <label for="username" class="form-label">Username</label>
+                <input
+                    id="username"
+                    type="text"
+                    class="form-control @error('username') is-invalid @enderror"
+                    name="username"
+                    value="{{ old('username') }}"
+                    required
+                    autofocus
+                    placeholder="Enter your username"
+                >
+                @error('username')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    class="form-control @error('password') is-invalid @enderror"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                >
+                @error('password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <div class="mb-4 form-check">
+                <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="remember"
+                    name="remember"
+                >
+                <label class="form-check-label" for="remember">
+                    Remember credentials
+                </label>
+            </div>
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-teacher btn-lg">
+                    Login
+                </button>
+            </div>
+        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

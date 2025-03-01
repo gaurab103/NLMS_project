@@ -7,14 +7,18 @@ use App\Http\Controllers\Auth\StudentAuthController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\StudentNewsController;
 
 Route::get('/login', function () {
-    return redirect()->route('admin.login'); // Or any default login page
+    return redirect()->route('admin.login'); // Default login redirect
 })->name('login');
 
 Route::get('/', function () {
@@ -35,24 +39,22 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', function () {
             return view('admindashboard');
         })->name('admin.dashboard');
-
+        Route::resource('students', StudentController::class);
         // News Routes
         Route::get('/news', [NewsController::class, 'index'])->name('news.index');
         Route::post('/news', [NewsController::class, 'store'])->name('news.store');
         Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
         Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
 
-        // Teacher Routes (only under admin)
+        // Teacher Routes
         Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
         Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
         Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
         Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
         Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
-        // Student Routes
-        Route::get('/students', function () {
-            return view('studentmanagement');
-        })->name('students');
+        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+        Route::resource('students', StudentController::class)->except(['index']);
 
         Route::get('/attendance', function () {
             return view('attendance');
@@ -74,6 +76,12 @@ Route::prefix('teacher')->group(function () {
         Route::get('/dashboard', function () {
             return view('teacherportal');
         })->name('teacher.dashboard');
+        Route::get('/assignmentportalteacher', function () {
+            return view('assignmentportalteacher');
+        })->name('teacher.assignment');
+        Route::get('/notesteacher', function () {
+            return view('notesteacher');
+        })->name('teacher.notes');
     });
 });
 
@@ -102,6 +110,14 @@ Route::prefix('student')->group(function () {
         Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
 
         Route::get('/notes', [NotesController::class, 'notes'])->name('student.notes');
+
+        Route::get('/assignment', [AssignmentController::class, 'assignments'])->name('student.assignment');
+
+        Route::get('/message', [MessageController::class, 'messages'])->name('student.message');
+
+        Route::get('/subject', [SubjectController::class, 'subjects'])->name('student.subject');
+
+        Route::get('/news', [StudentNewsController::class, 'news'])->name('student.news');
 
 
         Route::get('/assignments', function () {

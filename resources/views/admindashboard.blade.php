@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <title>Naragram LMS Admin Dashboard</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -76,10 +76,13 @@
             margin-bottom: 10px;
         }
 
-        .grid-item h3 {
+        .grid-item a {
             font-size: 20px;
             color: #2c3e50;
             font-weight: bold;
+        }
+        .grid-item a:hover {
+            text-decoration: none;
         }
 
         @keyframes bounce {
@@ -126,50 +129,66 @@
 
 <body>
     <div class="main-content" id="mainContent">
+        <!-- Welcome Banner -->
         <div class="welcome-banner">
-            <h3> Admin Dashboard</h3>
-<a href="{{ route('admin.dashboard') }}" class="hover:underline">Dashboard</a>
-            <i class="fas fa-user-shield"></i>
+            <div class="welcome-text">
+                <h2>Welcome, {{ Auth::guard('admin')->user()->Admin_Name }}</h2>
+            </div>
+            <i class="fas fa-user-shield welcome-icon"></i>
         </div>
+
+        <!-- Dashboard Grid -->
         <div class="grid-container" id="dashboardGrid">
-            <div class="grid-item" data-name="Manage Students">
-                <i class="fas fa-user-graduate"></i>
+            <a href="{{ route('students.index') }}" class="grid-item">
+                <i class="fas fa-user-graduate grid-icon"></i>
                 <h3>Manage Students</h3>
-            </div>
-            <div class="grid-item" data-name="Manage Teachers">
-                <i class="fas fa-chalkboard-teacher"></i>
+            </a>
+
+            <a href="{{ route('teachers.index') }}" class="grid-item">
+                <i class="fas fa-chalkboard-teacher grid-icon"></i>
                 <h3>Manage Teachers</h3>
-            </div>
-            <div class="grid-item" data-name="Attendance">
-                <i class="fas fa-calendar-check"></i>
-                <h3>Attendance</h3>
-            </div>
-            <div class="grid-item" data-name="News and Notices">
-                <i class="fas fa-newspaper"></i>
+            </a>
+
+            <a href="{{ route('attendance') }}" class="grid-item">
+                <i class="fas fa-calendar-check grid-icon"></i>
+                <h3>Attendance Tracking</h3>
+            </a>
+
+            <a href="{{ route('news.index') }}" class="grid-item">
+                <i class="fas fa-newspaper grid-icon"></i>
                 <h3>News & Notices</h3>
-            </div>
-            <div class="grid-item" data-name="Manage Subjects">
-                <i class="fas fa-book"></i>
-                <h3>Manage Subjects</h3>
-            </div>
+            </a>
+
+            <a href="{{ route('class') }}" class="grid-item">
+                <i class="fas fa-landmark grid-icon"></i>
+                <h3>Class Management</h3>
+            </a>
         </div>
     </div>
 
     <script>
-        // function filterItems() {
+        // function filterItems() {}
+        // var filter = document.getElementById('searchInput').value.toLowerCase().trim();
+        // var grid = document.getElementById('dashboardGrid');
+        // var items = grid.getElementsByClassName('grid-item');
+        // for (var i = 0; i < items.length; i++) {
+        //     var item = items[i];
+        //     var nameText = item.getAttribute('data-name').toLowerCase().trim();
+        //     if (nameText.includes(filter)) {
+        //         item.style.display = 'block';
+        //     } else { item.style.display = 'none'; }
+        // }
+        // document.getElementById('searchInput').addEventListener('keyup', filterItems);
+        // document.getElementById('searchInput').addEventListener('keyup', function() {
         //     var filter = document.getElementById('searchInput').value.toLowerCase().trim();
         //     var grid = document.getElementById('dashboardGrid');
         //     var items = grid.getElementsByClassName('grid-item');
         //     for (var i = 0; i < items.length; i++) {
         //         var item = items[i];
-        //         var nameText = item.getAttribute('data-name').toLowerCase().trim();
-        //         if (nameText.includes(filter)) {
-        //             item.style.display = 'block';
-        //         } else {
-        //             item.style.display = 'none';
+        //         var nameText = item.getAttribute('data-name').toLowerCase().trim(); if (nameText.includes(filter)) {
+        //             item.style.display = 'block'; } else { item.style.display = 'none'; }
         //         }
-        //     }
-        // }
+        //     });
     </script>
 </body>
 
