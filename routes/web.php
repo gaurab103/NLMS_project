@@ -11,6 +11,13 @@ use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\NotesController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\StudentNewsController;
+use App\Http\Controllers\AdminAttendanceController;  // Added missing controller
+use App\Http\Controllers\TeacherAttendanceController; // Added missing controller
 
 Route::get('/login', function () {
     return redirect()->route('admin.login'); // Default login redirect
@@ -33,6 +40,7 @@ Route::prefix('admin')->group(function () {
             return view('admindashboard');
         })->name('admin.dashboard');
         Route::resource('students', StudentController::class);
+        
         // News Routes
         Route::get('/news', [NewsController::class, 'index'])->name('news.index');
         Route::post('/news', [NewsController::class, 'store'])->name('news.store');
@@ -46,11 +54,7 @@ Route::prefix('admin')->group(function () {
         Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
         Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
-        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-        Route::resource('students', StudentController::class)->except(['index']);
-
         Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('admin.attendance');
-
         Route::get('/class', function () {
             return view('class');
         })->name('class');
@@ -73,12 +77,12 @@ Route::prefix('teacher')->group(function () {
         Route::get('/notesteacher', function () {
             return view('notesteacher');
         })->name('teacher.notes');
+
+        // Teacher Attendance Routes
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])
             ->name('teacher.attendance');
-
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])
             ->name('teacher.attendance.students');
-
         Route::post('/attendance', [TeacherAttendanceController::class, 'store']);
     });
 });
@@ -90,44 +94,22 @@ Route::prefix('student')->group(function () {
     Route::post('/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 
     Route::middleware('auth:student')->group(function () {
-
         Route::get('/dashboard', function () {
             return view('layout');
         })->name('student.dashboard');
 
-            Route::get('/profile', function () {
-                return view('profile');
-            })->name('student.profile');
+        Route::get('/profile', [StudentsController::class, 'profile'])->name('student.profile');
+        
+        Route::get('/attendance', [AttendanceController::class, 'showAttendancePage'])->name('student.attendance');
+        Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
 
-            Route::get('/profile/edit/{id}', function ($id) {
-                return view('profile_edit', compact('id'));
-            })->name('edit.profile');
-
-            Route::put('/profile/update/{id}', [StudentAuthController::class, 'updatepro'])->name('update.profile');
-
-            Route::get('/attendance', function () {
-                return view('attendance');
-            })->name('student.attendance');
-
-            Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
-
-            Route::get('/notes', function () {
-                return view('notes');
-            })->name('student.notes');
-
-            Route::get('/assignments', function () {
-                return view('assignments');
-            })->name('student.assignments');
-
-            Route::get('/messages', function () {
-                return view('messages');
-            })->name('student.messages');
-
-            Route::get('/subjects', function () {
-                return view('subjects');
-            })->name('student.subjects');
-        });
+        Route::get('/notes', [NotesController::class, 'notes'])->name('student.notes');
+        Route::get('/assignments', [AssignmentController::class, 'assignments'])->name('student.assignment');
+        Route::get('/messages', [MessageController::class, 'messages'])->name('student.message');
+        Route::get('/subjects', [SubjectController::class, 'subjects'])->name('student.subject');
+        Route::get('/news', [StudentNewsController::class, 'news'])->name('student.news');
     });
+});
 
 Route::get('logout', function () {
     return view('homepage');
