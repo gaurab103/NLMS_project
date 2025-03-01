@@ -16,6 +16,11 @@ class Course extends Model
         return $this->hasMany(Student::class, 'C_ID');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function admin()
     {
         return $this->belongsTo(Admin::class, 'A_ID');

@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management</title>
+    {{-- Bootstrap 5 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
     <style>
         .content-wrapper {
             margin-left: 260px;
@@ -62,11 +65,8 @@
                             <i class="fas fa-user-plus me-2"></i>Add Student
                         </button>
                         <div class="d-flex align-items-center gap-3">
-                            <div class="text-muted d-none d-md-block">
-                                Showing {{ $students->firstItem() }} - {{ $students->lastItem() }} of {{ $students->total() }}
-                            </div>
                             <div class="filter-container">
-                                <!-- Search by name -->
+                                {{-- Search by name --}}
                                 <form method="GET" class="d-flex mb-2 mb-md-0">
                                     <div class="input-group">
                                         <input type="text" name="search" class="form-control" placeholder="Search by name..." value="{{ request('search') }}">
@@ -75,7 +75,7 @@
                                         </button>
                                     </div>
                                 </form>
-                                <!-- Filter by course -->
+                                {{-- Filter by course --}}
                                 <form method="GET" class="ms-2">
                                     <select name="course_id" class="form-select" onchange="this.form.submit()">
                                         <option value="">All Courses</option>
@@ -127,7 +127,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <!-- Edit button triggers the modal -->
+                                            {{-- Edit button triggers the modal --}}
                                             <button class="btn btn-warning btn-sm edit-button"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editStudentModal"
@@ -161,13 +161,16 @@
                                 @endforelse
                             </tbody>
                         </table>
+
+                        {{-- Pagination --}}
                         @if($students->hasPages())
                             <div class="mt-3 d-flex justify-content-between align-items-center">
                                 <div class="text-muted small">
                                     Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} entries
                                 </div>
                                 <nav>
-                                    {{ $students->appends(request()->query())->links() }}
+                                    {{-- Use Bootstrap 5 pagination view --}}
+                                    {{ $students->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </nav>
                             </div>
                         @endif
@@ -177,7 +180,7 @@
         </div>
     </div>
 
-    <!-- Add Student Modal -->
+    {{-- Add Student Modal --}}
     <div class="modal fade" id="addStudentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -252,7 +255,7 @@
         </div>
     </div>
 
-    <!-- Edit Student Modal -->
+    {{-- Edit Student Modal --}}
     <div class="modal fade" id="editStudentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -332,7 +335,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    {{-- JavaScript --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -344,7 +347,7 @@
                     const updateUrl = `{{ route('students.update', ':id') }}`.replace(':id', studentId);
                     document.getElementById('editStudentForm').action = updateUrl;
 
-                    // Populate the edit form fields using data attributes
+                    // Populate the edit form fields
                     document.getElementById('edit_name').value = this.dataset.name;
                     document.getElementById('edit_username').value = this.dataset.username;
                     document.getElementById('edit_password').value = this.dataset.password;
@@ -358,20 +361,24 @@
 
                     // Set photo preview
                     const photoPreview = document.getElementById('currentPhotoPreview');
-                    photoPreview.src = this.dataset.photo ? `/storage/${this.dataset.photo}` : '/images/default-user.png';
+                    photoPreview.src = this.dataset.photo
+                        ? `/storage/${this.dataset.photo}`
+                        : '/images/default-user.png';
 
                     // Clear file input
                     document.getElementById('edit_photo').value = '';
                 });
             });
 
-            // Optional: Update photo preview when a new file is selected in the edit modal
+            // Update photo preview when a new file is selected in the edit modal
             document.getElementById('edit_photo').addEventListener('change', function(e) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     document.getElementById('currentPhotoPreview').src = event.target.result;
                 }
-                reader.readAsDataURL(e.target.files[0]);
+                if (e.target.files && e.target.files[0]) {
+                    reader.readAsDataURL(e.target.files[0]);
+                }
             });
         });
     </script>

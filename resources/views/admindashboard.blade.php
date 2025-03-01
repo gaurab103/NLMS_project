@@ -149,7 +149,7 @@
                 <h3>Manage Teachers</h3>
             </a>
 
-            <a href="{{ route('attendance') }}" class="grid-item">
+            <a href="{{ route('admin.attendance') }}" class="grid-item">
                 <i class="fas fa-calendar-check grid-icon"></i>
                 <h3>Attendance Tracking</h3>
             </a>

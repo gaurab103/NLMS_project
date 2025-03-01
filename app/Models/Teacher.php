@@ -26,3 +26,4 @@ class Teacher extends Authenticatable
             : asset('images/default-user.png');
     }
 }
+

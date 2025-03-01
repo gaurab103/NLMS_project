@@ -6,34 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::create('attendances', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->unsignedBigInteger('Std_ID');
-            $table->unsignedBigInteger('A_ID');
-            $table->unsignedBigInteger('T_ID');
-            $table->timestamps();
-            $table->string('status');
+    public function up()
+{
+    Schema::create('attendance', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('student_id');
+        $table->unsignedBigInteger('course_id');
+        $table->date('date');
+        $table->enum('status', ['present', 'absent']);
+        $table->timestamps();
 
-            $table->foreign('Std_ID')
-                ->references('id')
-                ->on('students')
-                ->onDelete('cascade');
-
-            $table->foreign('A_ID')
-                ->references('id')
-                ->on('admins')
-                ->onDelete('cascade');
-
-            $table->foreign('T_ID')
-                ->references('id')
-                ->on('teachers')
-                ->onDelete('cascade');
-        });
-    }
-
+        $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+        $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+    });
+}
     public function down(): void
     {
         Schema::dropIfExists('attendances');

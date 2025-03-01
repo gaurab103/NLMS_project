@@ -36,7 +36,7 @@
             top: 0;
             left: 0;
             padding-top: 86px;
-            background-color: whitesmoke; 
+            background-color: whitesmoke;
         }
         .section a {
             padding: 15px;
@@ -58,7 +58,7 @@
             margin-top: 50px;
             margin-left: 10%;
             width: 80%;
-            height: 150px;  
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -136,7 +136,7 @@
             }
             .back-btn {
                 display: block; /* Show back button on small screens */
-               
+
             }
         }
     </style>
@@ -158,7 +158,7 @@
     <div class="section">
         <button class="back-btn" onclick="closeSidebar()"><</button>
         <a href="#" aria-label="Home" style="background-color: #007bff; color:white;">Home</a>
-        <a href="#" aria-label="Attendance">Attendance</a>
+        <a href="{{ route('teacher.attendance') }}" aria-label="Attendance">Attendance</a>
         <a href="{{ route('teacher.notes') }}" aria-label="Notes">Notes</a>
         <a href="{{ route('teacher.assignment') }}" aria-label="Assignments">Assignments</a>
         <a href="#" aria-label="Communication">Communication</a>
@@ -170,7 +170,7 @@
       @csrf
     </form>
 
-    
+
     </div>
     <div class="box">
         <h1>Welcome Teacher</h1>
@@ -178,7 +178,7 @@
     </div>
     <div class="grid-container container">
         <div class="row">
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ url('/attendance') }}">Attendance</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ 'teacher.attendance' }}">Attendance</div>
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.notes') }}">Notes</div>
         </div>
         <div class="row">

@@ -10,14 +10,15 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\TeacherAttendanceController;
+use App\Http\Controllers\AdminAttendanceController;
+
 
 Route::get('/login', function () {
     return redirect()->route('admin.login'); // Default login redirect
 })->name('login');
 
-Route::get('/', function () {
-    return view('homepage');
-})->name('home');
+Route::get('/', function () { return view('homepage'); })->name('home');
 
 Route::get('/pannel', function () {
     return view('pannel');
@@ -50,9 +51,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/students', [StudentController::class, 'index'])->name('students.index');
         Route::resource('students', StudentController::class)->except(['index']);
 
-        Route::get('/attendance', function () {
-            return view('attendance');
-        })->name('attendance');
+        Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('admin.attendance');
 
         Route::get('/class', function () {
             return view('class');
@@ -76,6 +75,13 @@ Route::prefix('teacher')->group(function () {
         Route::get('/notesteacher', function () {
             return view('notesteacher');
         })->name('teacher.notes');
+        Route::get('/attendance', [TeacherAttendanceController::class, 'create'])
+            ->name('teacher.attendance');
+
+        Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])
+            ->name('teacher.attendance.students');
+
+        Route::post('/attendance', [TeacherAttendanceController::class, 'store']);
     });
 });
 
@@ -89,37 +95,37 @@ Route::prefix('student')->group(function () {
         Route::get('/dashboard', function () {
             return view('layout');
         })->name('student.dashboard');
-        
+
             Route::get('/profile', function () {
-                return view('profile'); 
+                return view('profile');
             })->name('student.profile');
-            
+
             Route::get('/profile/edit/{id}', function ($id) {
                 return view('profile_edit', compact('id'));
             })->name('edit.profile');
-            
+
             Route::put('/profile/update/{id}', [StudentAuthController::class, 'updatepro'])->name('update.profile');
-            
+
             Route::get('/attendance', function () {
-                return view('attendance'); 
+                return view('attendance');
             })->name('student.attendance');
-            
+
             Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
-            
+
             Route::get('/notes', function () {
-                return view('notes'); 
+                return view('notes');
             })->name('student.notes');
-            
+
             Route::get('/assignments', function () {
                 return view('assignments');
             })->name('student.assignments');
-            
+
             Route::get('/messages', function () {
-                return view('messages'); 
+                return view('messages');
             })->name('student.messages');
-            
+
             Route::get('/subjects', function () {
-                return view('subjects'); 
+                return view('subjects');
             })->name('student.subjects');
         });
     });
