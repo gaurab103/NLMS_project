@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 
 class Teacher extends Authenticatable
 {
@@ -16,11 +15,14 @@ class Teacher extends Authenticatable
         'Teacher_Name', 'Subject', 'Email', 'Phone_Number',
         'Address', 'Username', 'Password', 'Status', 'A_ID', 'Photo'
     ];
-    protected $appends = ['photo_url', 'all'];
+
+    // Append the photo_url attribute for easy access in views.
+    protected $appends = ['photo_url'];
+
     public function getPhotoUrlAttribute()
     {
-        return $this->photo
-            ? asset('storage/'.$this->photo)
+        return $this->Photo
+            ? asset('storage/' . $this->Photo)
             : asset('images/default-user.png');
     }
 }
