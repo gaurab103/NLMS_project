@@ -12,7 +12,6 @@
     <div class="container mt-4">
         <h2>Attendance Records</h2>
 
-        <!-- Table to display attendance data -->
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -27,28 +26,23 @@
                 </tr>
             </thead>
             <tbody id="attendanceTableBody">
-                <!-- Data will be inserted here by JavaScript -->
             </tbody>
         </table>
 
-        <!-- Message for no records -->
         <p id="noRecordsMessage" style="display: none;">No attendance records found.</p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Fetch the attendance data for the logged-in student
             fetch('/student/attendance/fetch')
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('attendanceTableBody');
                     const noRecordsMessage = document.getElementById('noRecordsMessage');
 
-                    tableBody.innerHTML = ''; // Clear the table body
+                    tableBody.innerHTML = '';
 
-                    // If data is successfully fetched and contains records
                     if (data.success && data.data.length > 0) {
-                        // Loop through each attendance record and add to the table
                         data.data.forEach(record => {
                             const row = `
                                 <tr>

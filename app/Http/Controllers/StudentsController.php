@@ -20,6 +20,7 @@ class StudentsController extends Controller
     public function profile()
     {
         try {
+            $studentId = auth()->guard('student')->id();
             $student = Student::select([
                 'id',
                 'name',
@@ -31,18 +32,17 @@ class StudentsController extends Controller
                 'Email',
                 'Stats'
             ])
-            ->where('id', 1)
+            ->where('id', $studentId)
             ->first();
 
             if (!$student) {
                 return view('profile', ['error' => 'Student not found']);
             }
 
-            // Fetch additional data
-            $notes = Note::where('student_id', $student->id)->get();
-            $assignments = Assignment::where('student_id', $student->id)->get();
-            $messages = Message::where('student_id', $student->id)->get();
-            $subjects = Subject::where('student_id', $student->id)->get();
+            $notes = Note::where('id', $student->id)->get();
+            $assignments = Assignment::where('id', $student->id)->get();
+            $messages = Message::where('id', $student->id)->get();
+            $subjects = Subject::where('id', $student->id)->get();
 
             return view('profile', compact('student', 'notes', 'assignments', 'messages', 'subjects'));
         } catch (\Exception $e) {

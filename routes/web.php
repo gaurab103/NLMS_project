@@ -7,12 +7,10 @@ use App\Http\Controllers\Auth\StudentAuthController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\TeacherAttendanceController;
-use App\Http\Controllers\AdminAttendanceController;
-
 
 Route::get('/login', function () {
     return redirect()->route('admin.login'); // Default login redirect
@@ -92,6 +90,7 @@ Route::prefix('student')->group(function () {
     Route::post('/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 
     Route::middleware('auth:student')->group(function () {
+
         Route::get('/dashboard', function () {
             return view('layout');
         })->name('student.dashboard');
@@ -129,7 +128,6 @@ Route::prefix('student')->group(function () {
             })->name('student.subjects');
         });
     });
-
 
 Route::get('logout', function () {
     return view('homepage');

@@ -101,10 +101,9 @@ class StudentAuthController extends Controller
         return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
     }
 }
-
 public function fetchAttendance()
 {
-    $student = Auth::guard('student')->user(); // Get the logged-in student
+    $student = Auth::guard('student')->user();
 
     if (!$student) {
         return response()->json([
@@ -112,6 +111,7 @@ public function fetchAttendance()
             'message' => 'User not authenticated',
         ]);
     }
+
     $attendance = Attendance::where('Std_ID', $student->id)->get();
 
     return response()->json([

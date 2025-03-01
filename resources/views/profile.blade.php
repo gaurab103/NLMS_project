@@ -10,7 +10,6 @@
         <h1>Student Profile</h1>
 
         @if(isset($student))
-            <a href="{{ route('edit.profile', $student->id) }}" class="btn btn-primary">Edit Profile</a>
             <div class="card mt-3">
                 <div class="card-body">
                     <p><strong>Name:</strong> {{ $student->name }}</p>
@@ -19,6 +18,8 @@
             </div>
         @elseif(isset($error))
             <div class="alert alert-danger">{{ $error }}</div>
+        @else
+            <div class="alert alert-warning">No student data available</div>
         @endif
     </div>
 </body>
