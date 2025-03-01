@@ -401,7 +401,7 @@ document.querySelectorAll('.box[data-title="Attendance"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Messages"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('messages', '/student/message');
+        showSectionContent('messages', '/student/messages');
     });
 });
 
@@ -413,13 +413,13 @@ document.querySelectorAll('.box[data-title="Notes"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('assignments', '/student/assignment');
+        showSectionContent('assignments', '/student/assignments');
     });
 });
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/subject');
+        showSectionContent('subjects', '/student/subjects');
     });
 });
 

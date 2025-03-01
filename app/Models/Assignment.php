@@ -13,7 +13,7 @@ class Assignment extends Model
         'student_id',
         'title',
         'description',
-        'file_path', // Added file path for submissions
+        'file_path',
         'due_date',
         'created_at',
         'updated_at',
