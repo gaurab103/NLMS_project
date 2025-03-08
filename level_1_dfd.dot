@@ -1,0 +1,62 @@
+digraph Level1DFD {
+    node [shape=rectangle, style=filled, fillcolor=lightblue];
+
+    // External Entities (Actors)
+    Admin [label="Administrator", shape=actor];
+    Teacher [label="Teacher", shape=actor];
+    Student [label="Student", shape=actor];
+
+    // Admin Processes
+    UserManagement [label="User Management", shape=box, style=filled, fillcolor=lightgreen];
+    ClassManagement [label="Class Management", shape=box, style=filled, fillcolor=lightgreen];
+    SubjectManagement [label="Subject Management", shape=box, style=filled, fillcolor=lightgreen];
+    AttendanceManagement [label="Attendance Management", shape=box, style=filled, fillcolor=lightgreen];
+    
+    // Teacher Processes
+    AttendanceTracking [label="Attendance Tracking", shape=box, style=filled, fillcolor=lightyellow];
+    NoteManagement [label="Note Management", shape=box, style=filled, fillcolor=lightyellow];
+    AssignmentManagement [label="Assignment Management", shape=box, style=filled, fillcolor=lightyellow];
+    
+    // Student Processes
+    ProfileManagement [label="Profile Management", shape=box, style=filled, fillcolor=lightcoral];
+    AttendanceView [label="Attendance View", shape=box, style=filled, fillcolor=lightcoral];
+    
+    // Data Stores
+    D1 [label="User Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D2 [label="Class Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D3 [label="Subject Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D4 [label="Attendance Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+
+    // Admin Interactions
+    Admin -> UserManagement [label="Manage User Accounts"];
+    Admin -> ClassManagement [label="Manage Classes"];
+    Admin -> SubjectManagement [label="Manage Subjects"];
+    Admin -> AttendanceManagement [label="Monitor Attendance"];
+    
+    // Teacher Interactions
+    Teacher -> AttendanceTracking [label="Track Attendance"];
+    Teacher -> NoteManagement [label="Manage Notes"];
+    Teacher -> AssignmentManagement [label="Manage Assignments"];
+    
+    // Student Interactions
+    Student -> ProfileManagement [label="Update Profile"];
+    Student -> AttendanceView [label="View Attendance"];
+    
+    // Data Store Interactions
+    UserManagement -> D1 [label="Store/Retrieve User Data"];
+    ClassManagement -> D2 [label="Store/Update Class Data"];
+    SubjectManagement -> D3 [label="Store/Update Subject Data"];
+    AttendanceManagement -> D4 [label="Store/Track Attendance"];
+    
+    AttendanceTracking -> D4 [label="Track Attendance"];
+    NoteManagement -> D4 [label="Post/View Notes"];
+    AssignmentManagement -> D4 [label="Post/View Assignments"];
+    
+    ProfileManagement -> D1 [label="Update Profile Info"];
+    AttendanceView -> D4 [label="View Attendance Data"];
+    
+    // System Interaction
+    System [label="System", shape=circle, style=filled, fillcolor=lightgrey];
+    System -> D1 [label="Verify Login Credentials"];
+    D1 -> System [label="Authentication Response"];
+}

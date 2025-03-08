@@ -134,6 +134,9 @@ Route::prefix('student')->group(function () {
             Route::get('/subjects', function () {
                 return view('subjects');
             })->name('student.subjects');
+            Route::get('/news', function () {
+                return view('news');
+            })->name('student.news');
         });
     });
 

@@ -21,7 +21,7 @@ class TeacherAuthController extends Controller
             'password' => 'required'
         ]);
 
-        $teacher = Teacher::where('Username', $credentials['username'])->first();
+        $teacher = Teacher::where('username', $credentials['username'])->first();
 
         if ($teacher && $teacher->Password === $credentials['password']) {
             Auth::guard('teacher')->login($teacher);
