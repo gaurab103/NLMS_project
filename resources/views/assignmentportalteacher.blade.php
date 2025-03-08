@@ -7,6 +7,134 @@
     <title>Document</title>
 </head>
 <body>
+    <style>
+                /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+            
+        }
+        h2{
+            display:flex;
+            justify-content:center;
+            margin-left:10%;
+        }
+
+        /* Form Styling */
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin-bottom: 30px;
+            margin-left:35%;
+        }
+
+        form h2 {
+            margin-bottom: 20px;
+            
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        /* Table Styling */
+        .table {
+    width: auto; /* Reduce table width further */
+    margin: 20px  0 -2%; /* Center the table */
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 12px; /* Reduce overall text size */
+}
+
+/* Table Header */
+.table th {
+    background: #007bff;
+    color: white;
+    margin-left:-20%;
+    padding: 4px; /* Reduce padding */
+    text-align: left;
+    font-size: 12px;
+}
+
+/* Table Data */
+.table td {
+    padding: 4px; /* Reduce padding */
+    border-bottom: 1px solid #ddd;
+    font-size: 12px; /* Reduce text size */
+}
+
+/* Zebra Striping */
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            form {
+                width: 100%;
+            }
+
+            .table {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+ @include('navteacher', ['active' => 'assignments'])
         <!-- Edit Form (Shown when editing) -->
         @if(isset($assignment))
             <h2>Edit Assignment</h2>
@@ -124,7 +252,7 @@
             </tbody>
         </table>
     </div>
-@endsection
+
 
 </body>
 </html>

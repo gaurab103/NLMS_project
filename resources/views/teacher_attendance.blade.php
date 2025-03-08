@@ -14,19 +14,7 @@
             background-color: #f8f9fa;
             overflow-y: auto;
         }
-        .navbar {
-            background-color: yellow;
-            padding: 0;
-        }
-        .navbar img {
-            height: 70px;
-            width: 80px;
-        }
-        .navbar .navbar-brand {
-            margin-right: 34%;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+        
         .section {
             height: 100vh;
             width: 250px;
@@ -61,7 +49,8 @@
         }
 
         .attendance-card {
-            margin: 2rem 15%;
+            margin: 3rem 20%;
+            padding-bottom:15%;
             box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
             border-radius: 15px;
         }

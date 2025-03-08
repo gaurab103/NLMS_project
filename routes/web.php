@@ -83,7 +83,7 @@ Route::prefix('teacher')->group(function () {
                 $query->where('teacher_id', $teacher->id);
             })->get();
             $subjects = \App\Models\Subject::where('teacher_id', $teacher->id)->get();
-            return view('notesteacher', compact('classes', 'subjects', 'active'));
+            return view('notesteacher', compact('classes', 'subjects', ));
         })->name('teacher.notes');
         Route::post('/notes', [NotesController::class, 'store'])->name('teacher.notes.store');
 
@@ -91,7 +91,7 @@ Route::prefix('teacher')->group(function () {
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance');
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
-        Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
+        Route::get('/news', [NewsController::class, 'TeacherIndex'])->name('teacher.news');
     });
 });
 Route::prefix('student')->group(function () {
