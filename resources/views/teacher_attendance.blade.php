@@ -152,10 +152,7 @@
                             <select name="course_id" class="form-select" required>
                                 <option value="">Select Class</option>
                                 @foreach ($courses as $course)
-                                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                        {{ $course->course_name }}
-                                    </option>
-                                @endforeach
+                                    <option value="{{ $course->id }}">{{ $course->name }}</option>
                             </select>
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
@@ -213,47 +210,45 @@
             $('.loading-overlay').show();
 
             $.ajax({
-                url: "{{ route('teacher.attendance.students', ['course' => ':courseId']) }}".replace(':courseId', courseId),
+                url: `/teacher/attendance/students/${courseId}?date=${date}`,
                 method: 'GET',
-                data: { date: date },
+                method: 'GET',
                 success: function(response) {
                     const tbody = $('#attendanceRows');
                     tbody.empty();
 
                     if (response.length === 0) {
                         tbody.append(`
-                            <tr>
-                                <td colspan="2" class="text-center text-muted py-4">
-                                    <i class="fas fa-user-slash me-2"></i>No students found in this class
-                                </td>
-                            </tr>
-                        `);
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            No students found in this class
+                        </td>
+                    </tr>
+                `);
                     } else {
                         response.forEach(student => {
                             const status = student.attendances.length > 0 ?
                                 student.attendances[0].status : 'present';
 
                             const row = `
-                                <tr>
-                                    <td class="fw-bold">${student.name}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <input type="hidden"
-                                                   name="students[${student.id}][student_id]"
-                                                   value="${student.id}">
-                                            <select name="students[${student.id}][status]"
-                                                    class="form-select status-select">
-                                                <option value="present" ${status === 'present' ? 'selected' : ''}>
-                                                    ✅ Present
-                                                </option>
-                                                <option value="absent" ${status === 'absent' ? 'selected' : ''}>
-                                                    ❌ Absent
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `;
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>
+                                <input type="hidden"
+                                       name="students[${student.id}][student_id]"
+                                       value="${student.id}">
+                                <select name="students[${student.id}][status]"
+                                        class="form-select">
+                                    <option value="present" ${status === 'present' ? 'selected' : ''}>
+                                        Present
+                                    </option>
+                                    <option value="absent" ${status === 'absent' ? 'selected' : ''}>
+                                        Absent
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    `;
                             tbody.append(row);
                         });
                     }
