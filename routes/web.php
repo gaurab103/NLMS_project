@@ -11,6 +11,10 @@ use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\TeacherAttendanceController;
+use App\Http\Controllers\StudentAttendanceController;
+use App\Http\Controllers\AdminAttendanceController;
+use App\Http\Controllers\AssignmentController;
 
 Route::get('/login', function () {
     return redirect()->route('admin.login');
