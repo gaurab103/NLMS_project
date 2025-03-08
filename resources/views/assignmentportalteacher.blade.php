@@ -1,194 +1,130 @@
-<!-- resources/views/assignmentportalteacher.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Assignment Portal</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f8f9fa; }
-    .assignment-card { transition: transform 0.2s; }
-    .assignment-card:hover { transform: translateY(-3px); }
-    .submission-list { max-height: 400px; overflow-y: auto; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-  @include('navteacher', ['active' => 'assignments'])
-
-  <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>NLMS Assignment Management</h1>
-      <button class="btn btn-primary" onclick="toggleForm()">
-        {{ isset($assignment) ? 'Back to List' : 'Create New Assignment' }}
-      </button>
-    </div>
-    @if(session('success'))
-      <div class="alert alert-success alert-dismissible fade show">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    @endif
-    <div id="assignmentList">
-      <div class="row g-4">
-        @forelse($assignments as $assignment)
-          <div class="col-md-6">
-            <div class="card assignment-card shadow">
-              <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <h5 class="mb-0">{{ $assignment->title }}</h5>
-                <div class="btn-group">
-                  <a href="{{ route('assignments.edit', $assignment) }}" class="btn btn-sm btn-warning">Edit</a>
-                  <form action="{{ route('assignments.destroy', $assignment) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this assignment?')">
-                      Delete
-                    </button>
-                  </form>
+        <!-- Edit Form (Shown when editing) -->
+        @if(isset($assignment))
+            <h2>Edit Assignment</h2>
+            <form action="{{ route('assignments.update', $assignment) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="title" id="title" class="form-control" value="{{ $assignment->title }}" required>
                 </div>
-              </div>
-              <div class="card-body">
-                <p class="card-text">{{ Str::limit($assignment->description, 100) }}</p>
-                <div class="d-flex justify-content-between">
-                  <small class="text-muted">Due: {{ $assignment->due_date->format('M d, Y H:i') }}</small>
-                  <a href="{{ route('assignments.show', $assignment) }}" class="btn btn-sm btn-info">
-                    View Submissions
-                  </a>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" required>{{ $assignment->description }}</textarea>
                 </div>
-                @if($assignment->file_path)
-                  <div class="mt-2">
-                    <a href="{{ Storage::url($assignment->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                      Download File
-                    </a>
-                  </div>
-                @endif
-              </div>
-            </div>
-          </div>
-        @empty
-          <div class="col-12">
-            <div class="alert alert-info">No assignments created yet.</div>
-          </div>
-        @endforelse
-      </div>
-    </div>
-    <div id="assignmentForm" style="display: none;">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">
-            {{ isset($assignment) ? 'Edit Assignment' : 'Create New Assignment' }}
-          </h5>
-        </div>
-        <div class="card-body">
-          <form method="POST" action="{{ isset($assignment) ? route('assignments.update', $assignment) : route('teacher.assignments.store') }}" enctype="multipart/form-data">
-            @csrf
-            @if(isset($assignment))
-              @method('PUT')
-            @endif
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Class</label>
-                <select class="form-select" name="class_id" required>
-                    <option value="">Select Class</option>
-                    @foreach($classes as $class)
-                      <option value="{{ $class->id }}" {{ (isset($assignment) && $assignment->course_id == $class->id) ? 'selected' : '' }}>
-                        {{ $class->course_name }}
-                      </option>
-                    @endforeach
-                  </select>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Subject</label>
-                <select class="form-select" name="subject_id" required>
-                  <option value="">Select Subject</option>
-                  @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ (isset($assignment) && $assignment->subject_id == $subject->id) ? 'selected' : '' }}>
-                      {{ $subject->name }}
-                    </option>
-                  @endforeach
-                </select>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Title</label>
-                <input type="text" class="form-control" name="title" value="{{ $assignment->title ?? old('title') }}" required>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" name="description" rows="3" required>{{ $assignment->description ?? old('description') }}</textarea>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Due Date</label>
-                <input type="datetime-local" class="form-control" name="due_date" value="{{ isset($assignment) ? $assignment->due_date->format('Y-m-d\TH:i') : old('due_date') }}" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Attachment (Optional)</label>
-                <input type="file" class="form-control" name="file">
-                @if(isset($assignment) && $assignment->file_path)
-                  <div class="mt-2">
-                    <small>Current file: {{ basename($assignment->file_path) }}</small>
-                  </div>
-                @endif
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary">
-                  {{ isset($assignment) ? 'Update' : 'Create' }} Assignment
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="toggleForm()">Cancel</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    @if(isset($selectedAssignment))
-      <div class="mt-5">
-        <div class="card shadow">
-          <div class="card-header bg-info text-white">
-            <h5 class="mb-0">Submissions for {{ $selectedAssignment->title }}</h5>
-          </div>
-          <div class="card-body submission-list">
-            @forelse($selectedAssignment->submissions as $submission)
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <h6>{{ $submission->student->name }}</h6>
-                      <small class="text-muted">Submitted: {{ $submission->submitted_at->format('M d, Y H:i') }}</small>
-                    </div>
-                    <div>
-                      <a href="{{ Storage::url($submission->file_path) }}" class="btn btn-sm btn-primary" target="_blank">
-                        View Submission
-                      </a>
-                    </div>
-                  </div>
+                <div class="mb-3">
+                    <label for="class_id" class="form-label">Class</label>
+                    <select name="class_id" id="class_id" class="form-control" required>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}" {{ $assignment->course_id == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-              </div>
-            @empty
-              <div class="alert alert-info">No submissions yet.</div>
-            @endforelse
-          </div>
-        </div>
-      </div>
-    @endif
-  </div>
+                <div class="mb-3">
+                    <label for="subject_id" class="form-label">Subject</label>
+                    <select name="subject_id" id="subject_id" class="form-control" required>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}" {{ $assignment->subject_id == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input type="date" name="due_date" id="due_date" class="form-control" value="{{ $assignment->due_date }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">File (optional)</label>
+                    <input type="file" name="file" id="file" class="form-control">
+                    @if($assignment->file_path)
+                        <small>Current file: <a href="{{ Storage::url($assignment->file_path) }}" target="_blank">View</a></small>
+                    @endif
+                </div>
+                <button type="submit" class="btn btn-primary">Update Assignment</button>
+            </form>
+        @else
+            <!-- Create Form -->
+            <h2>Create New Assignment</h2>
+            <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="title" id="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="class_id" class="form-label">Class</label>
+                    <select name="class_id" id="class_id" class="form-control" required>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="subject_id" class="form-label">Subject</label>
+                    <select name="subject_id" id="subject_id" class="form-control" required>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input type="date" name="due_date" id="due_date" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">File (optional)</label>
+                    <input type="file" name="file" id="file" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Create Assignment</button>
+            </form>
+        @endif
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function toggleForm() {
-      const form = document.getElementById('assignmentForm');
-      const list = document.getElementById('assignmentList');
+        <!-- Assignment List -->
+        <h2 class="mt-5">Assignments</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($assignments as $assignment)
+                    <tr>
+                        <td>{{ $assignment->title }}</td>
+                        <td>{{ $assignment->course->name }}</td>
+                        <td>{{ $assignment->subject->name }}</td>
+                        <td>{{ $assignment->due_date }}</td>
+                        <td>
+                            <a href="{{ route('assignments.edit', $assignment) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{{ route('assignments.show', $assignment) }}" class="btn btn-sm btn-info">View</a>
+                            <form action="{{ route('assignments.destroy', $assignment) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endsection
 
-      if (form.style.display === 'none' || form.style.display === '') {
-        form.style.display = 'block';
-        list.style.display = 'none';
-      } else {
-        form.style.display = 'none';
-        list.style.display = 'block';
-      }
-    }
-    @if(isset($assignment) || count($errors) > 0)
-      toggleForm();
-    @endif
-  </script>
 </body>
 </html>

@@ -60,7 +60,6 @@
             border-radius: 5px;
         }
 
-        /* Attendance Page Styles */
         .attendance-card {
             margin: 2rem 15%;
             box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
@@ -153,6 +152,7 @@
                                 <option value="">Select Class</option>
                                 @foreach ($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-4 d-flex align-items-end">

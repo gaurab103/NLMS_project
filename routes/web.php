@@ -15,6 +15,11 @@ use App\Http\Controllers\TeacherAttendanceController;
 use App\Http\Controllers\StudentAttendanceController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\NotesController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ClassController;
 
 Route::get('/login', function () {
     return redirect()->route('admin.login');
@@ -28,7 +33,6 @@ Route::get('/pannel', function () {
     return view('pannel');
 })->name('pannel');
 
-// Admin Routes
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login']);
@@ -39,7 +43,6 @@ Route::prefix('admin')->group(function () {
             return view('admindashboard');
         })->name('admin.dashboard');
         Route::resource('students', StudentController::class);
-        // News Routes
         Route::get('/news', [NewsController::class, 'index'])->name('news.index');
         Route::post('/news', [NewsController::class, 'store'])->name('news.store');
         Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
@@ -49,12 +52,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
         Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
         Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
-
-        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-        Route::resource('students', StudentController::class)->except(['index']);
-
         Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('admin.attendance');
+        Route::resource('classes', ClassController::class);
 
+        Route::resource('subjects', SubjectController::class)->except(['index', 'create', 'show']);
+        Route::get('/classes/{class}/subjects/{subject}', [SubjectController::class, 'show'])
+            ->name('classes.subjects.show');
         Route::get('/class', function () {
             return view('class');
         })->name('class');
@@ -69,7 +72,7 @@ Route::prefix('teacher')->group(function () {
 
     Route::middleware('auth:teacher')->group(function () {
         Route::get('/dashboard', function () {
-            return view('teacherportal');
+            return view('teacherportal', ['active' => 'home']);
         })->name('teacher.dashboard');
 
         Route::resource('assignments', AssignmentController::class)->except(['create']);
@@ -80,19 +83,17 @@ Route::prefix('teacher')->group(function () {
                 $query->where('teacher_id', $teacher->id);
             })->get();
             $subjects = \App\Models\Subject::where('teacher_id', $teacher->id)->get();
-            return view('notesteacher', compact('classes', 'subjects'));
+            return view('notesteacher', compact('classes', 'subjects', 'active'));
         })->name('teacher.notes');
-        Route::get('/attendance', [TeacherAttendanceController::class, 'create'])
-            ->name('teacher.attendance');
+        Route::post('/notes', [NotesController::class, 'store'])->name('teacher.notes.store');
 
-        Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])
-            ->name('teacher.attendance.students');
-
-        Route::post('/attendance', [TeacherAttendanceController::class, 'store']);
+        // Attendance Routes
+        Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance');
+        Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
+        Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
+        Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
     });
 });
-
-// Student Routes
 Route::prefix('student')->group(function () {
     Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
     Route::post('/login', [StudentAuthController::class, 'login']);
@@ -134,9 +135,6 @@ Route::prefix('student')->group(function () {
             Route::get('/subjects', function () {
                 return view('subjects');
             })->name('student.subjects');
-            Route::get('/news', function () {
-                return view('news');
-            })->name('student.news');
         });
     });
 

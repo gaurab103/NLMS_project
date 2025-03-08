@@ -73,8 +73,8 @@
         <a href="{{ route('assignments.index') }}" class="{{ $active === 'assignments' ? 'active' : '' }}">
             <i class="fas fa-tasks"></i> Assignments
         </a>
-        <a href="#" class="{{ $active === 'communication' ? 'active' : '' }}">
-            <i class="fas fa-comments"></i> Communication
+        <a href="{{ route('teacher.news') }}" class="{{ $active === 'communication' ? 'active' : '' }}">
+            <i class="fas fa-comments"></i> News
         </a>
         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fas fa-sign-out-alt"></i> Logout
