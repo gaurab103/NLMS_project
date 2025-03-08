@@ -73,7 +73,7 @@
   </style>
 </head>
 <body>
-  @include('nav_aside')
+  @include('navteacher')
 
   <div class="content-container">
     <div class="row">

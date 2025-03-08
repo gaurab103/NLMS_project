@@ -1,4 +1,3 @@
-<!-- resources/views/teacherportal.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +55,7 @@
             background: red;
             padding: 20px;
             margin-top: 50px;
-            margin-left: 10%;
+            margin-left: 250px;
             width: 80%;
             height: 150px;
             display: flex;
@@ -142,8 +141,6 @@
 </head>
 <body>
     @include('navteacher', ['active' => 'home'])
-
-    <!-- Search form specific to dashboard -->
     <header>
         <div class="navbar">
             <div class="container d-flex align-items-center justify-content-between">
@@ -166,7 +163,7 @@
         </div>
         <div class="row">
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('assignments.index') }}">Assignment</div>
-            <div class="col-md-5 grid-item mx-auto" data-href="{{route('teacher.news')}}">News</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ url('/communication') }}">Communication</div>
         </div>
     </div>
 
@@ -196,3 +193,65 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+navteacher.blade.php:: <!-- resources/views/navteacher.blade.php -->
+<header>
+    <div class="navbar">
+        <div class="container d-flex align-items-center justify-content-between">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" width="60">
+            <a class="navbar-brand" href="#">Naragram Learning Management System</a>
+        </div>
+    </div>
+</header>
+
+<button class="btn btn-primary mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="section">
+    <button class="back-btn" onclick="closeSidebar()"><</button>
+    <a href="{{ route('teacher.dashboard') }}" aria-label="Home"
+       @if($active === 'home') style="background-color: #007bff; color:white;" @endif>
+        <i class="fas fa-home"></i> Home
+    </a>
+    <a href="{{ route('teacher.attendance') }}" aria-label="Attendance"
+       @if($active === 'attendance') style="background-color: #007bff; color:white;" @endif>
+        <i class="fas fa-clipboard-check"></i> Attendance
+    </a>
+    <a href="{{ route('teacher.notes') }}" aria-label="Notes"
+       @if($active === 'notes') style="background-color: #007bff; color:white;" @endif>
+        <i class="fas fa-file-alt"></i> Notes
+    </a>
+    <a href="{{ route('assignments.index') }}" aria-label="Assignments"
+       @if($active === 'assignments') style="background-color: #007bff; color:white;" @endif>
+        <i class="fas fa-tasks"></i> Assignments
+    </a>
+    <a href="#" aria-label="Communication"
+       @if($active === 'communication') style="background-color: #007bff; color:white;" @endif>
+        <i class="fas fa-comments"></i> Communication
+    </a>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+    <form id="logout-form" action="{{ route('teacher.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.section');
+        const backButton = document.querySelector('.back-btn');
+        if (sidebar.style.display === 'block') {
+            sidebar.style.display = 'none';
+            backButton.style.display = 'none';
+        } else {
+            sidebar.style.display = 'block';
+            backButton.style.display = 'block';
+        }
+    }
+
+    function closeSidebar() {
+        const sidebar = document.querySelector('.section');
+        const backButton = document.querySelector('.back-btn');
+        sidebar.style.display = 'none';
+        backButton.style.display = 'none';
+    }
+</script>

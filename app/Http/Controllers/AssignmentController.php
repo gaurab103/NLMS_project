@@ -19,16 +19,16 @@ class AssignmentController extends Controller
             ->where('teacher_id', $teacherId)
             ->latest()
             ->get();
-
         $classes = Course::all();
         $subjects = Subject::where('teacher_id', $teacherId)->get();
-
-        return view('assignmentportalteacher', compact('assignments', 'classes', 'subjects'));
+        return view('assignmentportalteacher', [
+            'assignments' => $assignments,
+            'classes' => $classes,
+            'subjects' => $subjects,
+            'active' => 'assignments' // Highlights "Assignments" in nav
+        ]);
     }
 
-    /**
-     * Store a new assignment.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -52,38 +52,36 @@ class AssignmentController extends Controller
             'file_path' => $filePath
         ]);
 
-        return redirect()->route('ssignments.index')
+        return redirect()->route('assignments.index')
             ->with('success', 'Assignment created successfully');
     }
 
-    /**
-     * Show the form for editing an assignment.
-     */
     public function edit(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'You are not authorized to edit this assignment.');
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
         }
-
         $assignments = Assignment::with(['subject', 'course', 'submissions'])
             ->where('teacher_id', $teacherId)
             ->latest()
             ->get();
         $classes = Course::all();
         $subjects = Subject::where('teacher_id', $teacherId)->get();
-
-        return view('assignmentportalteacher', compact('assignment', 'assignments', 'classes', 'subjects'));
+        return view('assignmentportalteacher', [
+            'assignment' => $assignment,
+            'assignments' => $assignments,
+            'classes' => $classes,
+            'subjects' => $subjects,
+            'active' => 'assignments' // Highlights "Assignments" in nav
+        ]);
     }
 
-    /**
-     * Update an existing assignment.
-     */
     public function update(Request $request, Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'You are not authorized to update this assignment.');
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
         }
 
         $validated = $request->validate([
@@ -116,14 +114,11 @@ class AssignmentController extends Controller
             ->with('success', 'Assignment updated successfully');
     }
 
-    /**
-     * Delete an assignment.
-     */
     public function destroy(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'You are not authorized to delete this assignment.');
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
         }
 
         if ($assignment->file_path) {
@@ -136,14 +131,11 @@ class AssignmentController extends Controller
             ->with('success', 'Assignment deleted successfully');
     }
 
-    /**
-     * Display an assignment and its submissions.
-     */
     public function show(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'You are not authorized to view this assignment.');
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
         }
 
         $selectedAssignment = $assignment->load('submissions.student');
@@ -153,7 +145,12 @@ class AssignmentController extends Controller
             ->get();
         $classes = Course::all();
         $subjects = Subject::where('teacher_id', $teacherId)->get();
-
-        return view('assignmentportalteacher', compact('selectedAssignment', 'assignments', 'classes', 'subjects'));
+        return view('assignmentportalteacher', [
+            'selectedAssignment' => $selectedAssignment,
+            'assignments' => $assignments,
+            'classes' => $classes,
+            'subjects' => $subjects,
+            'active' => 'assignments' // Highlights "Assignments" in nav
+        ]);
     }
 }

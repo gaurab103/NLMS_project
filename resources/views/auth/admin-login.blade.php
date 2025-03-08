@@ -154,7 +154,7 @@
     <div class="login-container">
         <div class="login-header">
             <img src="{{ asset('images/logo/logo.png') }}" alt="NLMS Logo" class="brand-logo">
-            <h2>Administration Portal</h2>
+            <h2>Admin Login</h2>
             <p class="text-muted">System Management Access</p>
         </div>
         <form method="POST" action="{{ route('admin.login') }}">
@@ -211,22 +211,11 @@
                         id="remember"
                         name="remember"
                     >
-                    <label class="form-check-label text-muted" for="remember">
-                        Persistent Session
-                    </label>
-                </div>
-                <a href="#" class="forgot-password">Recover Access</a>
-            </div>
 
             <div class="d-grid mb-4">
                 <button type="submit" class="btn btn-admin btn-lg text-white">
-                    <i class="fas fa-unlock-alt me-2"></i>Authenticate
+                    <i class="fas fa-unlock-alt me-2"></i>Login
                 </button>
-            </div>
-
-            <div class="security-notice">
-                <i class="fas fa-shield-alt security-icon"></i>
-                Secure Admin Portal - Authorized Access Only
             </div>
         </form>
     </div>
