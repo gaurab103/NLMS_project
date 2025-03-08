@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
-use App\Models\Notes;
 use App\Models\Attendance;
 
 class StudentAuthController extends Controller
@@ -30,7 +29,7 @@ class StudentAuthController extends Controller
             return redirect()->route('student.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        return back()->withErrors(['username' => 'Invalid credentials']);
     }
 
     public function logout()
@@ -38,15 +37,16 @@ class StudentAuthController extends Controller
         Auth::guard('student')->logout();
         return redirect('/');
     }
+
     public function profile()
     {
         try {
-            $student = Auth::guard('student')->user();
+            $student = Auth::guard('student')->user();  // Get authenticated student
 
+            // Check if student is authenticated
             if (!$student) {
                 return view('profile', ['error' => 'Student not found']);
             }
-
 
             return view('profile', compact('student'));
         } catch (\Exception $e) {
@@ -56,8 +56,9 @@ class StudentAuthController extends Controller
 
     public function editpro()
     {
-        $student = Auth::guard('student')->user();
+        $student = Auth::guard('student')->user();  // Get authenticated student
 
+        // Check if student is authenticated
         if (!$student) {
             return redirect()->route('profile')->with('error', 'Student not found.');
         }
@@ -67,8 +68,9 @@ class StudentAuthController extends Controller
 
     public function updatepro(Request $request)
     {
-        $student = Auth::guard('student')->user();
+        $student = Auth::guard('student')->user();  // Get authenticated student
 
+        // Check if student is authenticated
         if (!$student) {
             return redirect()->route('profile')->with('error', 'Student not found.');
         }
@@ -81,43 +83,48 @@ class StudentAuthController extends Controller
             'Parent_Name' => 'required|string|max:255',
         ]);
 
+        // Update student profile with validated data
         $student->update($request->all());
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
-    public function attendance()
-{
-    try {
-        $student = Auth::guard('student')->user();
 
+    public function attendance()
+    {
+        try {
+            $student = Auth::guard('student')->user();  // Get authenticated student
+
+            if (!$student) {
+                return view('attendance', ['error' => 'Student not found']);
+            }
+
+            // Retrieve attendance data for the authenticated student
+            $attendance = Attendance::where('student_id', $student->id)->get();
+
+            return view('attendance', compact('student', 'attendance'));
+        } catch (\Exception $e) {
+            return view('attendance', ['error' => 'Error loading attendance data: ' . $e->getMessage()]);
+        }
+    }
+
+    public function fetchAttendance()
+    {
+        $student = Auth::guard('student')->user();  // Get authenticated student
+
+        // Check if student is authenticated
         if (!$student) {
-            return view('attendance', ['error' => 'Student not found']);
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated',
+            ]);
         }
 
+        // Retrieve attendance data for the authenticated student
         $attendance = Attendance::where('student_id', $student->id)->get();
 
-        return view('attendance', compact('student', 'attendance'));
-    } catch (\Exception $e) {
-        return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
-    }
-}
-public function fetchAttendance()
-{
-    $student = Auth::guard('student')->user();
-
-    if (!$student) {
         return response()->json([
-            'success' => false,
-            'message' => 'User not authenticated',
+            'success' => true,
+            'data' => $attendance,
         ]);
     }
-
-    $attendance = Attendance::where('Std_ID', $student->id)->get();
-
-    return response()->json([
-        'success' => true,
-        'data' => $attendance,
-    ]);
-}
-
 }
