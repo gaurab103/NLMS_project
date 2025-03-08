@@ -11,184 +11,188 @@
     <!-- Date Range Picker CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Moment.js -->
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-
-    <!-- Date Range Picker -->
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <style>
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        .attendance-badge {
+            font-size: 0.9rem;
+            padding: 0.5em 0.8em;
+        }
+    </style>
 </head>
 <body class="bg-light">
-    <div class="container mt-5">
-        <div class="card shadow">
-            <!-- Card Header -->
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Attendance Management System</h3>
-            </div>
+    @include('nav_aside')
 
-            <!-- Card Body -->
-            <div class="card-body">
-                <!-- Filter Form -->
-                <form method="GET" class="mb-4">
-                    <div class="row g-3 mb-4">
-                        <!-- Class Filter -->
+    <div class="main-content">
+        <div class="container-fluid py-4">
+            <!-- Filter Section -->
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-end">
                         <div class="col-md-3">
+                            <label class="form-label">Class</label>
                             <select name="course_id" class="form-select">
                                 <option value="">All Classes</option>
                                 @foreach($courses as $course)
-                                <option value="{{ $course->id }}"
-                                    {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                                <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
                                     {{ $course->course_name }}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <!-- Student Filter -->
                         <div class="col-md-3">
+                            <label class="form-label">Student</label>
                             <select name="student_id" class="form-select">
                                 <option value="">All Students</option>
                                 @foreach($students as $student)
-                                <option value="{{ $student->id }}"
-                                    {{ request('student_id') == $student->id ? 'selected' : '' }}>
+                                <option value="{{ $student->id }}" {{ request('student_id') == $student->id ? 'selected' : '' }}>
                                     {{ $student->name }}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <!-- Date Filter -->
-                        <div class="col-md-3">
-                            <input type="date" name="date" class="form-control"
-                                   value="{{ request('date') }}">
+                        <div class="col-md-2">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="present" {{ request('status') === 'present' ? 'selected' : '' }}>Present</option>
+                                <option value="absent" {{ request('status') === 'absent' ? 'selected' : '' }}>Absent</option>
+                            </select>
                         </div>
 
-                        <!-- Date Range Filter -->
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="form-label">Date Range</label>
                             <input type="text" name="daterange" class="form-control daterange"
                                    value="{{ request('daterange') }}">
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="col-md-12 mt-3">
+                        <div class="col-md-2">
                             <button type="submit" class="btn btn-primary w-100">
-                                Apply Filters
+                                <i class="fas fa-filter"></i> Apply
                             </button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+            </div>
 
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <!-- Today's Attendance -->
-                    <div class="col-md-4">
-                        <div class="card text-white bg-success h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Today's Attendance</h5>
-                                <h2 class="card-text">{{ number_format($stats['today']) }}</h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Weekly Average -->
-                    <div class="col-md-4">
-                        <div class="card text-white bg-info h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">7-Day Average</h5>
-                                <h2 class="card-text">
-                                    {{ number_format($stats['weekly'] * 100, 1) }}%
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Monthly Average -->
-                    <div class="col-md-4">
-                        <div class="card text-white bg-warning h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">30-Day Average</h5>
-                                <h2 class="card-text">
-                                    {{ number_format($stats['monthly'] * 100, 1) }}%
-                                </h2>
-                            </div>
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Today's Attendance</h5>
+                            <h2 class="card-text">{{ $stats['today'] }}</h2>
                         </div>
                     </div>
                 </div>
-
-                <!-- Attendance Records Table -->
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Date</th>
-                                <th>Student Name</th>
-                                <th>Class</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($attendance as $record)
-                            <tr>
-                                <!-- Formatted Date -->
-                                <td>{{ $record->date->format('d M Y') }}</td>
-
-                                <!-- Student Name with Fallback -->
-                                <td>{{ $record->date ? $record->date->format('d M Y') : 'N/A' }}</td>
-
-                                <!-- Class Name with Fallback -->
-                                <td>{{ optional($record->course)->course_name ?? 'N/A' }}</td>
-
-                                <!-- Status Badge -->
-                                <td>
-                                    <span class="badge rounded-pill bg-{{ $record->status === 'present' ? 'success' : 'danger' }}">
-                                        {{ ucfirst($record->status) }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center">No attendance records found</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-success text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Present Rate</h5>
+                            <h2 class="card-text">{{ number_format($stats['monthly'] * 100, 1) }}%</h2>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-warning text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Class Average</h5>
+                            <h2 class="card-text">{{ number_format($stats['class_avg'] * 100, 1) }}%</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-danger text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Absences</h5>
+                            <h2 class="card-text">{{ $stats['absences'] }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $attendance->appends(request()->query())->links() }}
+            <!-- Attendance Records -->
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Detailed Records</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student</th>
+                                    <th>Class</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($attendance as $record)
+                                <tr>
+                                    <td>{{ Carbon\Carbon::parse($record->date)->format('d M Y') }}</td>
+                                    <td>{{ optional($record->student)->name ?? 'N/A' }}</td>
+                                    <td>{{ optional($record->course)->course_name ?? 'N/A' }}</td>
+                                    <td>
+                                        <span class="badge attendance-badge bg-{{ $record->status === 'present' ? 'success' : 'danger' }}">
+                                            {{ ucfirst($record->status) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $record->created_at->format('h:i A') }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No records found</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $attendance->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Date Range Picker Script -->
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     <script>
-    $(document).ready(function() {
-        // Initialize date range picker
-        $('input.daterange').daterangepicker({
-            opens: 'left',
-            autoUpdateInput: false,
-            locale: {
-                format: 'YYYY-MM-DD',
-                cancelLabel: 'Clear'
-            },
-            startDate: moment().subtract(29, 'days'),
-            endDate: moment()
-        });
+        // Date Range Picker
+        $(document).ready(function() {
+            $('input.daterange').daterangepicker({
+                opens: 'left',
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    cancelLabel: 'Clear'
+                }
+            });
 
-        // Handle date range selection
-        $('input.daterange').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        });
+            $('input.daterange').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            });
 
-        // Handle date range clear
-        $('input.daterange').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
+            $('input.daterange').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
         });
-    });
     </script>
 </body>
 </html>

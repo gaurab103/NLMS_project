@@ -6,31 +6,39 @@ use App\Models\Attendance;
 use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherAttendanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:teacher');
+    }
+
     public function create()
     {
-        $courses = Course::select('id', 'name')->get();
+        $courses = Course::all();
         return view('teacher_attendance', compact('courses'));
     }
 
     public function getStudents(Course $course, Request $request)
-{
-    $request->validate(['date' => 'required|date']);
+    {
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date'
+        ]);
 
-    $date = $request->query('date');
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $students = $course->students()
-            ->with(['attendances' => function($query) use ($date) {
-                $query->whereDate('date', $date);
+            ->with(['attendances' => function($query) use ($request) {
+                $query->whereDate('date', $request->date);
             }])
-            ->select('id', 'name') // Limit fields retrieved
-            ->paginate(30); // Add pagination
+            ->get(['id', 'name']);
 
-
-    return response()->json($students);
-}
+        return response()->json($students);
+    }
 
     public function store(Request $request)
     {
@@ -40,18 +48,31 @@ class TeacherAttendanceController extends Controller
             'students' => 'required|array'
         ]);
 
-        foreach ($request->students as $studentId => $data) {
-            // Consider using chunking if the number of students is large
+        $course = Course::findOrFail($validated['course_id']);
+
+        foreach ($validated['students'] as $studentId => $data) {
+            $student = Student::findOrFail($studentId);
+
+            if (!$course->students->contains($student)) {
+                return back()->withErrors(['students' => 'Invalid student for this course']);
+            }
+
             Attendance::updateOrCreate(
                 [
                     'student_id' => $studentId,
-                    'course_id' => $request->course_id,
-                    'date' => $request->date
+                    'course_id' => $validated['course_id'],
+                    'date' => $validated['date']
                 ],
-                ['status' => $data['status']]
+                [
+                    'student_id' => $studentId,
+                    'course_id' => $validated['course_id'],
+                    'date' => $validated['date'],
+                    'status' => $data['status']
+                ]
             );
         }
 
-        return redirect()->back()->with('success', 'Attendance saved successfully!');
+        return redirect()->route('teacher.attendance.create')
+            ->with('success', 'Attendance saved successfully!');
     }
 }

@@ -53,4 +53,15 @@ class NewsController extends Controller
         return redirect()->route('news.index')
                          ->with('success', 'Notice deleted successfully!');
     }
+    public function studentIndex()
+{
+    $notices = News::latest()->get();
+    return view('studentnews', compact('notices'));
+}
+
+public function teacherIndex()
+{
+    $notices = News::latest()->get();
+    return view('teachernews', compact('notices'));
+}
 }

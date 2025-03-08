@@ -27,15 +27,15 @@ class AdminAttendanceController extends Controller
             ->orderByDesc('date')
             ->paginate(30);
 
-        // Calculate statistics correctly
+        // Calculate statistics
         $todayRecords = Attendance::whereDate('date', today())->get();
-        $weeklyRecords = Attendance::whereBetween('date', [now()->subDays(7), now()])->get();
         $monthlyRecords = Attendance::whereBetween('date', [now()->subDays(30), now()])->get();
 
         $stats = [
             'today' => $todayRecords->count(),
-            'weekly' => $this->calculateAverage($weeklyRecords),
-            'monthly' => $this->calculateAverage($monthlyRecords)
+            'absences' => $todayRecords->where('status', 'absent')->count(),
+            'monthly' => $this->calculateAverage($monthlyRecords),
+            'class_avg' => $this->calculateClassAverage($request)
         ];
 
         return view('admin_attendance', [
@@ -44,6 +44,26 @@ class AdminAttendanceController extends Controller
             'students' => Student::all(),
             'stats' => $stats
         ]);
+    }
+
+    private function calculateClassAverage(Request $request)
+    {
+        return Course::withCount(['attendances as present_count' => function($q) {
+                $q->where('status', 'present');
+            }])
+            ->when($request->filled('daterange'), function($q) use ($request) {
+                $dates = explode(' - ', $request->daterange);
+                $q->whereHas('attendances', function($q) use ($dates) {
+                    $q->whereBetween('date', [
+                        Carbon::parse($dates[0])->startOfDay(),
+                        Carbon::parse($dates[1])->endOfDay()
+                    ]);
+                });
+            })
+            ->get()
+            ->avg(function($course) {
+                return $course->present_count / max($course->attendances_count, 1);
+            });
     }
 
     private function calculateAverage($records)

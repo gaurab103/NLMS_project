@@ -2,34 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
+use App\Models\Course;
+use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display the list of subjects for the logged-in student.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function subjects()
+    public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'teacher_id' => 'required|exists:teachers,id',
+            'class_id' => 'required|exists:courses,id',
+            'description' => 'nullable|string'
+        ]);
+
         try {
-            // Get the logged-in student's ID
-            $studentId = auth()->guard('student')->id(); // Assuming you're using a custom guard for the student
+            Subject::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'course_id' => $request->class_id,
+                'teacher_id' => $request->teacher_id,
+                'admin_id' => auth('admin')->id()
+            ]);
 
-            // Fetch the subjects associated with the logged-in student
-            $subjects = Subject::where('student_id', $studentId)
-                ->get(); // Fetch subjects for the logged-in student
-
-            return view('subjects', compact('subjects')); // Pass subjects to the view
+            return redirect()->back()->with('success', 'Subject created successfully');
 
         } catch (\Exception $e) {
-            // Handle any errors
-            $subjects = collect(); // Empty collection
-            return view('subjects', compact('subjects'))->with('error', 'Error loading subjects: ' . $e->getMessage());
+            return redirect()->back()
+                   ->with('error', 'Error creating subject: ' . $e->getMessage());
         }
     }
-}
 
+    public function update(Request $request, Subject $subject)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'teacher_id' => 'required|exists:teachers,id'
+        ]);
+
+        $subject->update($request->all());
+        return redirect()->back()->with('success', 'Subject updated successfully');
+    }
+
+    public function destroy(Subject $subject)
+    {
+        $subject->delete();
+        return redirect()->back()->with('success', 'Subject deleted successfully');
+    }
+
+    public function show(Course $class, Subject $subject)
+    {
+        if ($subject->course_id != $class->id) {
+            abort(404);
+        }
+        $subject->load([
+            'notes.teacher',
+            'assignments.submissions.student',
+            'teacher',
+            'course.students'
+        ]);
+        return view('subject_details', compact('subject', 'class'));
+    }
+}

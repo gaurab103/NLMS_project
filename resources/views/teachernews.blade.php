@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student News & Notices</title>
+  <title>Teacher News & Notices</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
   <style>
+    /* Same styles as studentnews.blade.php */
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
@@ -72,13 +73,14 @@
   </style>
 </head>
 <body>
+  @include('nav_aside')
 
   <div class="content-container">
     <div class="row">
       <div class="col-12">
         <div class="page-header">
           <i class="fas fa-newspaper"></i>
-          <h1 class="mb-0">Student News & Notices</h1>
+          <h1 class="mb-0">Teacher News & Notices</h1>
         </div>
       </div>
     </div>

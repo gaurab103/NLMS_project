@@ -67,7 +67,7 @@ class StudentController extends Controller
             'C_ID' => $validated['course_id'],
             'Stats' => $validated['stats'],
             'Username' => $validated['username'],
-            'Password' => $validated['password'], // Store plain text
+            'Password' => $validated['password'],
             'photo' => $photoPath,
         ]);
 

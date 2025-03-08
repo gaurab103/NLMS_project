@@ -2,40 +2,44 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Assignment extends Model
 {
-    protected $table = 'assignments';
+    use HasFactory;
 
     protected $fillable = [
-        'student_id',
         'title',
         'description',
-        'file_path', // Added file path for submissions
+        'file_path',
         'due_date',
-        'created_at',
-        'updated_at',
+        'subject_id',
+        'course_id',
+        'teacher_id'
+    ];
+    protected $casts = [
+        'due_date' => 'datetime',
     ];
 
-    /**
-     * Copy the associated assignment file to a new location.
-     *
-     * @param string $newPath
-     * @return bool
-     */
-    public function copyFile(string $newPath): bool
-    {
-        if (!$this->file_path || !Storage::exists($this->file_path)) {
-            return false;
-        }
 
-        return Storage::copy($this->file_path, $newPath);
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 
-    public function student()
+    public function course()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Course::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
     }
 }

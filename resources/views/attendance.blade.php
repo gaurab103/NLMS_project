@@ -19,7 +19,6 @@
                     <th>Name</th>
                     <th>Student ID</th>
                     <th>Attendance ID</th>
-                    <th>Teacher ID</th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th>Updated At</th>
@@ -49,8 +48,6 @@
                                     <td>${record.id}</td>
                                     <td>${record.name}</td>
                                     <td>${record.Std_ID}</td>
-                                    <td>${record.A_ID}</td>
-                                    <td>${record.T_ID}</td>
                                     <td>${record.status}</td>
                                     <td>${record.created_at}</td>
                                     <td>${record.updated_at}</td>

@@ -2,42 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Subject extends Model
 {
-    protected $table = 'subjects';
+    use HasFactory;
 
-    protected $fillable = [
-        'student_id',
-        'name',
-        'code',
-        'file_path', 
-        'created_at',
-        'updated_at',
-    ];
+    protected $fillable = ['name', 'description', 'course_id', 'teacher_id', 'admin_id'];
 
-    /**
-     * Copy the associated subject file to a new location.
-     *
-     * @param string $newPath
-     * @return bool
-     */
-    public function copyFile(string $newPath): bool
+    public function course()
     {
-        if (!$this->file_path || !Storage::exists($this->file_path)) {
-            return false;
-        }
-
-        return Storage::copy($this->file_path, $newPath);
+        return $this->belongsTo(Course::class);
     }
 
-    /**
-     * Get the student associated with the subject.
-     */
-    public function student()
+    public function teacher()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
     }
 }

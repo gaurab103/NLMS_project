@@ -1,4 +1,4 @@
-
+<!-- resources/views/teacherportal.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +7,14 @@
     <title>Teacher Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-         * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
             margin-left: 250px;
-            overflow-y: auto; /* Allow vertical scrolling */
+            overflow-y: auto;
             background-color: #f8f9fa;
         }
         .navbar {
@@ -92,15 +92,15 @@
             cursor: pointer;
         }
         .row + .row {
-            margin-top: 20px; /* Spacing between rows */
+            margin-top: 20px;
         }
         .mobile-menu-btn {
-            display: none; /* Hidden by default */
-            margin: 15px ;
+            display: none;
+            margin: 15px;
             background-color: #5e5d5d;
         }
         .back-btn {
-            display: none; /* Hidden by default */
+            display: none;
             margin: 15px;
             text-align: center;
             background-color: #5e5d5d;
@@ -111,10 +111,10 @@
         }
         @media (max-width: 768px) {
             body {
-                margin-left: 0; /* Remove sidebar margin on mobile */
+                margin-left: 0;
             }
             .section {
-                display: none; /* Hide sidebar by default */
+                display: none;
             }
             .navbar .navbar-brand {
                 font-size: 15px;
@@ -122,31 +122,31 @@
                 margin-right: 25px;
             }
             .navbar form {
-                width: 100%; /* Make the form take up full width */
+                width: 100%;
                 display: flex;
                 justify-content: center;
                 margin-top: 10px;
             }
             .navbar .form-control {
-                width: 80%; /* Make the search input take up most of the space */
+                width: 80%;
             }
             .mobile-menu-btn {
-                display: block; /* Show button on small screens */
+                display: block;
                 margin-left: 3px;
             }
             .back-btn {
-                display: block; /* Show back button on small screens */
-
+                display: block;
             }
         }
     </style>
 </head>
 <body>
+    @include('navteacher', ['active' => 'home'])
+
+    <!-- Search form specific to dashboard -->
     <header>
         <div class="navbar">
             <div class="container d-flex align-items-center justify-content-between">
-                <img src="{{ asset('images/logo.png') }}" alt="Admin Logo" width="60">
-                <a class="navbar-brand" href="#">Naragram Learning Management System</a>
                 <form class="d-flex" role="search" onsubmit="event.preventDefault(); filterItems()">
                     <input id="search-bar" class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
@@ -154,36 +154,19 @@
             </div>
         </div>
     </header>
-    <button class="btn btn-primary mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-    <div class="section">
-        <button class="back-btn" onclick="closeSidebar()"><</button>
-        <a href="#" aria-label="Home" style="background-color: #007bff; color:white;">Home</a>
-        <a href="{{ route('teacher.attendance') }}" aria-label="Attendance">Attendance</a>
-        <a href="{{ route('teacher.notes') }}" aria-label="Notes">Notes</a>
-        <a href="{{ route('teacher.assignment') }}" aria-label="Assignments">Assignments</a>
-        <a href="#" aria-label="Communication">Communication</a>
-        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-    <!-- Hidden logout form -->
-    <form id="logout-form" action="{{ route('teacher.logout') }}" method="POST" style="display: none;">
-      @csrf
-    </form>
 
-
-    </div>
     <div class="box">
         <h1>Welcome Teacher</h1>
         <img src="{{ asset('images/teacherportal.png') }}" alt="Teacher">
     </div>
     <div class="grid-container container">
         <div class="row">
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ 'teacher.attendance' }}">Attendance</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.attendance') }}">Attendance</div>
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.notes') }}">Notes</div>
         </div>
         <div class="row">
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.assignment') }}">Assignment</div>
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ url('/communication') }}">Communication</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('assignments.index') }}">Assignment</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{route('teacher.news')}}">News</div>
         </div>
     </div>
 
@@ -196,29 +179,10 @@
                 }
             });
         });
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.section');
-            const backButton = document.querySelector('.back-btn');
-            if (sidebar.style.display === 'block') {
-                sidebar.style.display = 'none';
-                backButton.style.display = 'none';
-            } else {
-                sidebar.style.display = 'block';
-                backButton.style.display = 'block';
-            }
-        }
-
-        function closeSidebar() {
-            const sidebar = document.querySelector('.section');
-            const backButton = document.querySelector('.back-btn');
-            sidebar.style.display = 'none';
-            backButton.style.display = 'none';
-        }
 
         function filterItems() {
             const searchValue = document.getElementById("search-bar").value.toLowerCase();
             const gridItems = document.querySelectorAll(".grid-item");
-
             gridItems.forEach(item => {
                 const itemName = item.textContent.toLowerCase();
                 if (itemName.includes(searchValue)) {

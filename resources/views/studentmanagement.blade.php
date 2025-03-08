@@ -50,7 +50,7 @@
         <div class="container-fluid">
             <div class="card card-shadow">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Student Management</h3>
+                    <h3 class="mb-0"><i class="fas fa-user-graduate me-2"></i>NLMS Student Management</h3>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -75,7 +75,6 @@
                                         </button>
                                     </div>
                                 </form>
-                                {{-- Filter by course --}}
                                 <form method="GET" class="ms-2">
                                     <select name="course_id" class="form-select" onchange="this.form.submit()">
                                         <option value="">All Courses</option>
@@ -102,7 +101,7 @@
                                     <th>Address</th>
                                     <th>Email</th>
                                     <th>Contact No</th>
-                                    <th>Course</th>
+                                    <th>Class</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -120,14 +119,13 @@
                                         <td>{{ $student->Address }}</td>
                                         <td>{{ $student->Email }}</td>
                                         <td>{{ $student->Contact_No }}</td>
-                                        <td>{{ $student->course ? $student->course->course_name : 'N/A' }}</td>
+                                        <td>{{ $student->course->course_name}}</td>
                                         <td>
                                             <span class="badge bg-{{ $student->Stats === 'Active' ? 'success' : 'danger' }}">
                                                 {{ $student->Stats }}
                                             </span>
                                         </td>
                                         <td>
-                                            {{-- Edit button triggers the modal --}}
                                             <button class="btn btn-warning btn-sm edit-button"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editStudentModal"

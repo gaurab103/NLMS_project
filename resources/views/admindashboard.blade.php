@@ -159,7 +159,7 @@
                 <h3>News & Notices</h3>
             </a>
 
-            <a href="{{ route('class') }}" class="grid-item">
+            <a href="{{ route('classes.index') }}" class="grid-item">
                 <i class="fas fa-landmark grid-icon"></i>
                 <h3>Class Management</h3>
             </a>

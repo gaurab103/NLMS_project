@@ -47,7 +47,7 @@
         <div class="container-fluid">
             <div class="card card-shadow">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Teacher Management</h3>
+                    <h3 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>NLMS Teacher Management</h3>
                 </div>
 
                 <div class="card-body">

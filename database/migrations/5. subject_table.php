@@ -6,27 +6,33 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('subject', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('T_ID');
-            $table->unsignedBigInteger('A_ID');
-            $table->string('Subject_Name');
+        Schema::create('subjects', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->id(); // This creates an unsigned big integer primary key
+            $table->unsignedBigInteger('course_id'); // Foreign key to courses table
+            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('admin_id');
+            $table->string('name');
+            $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->foreign('T_ID')->references('id')->on('teachers')->onDelete('cascade');
-
-            $table->foreign('A_ID')
-                ->references('id')
-                ->on('admins')
-                ->onDelete('cascade');
+            // Foreign keys
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('subject');
+        Schema::dropIfExists('subjects');
     }
 };

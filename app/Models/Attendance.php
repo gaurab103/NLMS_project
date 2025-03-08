@@ -18,14 +18,11 @@ class Attendance extends Model
 
     // Define the fillable fields for mass assignment (this helps prevent mass-assignment vulnerabilities)
     protected $fillable = [
-        'Std_ID',
-        'A_ID',
-        'T_ID',
-        'status',
-        'created_at',
-        'updated_at'
+        'student_id',  // Match actual DB column
+        'course_id',   // Match actual DB column
+        'date',        // Add if exists in DB
+        'status'
     ];
-
     // Optionally, you can specify which attributes should be hidden in arrays (e.g., for API responses)
     protected $hidden = [
         // 'some_column',  // Add columns to hide from JSON output
@@ -33,10 +30,10 @@ class Attendance extends Model
 
     // If you have date fields, ensure that they are cast to a DateTime type
     protected $dates = [
+        'date', // Add this line
         'created_at',
         'updated_at',
     ];
-
     // Example of relationships (if you want to link Attendance to other models like Student and Teacher)
     public function student()
     {

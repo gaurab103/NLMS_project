@@ -223,18 +223,18 @@
         }
         aside .box {
     width: 100%;
-    max-width: 250px; 
+    max-width: 250px;
     margin-bottom: 10px;
     padding: 0px;
     background-color: transparent;
 }
 
 aside .box h6 {
-    font-size: 14px; 
+    font-size: 14px;
     display: inline;
 }
 aside .box i {
-    font-size: 14px; 
+    font-size: 14px;
     display: inlin;
 
 }
@@ -284,7 +284,7 @@ aside .box i {
             <div class="col-md-4 box">
                 <button type="submit" class="btn btn-danger w-100">Logout</button>
             </div>
-        </form>        
+        </form>
     </form>
     </aside>
     <main>
@@ -425,7 +425,7 @@ document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="News"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/news');
+        showSectionContent('news', '{{ route('student.news') }}');
     });
 });
 
