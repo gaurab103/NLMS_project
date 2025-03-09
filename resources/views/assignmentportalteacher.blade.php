@@ -30,6 +30,7 @@
             max-width: 600px;
             margin-bottom: 30px;
             margin-left:35%;
+            overflow: visible !important;
         }
 
         form h2 {
@@ -41,10 +42,7 @@
             font-weight: bold;
         }
 
-        .form-control {
-            border-radius: 5px;
-            padding: 10px;
-        }
+
 
         /* Buttons */
         .btn {
@@ -89,7 +87,18 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
-
+        select {
+    color: black !important;
+}
+select option {
+    color: black !important;
+    background-color: white !important;
+    font-size: 16px;
+}
+.table-view{
+    margin-left:20%;
+    margin-right:2%;
+}
         /* Table Styling */
         .table {
     width: auto; /* Reduce table width further */
@@ -122,6 +131,10 @@
 .table-striped tbody tr:nth-child(odd) {
     background-color: #f2f2f2;
 }
+.delete{
+    display: inline;
+
+}
         /* Responsive Design */
         @media (max-width: 768px) {
             form {
@@ -131,6 +144,15 @@
             .table {
                 font-size: 14px;
             }
+            .table-view{
+                margin:10px;
+            }
+            .delete{
+                display: flex;
+                position: relative;
+               right:40px;
+            }
+
         }
 
     </style>
@@ -221,18 +243,19 @@
 
         <!-- Assignment List -->
         <h2 class="mt-5">Assignments</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Class</th>
-                    <th>Subject</th>
-                    <th>Due Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($assignments as $assignment)
+        <div class="table-view">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($assignments as $assignment)
                     <tr>
                         <td>{{ $assignment->title }}</td>
                         <td>{{ $assignment->course->name }}</td>
@@ -241,18 +264,22 @@
                         <td>
                             <a href="{{ route('assignments.edit', $assignment) }}" class="btn btn-sm btn-warning">Edit</a>
                             <a href="{{ route('assignments.show', $assignment) }}" class="btn btn-sm btn-info">View</a>
+                            <div class="delete">
                             <form action="{{ route('assignments.destroy', $assignment) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                             </form>
+    </div>
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-
-</body>
-</html>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        
+                </div>
+        
+        
+    </body>
+    </html>
