@@ -122,9 +122,31 @@ class StudentAuthController extends Controller
         // Retrieve attendance data for the authenticated student
         $attendance = Attendance::where('student_id', $student->id)->get();
 
+<<<<<<< HEAD
         return response()->json([
             'success' => true,
             'data' => $attendance,
         ]);
     }
+=======
+        return view('attendance', compact('student', 'attendance'));
+    } catch (\Exception $e) {
+        return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
+    }
+}
+public function fetchAttendance()
+{
+    $student = auth()->user();
+
+    $attendanceRecords = Attendance::where('student_id', $student->id)
+        ->select('date', 'status')
+        ->get();
+
+    return response()->json([
+        'success' => true,
+        'data' => $attendanceRecords
+    ]);
+}
+
+>>>>>>> ccbb70b (...)
 }

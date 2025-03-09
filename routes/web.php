@@ -75,6 +75,7 @@ Route::prefix('teacher')->group(function () {
             return view('teacherportal', ['active' => 'home']);
         })->name('teacher.dashboard');
 
+<<<<<<< HEAD
         Route::resource('assignments', AssignmentController::class)->except(['create']);
 
         Route::get('/notesteacher', function () {
@@ -92,6 +93,13 @@ Route::prefix('teacher')->group(function () {
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
         Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
+=======
+        // Teacher Attendance Routes
+        Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance');
+        Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
+        Route::post('/attendance', [TeacherAttendanceController::class, 'store']);
+
+>>>>>>> ccbb70b (...)
     });
 });
 Route::prefix('student')->group(function () {
@@ -104,7 +112,12 @@ Route::prefix('student')->group(function () {
             return view('layout');
         })->name('student.dashboard');
         Route::get('/profile', [StudentsController::class, 'profile'])->name('student.profile');
+<<<<<<< HEAD
         Route::get('/attendance', [AttendanceController::class, 'showAttendancePage'])->name('student.attendance');
+=======
+        
+        Route::get('/attendance', [StudentAuthController::class, 'attendance'])->name('student.attendance');
+>>>>>>> ccbb70b (...)
         Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
         Route::get('/notes', [NotesController::class, 'notes'])->name('student.notes');
         Route::get('/assignments', [AssignmentController::class, 'assignments'])->name('student.assignment');

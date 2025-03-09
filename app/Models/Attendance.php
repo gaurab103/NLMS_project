@@ -7,21 +7,19 @@ use Carbon\Carbon;
 
 class Attendance extends Model
 {
-    // Specify the table name (Laravel assumes plural by default)
     protected $table = 'attendances';
 
-    // If you're using timestamps in your table (created_at, updated_at)
-    public $timestamps = true;  // This is actually optional as Laravel does this automatically
+    public $timestamps = true; 
 
-    // Specify the primary key if it's not the default 'id'
-    protected $primaryKey = 'id';  // Optional, use only if your primary key is different
+    protected $primaryKey = 'id'; 
 
-    // Define the fillable fields for mass assignment (this helps prevent mass-assignment vulnerabilities)
     protected $fillable = [
-        'student_id',  // Match actual DB column
-        'course_id',   // Match actual DB column
-        'date',        // Add if exists in DB
-        'status'
+        'Std_ID',
+        'A_ID',
+        'T_ID',
+        'status',
+        'created_at',
+        'updated_at'
     ];
     // Optionally, you can specify which attributes should be hidden in arrays (e.g., for API responses)
     protected $hidden = [
