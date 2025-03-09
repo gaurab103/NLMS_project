@@ -1,0 +1,44 @@
+digraph Level0DFD {
+    node [shape=rectangle, style=filled, fillcolor=lightblue];
+    
+    // External Entities
+    Admin [label="Administrator", shape=actor];
+    Teacher [label="Teacher", shape=actor];
+    Student [label="Student", shape=actor];
+    
+    // Processes
+    UserManagement [label="User Management", shape=box, style=filled, fillcolor=lightgreen];
+    ClassManagement [label="Class Management", shape=box, style=filled, fillcolor=lightgreen];
+    SubjectManagement [label="Subject Management", shape=box, style=filled, fillcolor=lightgreen];
+    AttendanceManagement [label="Attendance Management", shape=box, style=filled, fillcolor=lightgreen];
+    InformationAccess [label="Information Access", shape=box, style=filled, fillcolor=lightgreen];
+    
+    // Data Stores
+    D1 [label="User Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D2 [label="Class Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D3 [label="Subject Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    D4 [label="Attendance Data", shape=cylinder, style=filled, fillcolor=lightyellow];
+    
+    // Interactions
+    Admin -> UserManagement [label="Manage Users"];
+    Admin -> ClassManagement [label="Manage Classes"];
+    Admin -> SubjectManagement [label="Manage Subjects"];
+    Admin -> AttendanceManagement [label="Manage Attendance"];
+    Admin -> InformationAccess [label="Access Info"];
+    
+    Teacher -> AttendanceManagement [label="Record/View Attendance"];
+    Teacher -> InformationAccess [label="Access Class & Subject Info"];
+    
+    Student -> InformationAccess [label="View Attendance & Subjects"];
+    
+    // Data Store interactions
+    UserManagement -> D1 [label="Store User Data"];
+    ClassManagement -> D2 [label="Store Class Data"];
+    SubjectManagement -> D3 [label="Store Subject Data"];
+    AttendanceManagement -> D4 [label="Store Attendance Data"];
+    
+    InformationAccess -> D1 [label="Access User Info"];
+    InformationAccess -> D2 [label="Access Class Data"];
+    InformationAccess -> D3 [label="Access Subject Data"];
+    InformationAccess -> D4 [label="Access Attendance Data"];
+}

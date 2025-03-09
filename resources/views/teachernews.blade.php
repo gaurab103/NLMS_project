@@ -73,7 +73,7 @@
   </style>
 </head>
 <body>
-  @include('navteacher')
+  @include('navteacher',['active' => 'news'])
 
   <div class="content-container">
     <div class="row">
