@@ -91,7 +91,7 @@ Route::prefix('teacher')->group(function () {
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance');
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
-        Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
+        Route::get('/news', [NewsController::class, 'teacherIndex'])->name('teacher.news');
     });
 });
 Route::prefix('student')->group(function () {
