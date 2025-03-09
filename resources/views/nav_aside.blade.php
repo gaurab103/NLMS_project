@@ -112,7 +112,7 @@
     <a href="{{ route('admin.attendance') }}" id="attendanceLink">
       <i class="fas fa-calendar-check"></i> Attendance
     </a>
-    <a href="{{route('classes.index')}}" id="classLink">
+    <a href="{{ route('classes.index') }}" id="classLink">
         <i class="fa-solid fa-landmark"></i> manage Class
     </a>
     <a href="{{ route('news.index') }}" id="newsLink">
