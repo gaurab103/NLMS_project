@@ -313,7 +313,7 @@ aside .box i {
             <nav class="navbar bg-body-tertiary">
                 <div style="width: 800px;" class="container-fluid">
                     <a style="color: white;" class="navbar-brand" href="">
-                        Welcome, {{ Auth::guard('student')->user()->Name }}
+                        Welcome, {{ Auth::guard('student')->user()->name }}
                     </a>
                 </div>
             </nav>

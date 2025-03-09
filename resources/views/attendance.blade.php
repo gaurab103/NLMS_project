@@ -19,9 +19,8 @@
                     <th>Name</th>
                     <th>Student ID</th>
                     <th>Attendance ID</th>
+                    <th>Date</th>
                     <th>Status</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
                 </tr>
             </thead>
             <tbody id="attendanceTableBody">
@@ -45,12 +44,14 @@
                         data.data.forEach(record => {
                             const row = `
                                 <tr>
+<<<<<<< HEAD
                                     <td>${record.id}</td>
                                     <td>${record.name}</td>
                                     <td>${record.Std_ID}</td>
+=======
+                                    <td>${record.date}</td>
+>>>>>>> ccbb70b (...)
                                     <td>${record.status}</td>
-                                    <td>${record.created_at}</td>
-                                    <td>${record.updated_at}</td>
                                 </tr>
                             `;
                             tableBody.innerHTML += row;

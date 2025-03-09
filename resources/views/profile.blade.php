@@ -14,6 +14,12 @@
                 <div class="card-body">
                     <p><strong>Name:</strong> {{ $student->name }}</p>
                     <p><strong>Email:</strong> {{ $student->Email }}</p>
+                    <p><strong>Date of Birth:</strong> {{ $student->dob }}</p>
+                    <p><strong>Address:</strong> {{ $student->Address }}</p>
+                    <p><strong>Parent's Name:</strong> {{ $student->Parent_Name }}</p>
+                    <p><strong>Contact Number:</strong> {{ $student->Contact_No }}</p>
+                    <p><strong>Course:</strong> {{ $student->courses->course_name ?? 'N/A' }}</p>
+                    <p><strong>Profile Photo:</strong> <img src="{{ $student->photo_url }}" alt="Student Photo" class="img-thumbnail" width="150"></p>
                 </div>
             </div>
         @elseif(isset($error))

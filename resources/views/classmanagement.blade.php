@@ -192,7 +192,7 @@
                 const form = $('#classForm');
 
                 if (isEdit) {
-                    form.attr('action', `/admin/classes/${button.data('id')}`);
+                    form.attr('action', /admin/classes/${button.data('id')});
                     $('#method-container').html('<input type="hidden" name="_method" value="PUT">');
                     $('#className').val(button.data('name'));
                     $('#classId').val(button.data('id'));
@@ -209,7 +209,7 @@
                 const form = $('#subjectForm');
 
                 if (isEdit) {
-                    form.attr('action', `/admin/subjects/${button.data('id')}`);
+                    form.attr('action', /admin/subjects/${button.data('id')});
                     form.find('input[name="_method"]').remove();
                     form.append('<input type="hidden" name="_method" value="PUT">');
                     $('#subjectName').val(button.data('name'));
@@ -227,7 +227,7 @@
             $('.delete-class').click(function() {
                 if (confirm('Delete this class and all its subjects?')) {
                     $.ajax({
-                        url: `/admin/classes/${$(this).data('id')}`,
+                        url: /admin/classes/${$(this).data('id')},
                         method: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -241,7 +241,7 @@
             $('.delete-subject').click(function() {
                 if (confirm('Delete this subject permanently?')) {
                     $.ajax({
-                        url: `/admin/subjects/${$(this).data('id')}`,
+                        url: /admin/subjects/${$(this).data('id')},
                         method: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
