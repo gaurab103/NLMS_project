@@ -15,14 +15,11 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-<<<<<<< HEAD
                     <th>ID</th>
                     <th>Name</th>
                     <th>Student ID</th>
                     <th>Attendance ID</th>
-=======
                     <th>Date</th>
->>>>>>> ccbb70b (...)
                     <th>Status</th>
                 </tr>
             </thead>

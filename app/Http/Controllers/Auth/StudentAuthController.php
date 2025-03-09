@@ -109,7 +109,7 @@ class StudentAuthController extends Controller
 
     public function fetchAttendance()
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = auth()->user();
 
         // Check if student is authenticated
         if (!$student) {
@@ -120,33 +120,13 @@ class StudentAuthController extends Controller
         }
 
         // Retrieve attendance data for the authenticated student
-        $attendance = Attendance::where('student_id', $student->id)->get();
+        $attendanceRecords = Attendance::where('student_id', $student->id)
+            ->select('date', 'status')
+            ->get();
 
-<<<<<<< HEAD
         return response()->json([
             'success' => true,
-            'data' => $attendance,
+            'data' => $attendanceRecords
         ]);
     }
-=======
-        return view('attendance', compact('student', 'attendance'));
-    } catch (\Exception $e) {
-        return view('attendance', ['error' => 'Error loading profile data: ' . $e->getMessage()]);
-    }
-}
-public function fetchAttendance()
-{
-    $student = auth()->user();
-
-    $attendanceRecords = Attendance::where('student_id', $student->id)
-        ->select('date', 'status')
-        ->get();
-
-    return response()->json([
-        'success' => true,
-        'data' => $attendanceRecords
-    ]);
-}
-
->>>>>>> ccbb70b (...)
 }
