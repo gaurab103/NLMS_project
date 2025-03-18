@@ -54,7 +54,6 @@ Route::prefix('admin')->group(function () {
         Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
         Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('admin.attendance');
         Route::resource('classes', ClassController::class);
-
         Route::resource('subjects', SubjectController::class)->except(['index', 'create', 'show']);
         Route::get('/classes/{class}/subjects/{subject}', [SubjectController::class, 'show'])
             ->name('classes.subjects.show');
@@ -91,6 +90,9 @@ Route::prefix('teacher')->group(function () {
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance');
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
+        Route::resource('assignments', AssignmentController::class)->except(['create', 'show']);
+        Route::get('assignments/{assignment}', [AssignmentController::class, 'show'])
+            ->name('assignments.show');
         Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
     });
 });

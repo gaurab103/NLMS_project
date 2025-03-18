@@ -72,7 +72,7 @@ class TeacherAttendanceController extends Controller
             );
         }
 
-        return redirect()->route('teacher.attendance.create')
+        return redirect()->route('teacher.attendance')
             ->with('success', 'Attendance saved successfully!');
     }
 }

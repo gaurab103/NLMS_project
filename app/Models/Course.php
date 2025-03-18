@@ -11,22 +11,22 @@ class Course extends Model
 
     protected $fillable = ['course_name', 'A_ID'];
 
-    public function students()
+    public function subjects()
     {
-        return $this->hasMany(Student::class, 'C_ID');
+        return $this->hasMany(Subject::class);
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
 
-    public function admin()
+    public function students()
     {
-        return $this->belongsTo(Admin::class, 'A_ID');
-    }
-    public function subjects()
-    {
-        return $this->hasMany(Subject::class);
+        return $this->hasMany(Student::class, 'C_ID');
     }
 }

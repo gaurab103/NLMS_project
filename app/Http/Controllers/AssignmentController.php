@@ -15,17 +15,23 @@ class AssignmentController extends Controller
     public function index()
     {
         $teacherId = Auth::guard('teacher')->id();
+
         $assignments = Assignment::with(['subject', 'course', 'submissions'])
             ->where('teacher_id', $teacherId)
             ->latest()
             ->get();
-        $classes = Course::all();
+
+        $classes = Course::whereHas('subjects', function($query) use ($teacherId) {
+                $query->where('teacher_id', $teacherId);
+            })->get();
+
         $subjects = Subject::where('teacher_id', $teacherId)->get();
+
         return view('assignmentportalteacher', [
             'assignments' => $assignments,
             'classes' => $classes,
             'subjects' => $subjects,
-            'active' => 'assignments' // Highlights "Assignments" in nav
+            'active' => 'assignments'
         ]);
     }
 
@@ -33,23 +39,25 @@ class AssignmentController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
+            'file' => 'nullable|file|max:2048',
+            'due_date' => 'required|date',
             'class_id' => 'required|exists:courses,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'due_date' => 'required|date|after:now',
-            'file' => 'nullable|file|max:5120' // 5MB max
+            'subject_id' => 'required|exists:subjects,id'
         ]);
 
-        $filePath = $request->hasFile('file') ? $request->file('file')->store('assignments', 'public') : null;
+        $filePath = $request->hasFile('file')
+            ? $request->file('file')->store('assignments', 'public')
+            : null;
 
         Assignment::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
+            'file_path' => $filePath,
+            'due_date' => $validated['due_date'],
             'course_id' => $validated['class_id'],
             'subject_id' => $validated['subject_id'],
-            'due_date' => $validated['due_date'],
-            'teacher_id' => Auth::guard('teacher')->id(),
-            'file_path' => $filePath
+            'teacher_id' => Auth::guard('teacher')->id()
         ]);
 
         return redirect()->route('assignments.index')
@@ -62,18 +70,18 @@ class AssignmentController extends Controller
         if ($assignment->teacher_id !== $teacherId) {
             abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
         }
-        $assignments = Assignment::with(['subject', 'course', 'submissions'])
-            ->where('teacher_id', $teacherId)
-            ->latest()
-            ->get();
-        $classes = Course::all();
+
+        $classes = Course::whereHas('subjects', function($query) use ($teacherId) {
+                $query->where('teacher_id', $teacherId);
+            })->get();
+
         $subjects = Subject::where('teacher_id', $teacherId)->get();
+
         return view('assignmentportalteacher', [
             'assignment' => $assignment,
-            'assignments' => $assignments,
             'classes' => $classes,
             'subjects' => $subjects,
-            'active' => 'assignments' // Highlights "Assignments" in nav
+            'active' => 'assignments'
         ]);
     }
 
@@ -86,28 +94,29 @@ class AssignmentController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'class_id' => 'required|exists:courses,id',
-            'subject_id' => 'required|exists:subjects,id',
+            'description' => 'nullable|string',
+            'file' => 'nullable|file|max:2048',
             'due_date' => 'required|date',
-            'file' => 'nullable|file|max:5120'
+            'class_id' => 'required|exists:courses,id',
+            'subject_id' => 'required|exists:subjects,id'
         ]);
 
-        $filePath = $assignment->file_path;
         if ($request->hasFile('file')) {
-            if ($filePath) {
-                Storage::disk('public')->delete($filePath);
+            if ($assignment->file_path) {
+                Storage::disk('public')->delete($assignment->file_path);
             }
             $filePath = $request->file('file')->store('assignments', 'public');
+        } else {
+            $filePath = $assignment->file_path;
         }
 
         $assignment->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'course_id' => $validated['class_id'],
-            'subject_id' => $validated['subject_id'],
+            'file_path' => $filePath,
             'due_date' => $validated['due_date'],
-            'file_path' => $filePath
+            'course_id' => $validated['class_id'],
+            'subject_id' => $validated['subject_id']
         ]);
 
         return redirect()->route('assignments.index')
@@ -126,31 +135,7 @@ class AssignmentController extends Controller
         }
 
         $assignment->delete();
-
         return redirect()->route('assignments.index')
             ->with('success', 'Assignment deleted successfully');
-    }
-
-    public function show(Assignment $assignment)
-    {
-        $teacherId = Auth::guard('teacher')->id();
-        if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
-        }
-
-        $selectedAssignment = $assignment->load('submissions.student');
-        $assignments = Assignment::with(['subject', 'course', 'submissions'])
-            ->where('teacher_id', $teacherId)
-            ->latest()
-            ->get();
-        $classes = Course::all();
-        $subjects = Subject::where('teacher_id', $teacherId)->get();
-        return view('assignmentportalteacher', [
-            'selectedAssignment' => $selectedAssignment,
-            'assignments' => $assignments,
-            'classes' => $classes,
-            'subjects' => $subjects,
-            'active' => 'assignments' // Highlights "Assignments" in nav
-        ]);
     }
 }
