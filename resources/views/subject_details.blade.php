@@ -11,32 +11,26 @@
   </style>
 </head>
 <body>
-  <div class="content-wrapper">
-    <div class="container">
-      <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-          <h3>{{ $subject->name }} - Subject Details</h3>
-        </div>
-        <div class="card-body">
-          <p><strong>Teacher:</strong> {{ $subject->teacher->Teacher_Name }}</p>
-          <p><strong>Description:</strong> {{ $subject->description ?? 'No description provided.' }}</p>
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>{{ $subject->name }} - Subject Details</h1>
+            <p>Teacher: {{ $subject->teacher->Teacher_Name }}</p>
+            <p>Description: {{ $subject->description ?? 'No description provided.' }}</p>
 
-          <h4>Notes</h4>
-          @if($subject->notes->count() > 0)
-            <ul class="list-group mb-3">
-              @foreach($subject->notes as $note)
-                <li class="list-group-item">
-                  <strong>{{ $note->title }}</strong> - {{ $note->content }}
-                  <br>
-                  <small class="text-muted">
-                    Posted by: {{ $note->teacher->Teacher_Name }} on {{ $note->created_at->format('M d, Y') }}
-                  </small>
-                </li>
-              @endforeach
-            </ul>
-          @else
-            <p>No notes posted for this subject.</p>
-          @endif
+            <h3>Notes</h3>
+            @if($subject->notes->count() > 0)
+                <ul class="list-group">
+                    @foreach($subject->notes as $note)
+                        <li class="list-group-item">
+                            <strong>{{ $note->title }}</strong> - {{ $note->content }}
+                            <br>
+                            <small>Posted by: {{ $note->teacher->Teacher_Name }} on {{ $note->created_at->format('M d, Y') }}</small>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>No notes posted for this subject.</p>
+            @endif
 
           <h4>Assignments</h4>
           @if($subject->assignments->count() > 0)
@@ -76,7 +70,7 @@
             <p>No assignments posted for this subject.</p>
           @endif
 
-          <a href="{{ route('classes.show', $subject->course_id) }}" class="btn btn-secondary mt-3">Back to Class</a>
+            <a href="{{ route('classes.show', $subject->course_id) }}" class="btn btn-secondary mt-3">Back to Class</a>
         </div>
       </div>
     </div>

@@ -313,7 +313,7 @@ aside .box i {
             <nav class="navbar bg-body-tertiary">
                 <div style="width: 800px;" class="container-fluid">
                     <a style="color: white;" class="navbar-brand" href="">
-                        Welcome, {{ Auth::guard('student')->user()->Name }}
+                        Welcome, {{ Auth::guard('student')->user()->name }}
                     </a>
                 </div>
             </nav>
@@ -419,7 +419,7 @@ document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/subjects');
+        showSectionContent('subjects', '{{ route('student.subject') }}');
     });
 });
 

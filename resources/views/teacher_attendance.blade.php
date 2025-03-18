@@ -7,6 +7,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Navigation Styles */
+        body {
+            margin-left: 250px;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .section {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            padding-top: 86px;
+            background-color: whitesmoke;
+        }
+        .section a {
+            padding: 15px;
+            font-size: 18px;
+            color: #333;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+        }
+        .section a:hover {
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+        .mobile-menu-btn, .back-btn {
+            display: none;
+            margin: 15px;
+            background-color: #5e5d5d;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
         .attendance-card {
             max-width: 800px;
             margin: 2rem auto;
@@ -112,7 +152,7 @@
                             <table class="table table-borderless">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="w-60">Student Name</th>
+                                        <th class="w-50">Student Name</th>
                                         <th>Attendance Status</th>
                                     </tr>
                                 </thead>
@@ -154,40 +194,44 @@
             $.ajax({
                 url: `/teacher/attendance/students/${courseId}?date=${date}`,
                 method: 'GET',
-                success: (response) => {
+                method: 'GET',
+                success: function(response) {
                     const tbody = $('#attendanceRows');
                     tbody.empty();
 
                     if (response.length === 0) {
                         tbody.append(`
-                            <tr>
-                                <td colspan="2" class="text-center py-4 text-muted">
-                                    <i class="fas fa-user-slash fa-2x mb-2"></i><br>
-                                    No students found in this class
-                                </td>
-                            </tr>
-                        `);
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            No students found in this class
+                        </td>
+                    </tr>
+                `);
                     } else {
                         response.forEach(student => {
-                            const status = student.attendances[0]?.status || 'present';
-                            tbody.append(`
-                                <tr class="student-row">
-                                    <td>${student.name}</td>
-                                    <td>
-                                        <input type="hidden" name="students[${student.id}][student_id]"
-                                               value="${student.id}">
-                                        <select name="students[${student.id}][status]"
-                                                class="form-select status-select ${status}">
-                                            <option value="present" ${status === 'present' ? 'selected' : ''}>
-                                                Present
-                                            </option>
-                                            <option value="absent" ${status === 'absent' ? 'selected' : ''}>
-                                                Absent
-                                            </option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            `);
+                            const status = student.attendances.length > 0 ?
+                                student.attendances[0].status : 'present';
+
+                            const row = `
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>
+                                <input type="hidden"
+                                       name="students[${student.id}][student_id]"
+                                       value="${student.id}">
+                                <select name="students[${student.id}][status]"
+                                        class="form-select">
+                                    <option value="present" ${status === 'present' ? 'selected' : ''}>
+                                        Present
+                                    </option>
+                                    <option value="absent" ${status === 'absent' ? 'selected' : ''}>
+                                        Absent
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+                            tbody.append(row);
                         });
                     }
 

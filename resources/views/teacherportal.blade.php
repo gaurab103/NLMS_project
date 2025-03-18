@@ -130,7 +130,7 @@
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.notes') }}">Notes</div>
         
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('assignments.index') }}">Assignment</div>
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ url('/teacher.news') }}">News</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.news') }}">News</div>
         </div>
     </div>
 

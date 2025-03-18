@@ -13,17 +13,17 @@ class SubjectController extends Controller
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
             'teacher_id' => 'required|exists:teachers,id',
-            'class_id'   => 'required|exists:courses,id',
-            'description'=> 'nullable|string'
+            'class_id' => 'required|exists:courses,id',
+            'description' => 'nullable|string'
         ]);
 
         try {
             Subject::create([
-                'name'       => $validated['name'],
-                'description'=> $validated['description'] ?? null,
-                'course_id'  => $validated['class_id'],
-                'teacher_id' => $validated['teacher_id'],
-                'admin_id'   => auth('admin')->id()
+                'name' => $request->name,
+                'description' => $request->description,
+                'course_id' => $request->class_id,
+                'teacher_id' => $request->teacher_id,
+                'admin_id' => auth('admin')->id()
             ]);
 
             return redirect()->back()->with('success', 'Subject created successfully');
@@ -50,17 +50,38 @@ class SubjectController extends Controller
         return redirect()->back()->with('success', 'Subject deleted successfully');
     }
 
-    public function show(Course $class, Subject $subject)
+    public function show(Course $course, Subject $subject)
     {
-        if ($subject->course_id != $class->id) {
+        // Ensure the subject belongs to the specified course
+        if ($subject->course_id != $course->id) {
             abort(404);
         }
+
+        // Eager load relationships to avoid N+1 queries
         $subject->load([
-            'notes.teacher',
-            'assignments.submissions.student',
             'teacher',
-            'course.students'
+            'course.students',
+            'notes.teacher',
+            'assignments.submissions.student'
         ]);
-        return view('subject_details', compact('subject', 'class'));
+
+        return view('subject_details', compact('subject', 'course'));
     }
+
+    public function studentshow(Course $course)
+    {
+        if (!$course) {
+            dd('Course not found');
+        }
+
+        $course->load('subjects');
+
+        dd($course->subjects);
+
+        return view('subjects', [
+            'course' => $course,
+            'subjects' => $course->subjects
+        ]);
+    }
+
 }

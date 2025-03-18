@@ -138,4 +138,27 @@ class AssignmentController extends Controller
         return redirect()->route('assignments.index')
             ->with('success', 'Assignment deleted successfully');
     }
+
+    public function show(Assignment $assignment)
+    {
+        $teacherId = Auth::guard('teacher')->id();
+        if ($assignment->teacher_id !== $teacherId) {
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
+        }
+
+        $selectedAssignment = $assignment->load('submissions.student');
+        $assignments = Assignment::with(['subject', 'course', 'submissions'])
+            ->where('teacher_id', $teacherId)
+            ->latest()
+            ->get();
+        $classes = Course::all();
+        $subjects = Subject::where('teacher_id', $teacherId)->get();
+        return view('assignmentportalteacher', [
+            'selectedAssignment' => $selectedAssignment,
+            'assignments' => $assignments,
+            'classes' => $classes,
+            'subjects' => $subjects,
+            'active' => 'assignments' // Highlights "Assignments" in nav
+        ]);
+    }
 }

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Your Subjects</h1>
+        <h1>Your Subjects in {{ $course->course_name }}</h1>
 
         <!-- Display error message if any -->
         @if(session('error'))
@@ -20,14 +20,22 @@
         <!-- Check if there are subjects to display -->
         @if($subjects->isNotEmpty())
             @foreach($subjects as $subject)
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">
-                        <h3>{{ $subject->Name }} {{ $subject->code }}</h3>
+                        <h3>{{ $subject->name }}</h3>
                     </div>
                     <div class="card-body">
-                        {{-- <p><strong>Name:</strong> {{ $subject->Name }}</p> --}}
-                        <p><strong>Created on:</strong> {{ $subject->created_at->format('M d, Y h:i A') }}</p>
-                        <p><strong>Last updated:</strong> {{ $subject->updated_at->format('M d, Y h:i A') }}</p>
+                        <!-- Displaying all subject data -->
+                        <ul class="list-group">
+                            @foreach($subject->getAttributes() as $key => $value)
+                                @if($key != 'file_path') <!-- Skip file_path to display later if necessary -->
+                                    <li class="list-group-item">
+                                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong> 
+                                        {{ $value }}
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
 
                         <!-- If there's an attached file, provide a link to download -->
                         @if($subject->file_path)
@@ -41,7 +49,7 @@
             @endforeach
         @else
             <div class="alert alert-info">
-                You have no subjects.
+                You have no subjects in this course.
             </div>
         @endif
     </div>

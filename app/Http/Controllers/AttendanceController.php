@@ -3,21 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use App\Models\Student;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
     public function showAttendancePage()
-    {
-        $studentId = auth()->guard('student')->id();
-        $attendance = Attendance::where('Std_ID', $studentId)->get();
+{
+    // Get the authenticated student ID
+    $studentId = auth()->guard('student')->id();
 
-        if ($attendance->isEmpty()) {
-            return view('attendance', ['error' => 'No attendance records found for this student.']);
-        }
-
-        return view('attendance', compact('attendance'));
+    // If no student is logged in, redirect to the login page
+    if (!$studentId) {
+        return redirect()->route('login')->withErrors('You need to be logged in to view your attendance.');
     }
-    
+
+    // Fetch attendance records for the logged-in student
+    $attendance = Attendance::with(['student', 'course'])->where('student_id', $studentId)->get();
+
+    // If no records are found, pass an empty collection to the view
+    return view('attendance', [
+        'attendance' => $attendance, 
+        'error' => $attendance->isEmpty() ? 'No attendance records found for this student.' : null
+    ]);
+}
 }

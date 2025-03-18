@@ -41,7 +41,7 @@ class StudentAuthController extends Controller
     public function profile()
     {
         try {
-            $student = Auth::guard('student')->user();  // Get authenticated student
+            $student = Auth::guard('student')->user(); // Get authenticated student
 
             // Check if student is authenticated
             if (!$student) {
@@ -56,7 +56,7 @@ class StudentAuthController extends Controller
 
     public function editpro()
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = Auth::guard('student')->user(); // Get authenticated student
 
         // Check if student is authenticated
         if (!$student) {
@@ -68,7 +68,7 @@ class StudentAuthController extends Controller
 
     public function updatepro(Request $request)
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = Auth::guard('student')->user(); // Get authenticated student
 
         // Check if student is authenticated
         if (!$student) {
@@ -92,7 +92,7 @@ class StudentAuthController extends Controller
     public function attendance()
     {
         try {
-            $student = Auth::guard('student')->user();  // Get authenticated student
+            $student = Auth::guard('student')->user(); // Get authenticated student
 
             if (!$student) {
                 return view('attendance', ['error' => 'Student not found']);
@@ -109,7 +109,7 @@ class StudentAuthController extends Controller
 
     public function fetchAttendance()
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = auth()->user();
 
         // Check if student is authenticated
         if (!$student) {
@@ -120,11 +120,13 @@ class StudentAuthController extends Controller
         }
 
         // Retrieve attendance data for the authenticated student
-        $attendance = Attendance::where('student_id', $student->id)->get();
+        $attendanceRecords = Attendance::where('student_id', $student->id)
+            ->select('date', 'status')
+            ->get();
 
         return response()->json([
             'success' => true,
-            'data' => $attendance,
+            'data' => $attendanceRecords
         ]);
     }
 }
