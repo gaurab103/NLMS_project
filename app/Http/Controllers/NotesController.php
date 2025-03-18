@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Note;
+use App\Models\Subject;
+use App\Models\Course; 
 
 class NotesController extends Controller
 {
@@ -36,15 +38,17 @@ class NotesController extends Controller
 
     public function notes()
     {
-        try {
-            $studentId = auth()->guard('student')->id();
-            $notes = Note::select(['id', 'content', 'subject_id', 'created_at'])
-                ->where('student_id', $studentId)
-                ->get();
-            return view('notes', compact('notes'));
-        } catch (\Exception $e) {
-            $notes = collect();
-            return view('notes', compact('notes'))->with('error', 'Error loading notes: ' . $e->getMessage());
-        }
+        // Fetch all notes, no longer filtered by teacher_id
+        $notes = Note::with(['subject', 'course'])->latest()->get();
+    
+        $courses = Course::all();
+        $subjects = Subject::all();  // You can modify this if you want to filter subjects based on some criteria
+    
+        return view('notes', [
+            'notes' => $notes,
+            'courses' => $courses,
+            'subjects' => $subjects,
+            'active' => 'notes'
+        ]);
     }
 }

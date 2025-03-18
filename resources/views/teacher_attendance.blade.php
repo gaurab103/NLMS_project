@@ -1,4 +1,3 @@
-<!-- resources/views/Teacher_attendance.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +13,7 @@
             background-color: #f8f9fa;
             overflow-y: auto;
         }
-        
+
         .section {
             height: 100vh;
             width: 250px;
@@ -163,6 +162,7 @@
                             <table class="table table-bordered table-hover align-middle">
                                 <thead class="table-primary">
                                     <tr>
+                                        <th scope="col">Student ID</th>
                                         <th class="w-50">Student Name</th>
                                         <th>Attendance Status</th>
                                     </tr>
@@ -201,43 +201,43 @@
             $.ajax({
                 url: `/teacher/attendance/students/${courseId}?date=${date}`,
                 method: 'GET',
-                method: 'GET',
                 success: function(response) {
                     const tbody = $('#attendanceRows');
                     tbody.empty();
 
                     if (response.length === 0) {
                         tbody.append(`
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            No students found in this class
-                        </td>
-                    </tr>
-                `);
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    No students found in this class
+                                </td>
+                            </tr>
+                        `);
                     } else {
                         response.forEach(student => {
                             const status = student.attendances.length > 0 ?
                                 student.attendances[0].status : 'present';
 
                             const row = `
-                        <tr>
-                            <td>${student.name}</td>
-                            <td>
-                                <input type="hidden"
-                                       name="students[${student.id}][student_id]"
-                                       value="${student.id}">
-                                <select name="students[${student.id}][status]"
-                                        class="form-select">
-                                    <option value="present" ${status === 'present' ? 'selected' : ''}>
-                                        Present
-                                    </option>
-                                    <option value="absent" ${status === 'absent' ? 'selected' : ''}>
-                                        Absent
-                                    </option>
-                                </select>
-                            </td>
-                        </tr>
-                    `;
+                                <tr>
+                                    <td>${student.id}</td> <!-- Display student ID -->
+                                    <td>${student.name}</td>
+                                    <td>
+                                        <input type="hidden"
+                                               name="students[${student.id}][student_id]"
+                                               value="${student.id}">
+                                        <select name="students[${student.id}][status]"
+                                                class="form-select">
+                                            <option value="present" ${status === 'present' ? 'selected' : ''}>
+                                                Present
+                                            </option>
+                                            <option value="absent" ${status === 'absent' ? 'selected' : ''}>
+                                                Absent
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            `;
                             tbody.append(row);
                         });
                     }

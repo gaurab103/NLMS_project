@@ -4,27 +4,15 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 class Student extends Authenticatable
 {
     use Notifiable;
 
     protected $table = 'students';
+
     protected $fillable = [
-        'name',
-        'dob',
-        'Address',
-        'Parent_Name',
-        'Contact_No',
-        'Email',
-        'C_ID',
-        'A_ID',
-        'Stats',
-        'Username',
-        'Password',
-        'photo'
+        'name', 'dob', 'Address', 'Parent_Name', 'Contact_No', 'Email', 'Stats', 'Username', 'Password', 'photo'
     ];
 
     protected $hidden = ['Password'];
@@ -37,24 +25,27 @@ class Student extends Authenticatable
     {
         return $this->Password;
     }
+
+    // Relationship to Course
     public function course()
     {
         return $this->belongsTo(Course::class, 'C_ID');
     }
 
+    // Relationship to Attendance
     public function attendances()
     {
         return $this->hasMany(Attendance::class, 'student_id');
     }
-    public function getPhotoUrlAttribute()
+
+    // Relationship to Notes (Student can have many notes)
+    public function notes()
     {
-        return $this->photo
-            ? asset('storage/' . $this->photo)
-            : asset('images/default-user.png');
+        return $this->hasMany(Note::class, 'student_id');
     }
 
-    public function getFormattedDobAttribute()
+    public function subjects()
     {
-        return $this->dob ? $this->dob->format('d M Y') : 'N/A';
+        return $this->belongsToMany(Subject::class, 'student_subjects', 'student_id', 'subject_id');
     }
 }

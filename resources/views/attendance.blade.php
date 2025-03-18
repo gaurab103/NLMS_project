@@ -12,61 +12,41 @@
     <div class="container mt-4">
         <h2>Attendance Records</h2>
 
+        @if (isset($error))
+            <div class="alert alert-warning">
+                {{ $error }}
+            </div>
+        @endif
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Student Name</th>
                     <th>Student ID</th>
-                    <th>Attendance ID</th>
+                    <th>Course Name</th>
                     <th>Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody id="attendanceTableBody">
+            <tbody>
+                @forelse ($attendance as $record)
+                    <tr>
+                        <td>{{ $record->id }}</td>
+                        <td>{{ $record->student->name }}</td>
+                        <td>{{ $record->student_id }}</td>
+                        <td>{{ $record->course->name }}</td>
+                        <td>{{ $record->date }}</td>
+                        <td>{{ $record->status }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6">No attendance records found.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
-
-        <p id="noRecordsMessage" style="display: none;">No attendance records found.</p>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/student/attendance/fetch')
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('attendanceTableBody');
-                    const noRecordsMessage = document.getElementById('noRecordsMessage');
-
-                    tableBody.innerHTML = '';
-
-                    if (data.success && data.data.length > 0) {
-                        data.data.forEach(record => {
-                            const row = `
-                                <tr>
-<<<<<<< HEAD
-                                    <td>${record.id}</td>
-                                    <td>${record.name}</td>
-                                    <td>${record.Std_ID}</td>
-=======
-                                    <td>${record.date}</td>
->>>>>>> ccbb70b (...)
-                                    <td>${record.status}</td>
-                                </tr>
-                            `;
-                            tableBody.innerHTML += row;
-                        });
-
-                        noRecordsMessage.style.display = 'none';
-                    } else {
-                        noRecordsMessage.style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    alert('Error fetching attendance data.');
-                });
-        });
-    </script>
 </body>
 
 </html>

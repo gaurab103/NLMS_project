@@ -1,58 +1,54 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Notes</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            /* margin: 20px; */
-        }
-        .notes-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .note-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        .no-notes {
-            color: #666;
-            text-align: center;
-            font-style: italic;
-        }
-        .error-message {
-            color: red;
-            text-align: center;
-        }
-    </style>
+    <title>Notes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="notes-container">
-        <h1>My Notes</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Your Notes</h1>
+        
         @if(session('error'))
-            <p class="error-message">{{ session('error') }}</p>
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
         @endif
 
-        <!-- Display notes if available -->
-        @if($notes->isEmpty())
-            <p class="no-notes">You haven't created any notes yet.</p>
-        @else
-            @foreach($notes as $note)
-                <div class="note-card">
-                    <h2>{{ $note->title ?? 'Untitled Note' }}</h2>
-                    <p>{{ $note->content ?? 'No content available for this note.' }}</p>
-                    <small>Created on: {{ $note->created_at->format('M d, Y') }}</small>
-                </div>
-            @endforeach
-        @endif
-
-        <div>
-            <a href="{{ route('student.dashboard') }}">Back to Home</a>
-        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>File</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($notes as $note)
+                    <tr>
+                        <td>{{ $note->title }}</td>
+                        <td>{{ $note->content }}</td>
+                        <td>
+                            @if ($note->file_path)
+                                <a href="{{ Storage::url($note->file_path) }}" target="_blank" class="btn btn-primary">Download</a>
+                            @else
+                                No file
+                            @endif
+                        </td>
+                        <td>{{ $note->created_at }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No notes found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

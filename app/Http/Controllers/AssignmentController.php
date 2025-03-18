@@ -153,4 +153,21 @@ class AssignmentController extends Controller
             'active' => 'assignments' // Highlights "Assignments" in nav
         ]);
     }
+    public function studentIndex()
+{
+    // Get all assignments for all courses
+    $assignments = Assignment::with(['course', 'subject'])
+        ->latest()
+        ->get();
+
+    // Get all courses
+    $courses = Course::all();
+
+    return view('assignments', [
+        'assignments' => $assignments,
+        'courses' => $courses,
+        'active' => 'assignments' // Highlights "Assignments" in nav
+    ]);
+}
+
 }

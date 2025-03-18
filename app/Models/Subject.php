@@ -13,26 +13,26 @@ class Subject extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Course::class);  // Course relationship
     }
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(Teacher::class);  // Teacher relationship
     }
 
     public function admin()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(Admin::class);  // Admin relationship
     }
 
     public function notes()
     {
-        return $this->hasMany(Note::class);
+        return $this->hasMany(Note::class);  // Notes relationship
     }
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class);
+        return $this->hasMany(Assignment::class);  // Assignments relationship
     }
 }

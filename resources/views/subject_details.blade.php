@@ -14,7 +14,8 @@
     <div class="content-wrapper">
         <div class="container">
             <h1>{{ $subject->name }} - Subject Details</h1>
-            <p>Teacher: {{ $subject->teacher->Teacher_Name }}</p>
+            <!-- Check if teacher is assigned, if not, show fallback message -->
+            <p>Teacher: {{ $subject->teacher ? $subject->teacher->Teacher_Name : 'Teacher not assigned' }}</p>
             <p>Description: {{ $subject->description ?? 'No description provided.' }}</p>
 
             <h3>Notes</h3>
@@ -24,7 +25,7 @@
                         <li class="list-group-item">
                             <strong>{{ $note->title }}</strong> - {{ $note->content }}
                             <br>
-                            <small>Posted by: {{ $note->teacher->Teacher_Name }} on {{ $note->created_at->format('M d, Y') }}</small>
+                            <small>Posted by: {{ $note->teacher ? $note->teacher->Teacher_Name : 'Unknown Teacher' }} on {{ $note->created_at->format('M d, Y') }}</small>
                         </li>
                     @endforeach
                 </ul>
@@ -70,7 +71,8 @@
                 <p>No assignments posted for this subject.</p>
             @endif
 
-            <a href="{{ route('classes.show', $subject->course_id) }}" class="btn btn-secondary mt-3">Back to Class</a>
+            <!-- Back to Class Button -->
+            <a href="{{ route('student.dashboard', $subject->course_id) }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
         </div>
     </div>
 

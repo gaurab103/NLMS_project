@@ -41,7 +41,7 @@ class StudentAuthController extends Controller
     public function profile()
     {
         try {
-            $student = Auth::guard('student')->user();  // Get authenticated student
+            $student = Auth::guard('student')->user(); // Get authenticated student
 
             // Check if student is authenticated
             if (!$student) {
@@ -56,7 +56,7 @@ class StudentAuthController extends Controller
 
     public function editpro()
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = Auth::guard('student')->user(); // Get authenticated student
 
         // Check if student is authenticated
         if (!$student) {
@@ -68,7 +68,7 @@ class StudentAuthController extends Controller
 
     public function updatepro(Request $request)
     {
-        $student = Auth::guard('student')->user();  // Get authenticated student
+        $student = Auth::guard('student')->user(); // Get authenticated student
 
         // Check if student is authenticated
         if (!$student) {
@@ -92,7 +92,7 @@ class StudentAuthController extends Controller
     public function attendance()
     {
         try {
-            $student = Auth::guard('student')->user();  // Get authenticated student
+            $student = Auth::guard('student')->user(); // Get authenticated student
 
             if (!$student) {
                 return view('attendance', ['error' => 'Student not found']);

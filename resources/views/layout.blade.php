@@ -419,7 +419,7 @@ document.querySelectorAll('.box[data-title="Assignments"]').forEach(box => {
 
 document.querySelectorAll('.box[data-title="Subjects"]').forEach(box => {
     box.addEventListener('click', () => {
-        showSectionContent('subjects', '/student/subjects');
+        showSectionContent('subjects', '{{ route('student.subject') }}');
     });
 });
 

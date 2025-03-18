@@ -83,7 +83,7 @@ Route::prefix('teacher')->group(function () {
                 $query->where('teacher_id', $teacher->id);
             })->get();
             $subjects = \App\Models\Subject::where('teacher_id', $teacher->id)->get();
-            return view('notesteacher', compact('classes', 'subjects', 'active'));
+            return view('notesteacher', compact('classes', 'subjects'));
         })->name('teacher.notes');
         Route::post('/notes', [NotesController::class, 'store'])->name('teacher.notes.store');
 
@@ -104,9 +104,7 @@ Route::prefix('student')->group(function () {
             return view('layout');
         })->name('student.dashboard');
 
-            Route::get('/profile', function () {
-                return view('profile');
-            })->name('student.profile');
+        Route::get('/profile', [StudentAuthController::class, 'profile'])->name('student.profile');
 
             Route::get('/profile/edit/{id}', function ($id) {
                 return view('profile_edit', compact('id'));
@@ -114,27 +112,25 @@ Route::prefix('student')->group(function () {
 
             Route::put('/profile/update/{id}', [StudentAuthController::class, 'updatepro'])->name('update.profile');
 
-            Route::get('/attendance', function () {
-                return view('attendance');
-            })->name('student.attendance');
+            Route::get('/attendance', [AttendanceController::class, 'showAttendancePage'])->name('attendance');
 
             Route::get('/attendance/fetch', [StudentAuthController::class, 'fetchAttendance'])->name('student.attendance.fetch');
 
-            Route::get('/notes', function () {
-                return view('notes');
-            })->name('student.notes');
+            Route::get('/notes', [NotesController::class, 'notes'])->name('student.notes');
 
-            Route::get('/assignments', function () {
-                return view('assignments');
-            })->name('student.assignments');
+
+            Route::get('/assignments', [AssignmentController::class, 'studentIndex'])->name('student.assignments');
+
 
             Route::get('/messages', function () {
                 return view('messages');
             })->name('student.messages');
 
-            Route::get('/subjects', function () {
-                return view('subjects');
-            })->name('student.subjects');
+            Route::get('/subjects', [SubjectController::class, 'studentshow'])->name('student.subject');
+
+
+            Route::get('news', [NewsController::class, 'studentIndex'])->name('student.news');
+
         });
     });
 

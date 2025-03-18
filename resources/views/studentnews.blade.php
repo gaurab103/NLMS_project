@@ -14,7 +14,6 @@
       background-color: #f5f5f5;
     }
     .content-container {
-      margin-left: 250px;
       padding: 20px;
       transition: margin-left 0.3s ease;
     }
