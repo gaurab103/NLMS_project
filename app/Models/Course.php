@@ -29,8 +29,5 @@ class Course extends Model
     {
         return $this->belongsTo(Admin::class, 'A_ID');
     }
-    public function subjects()
-    {
-        return $this->hasMany(Subject::class);
-    }
+
 }
