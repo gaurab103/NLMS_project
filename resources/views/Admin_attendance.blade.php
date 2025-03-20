@@ -1,199 +1,170 @@
+<!-- AdminAttendance.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Management</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom Styles */
-        .stat-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            border-radius: 15px;
-            margin-bottom: 1rem;
+        body {
+            background-color: #f5f5f5;
+            margin: 0; /* Remove default body margin */
         }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .progress {
-            height: 8px;
-            border-radius: 4px;
-        }
-        .filter-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-        }
-        .attendance-table th {
-            background: #f1f3f5;
-            font-weight: 600;
-        }
-        .date-range-input {
-            background: white;
-            cursor: pointer;
-        }
-
-        /* Responsive Adjustments */
-        main {
+        .container-fluid {
+            margin-top: 20px;
             margin-left: 250px;
-            transition: margin-left 0.3s ease;
-            padding: 20px;
+            min-height: calc(100vh - 70px);
+            width: calc(100% - 250px);
+            padding: 15px;
         }
-
         @media (max-width: 768px) {
-            main {
+            .container-fluid {
                 margin-left: 0;
-                padding: 15px;
-            }
-
-            .filter-card .col-md-3 {
-                margin-bottom: 1rem;
-            }
-
-            .stat-card h2 {
-                font-size: 1.75rem;
-            }
-
-            .attendance-table td, .attendance-table th {
-                font-size: 0.875rem;
-                padding: 0.75rem;
-            }
-
-            .badge {
-                font-size: 0.75rem;
+                width: 100%; /* Full width on mobile */
+                padding: 10px; /* Adjust padding for mobile */
             }
         }
-
-        @media (max-width: 576px) {
-            .stat-card {
-                padding: 1.5rem 1rem;
-            }
-
-            .stat-card h5 {
-                font-size: 1rem;
-            }
-
-            .stat-card i {
-                font-size: 1.5rem;
+        .card-stat {
+            border-radius: 15px;
+            overflow: hidden;
+            width: 100%; /* Ensure cards take full width */
+        }
+        .attendance-table {
+            overflow-x: auto;
+            width: 100%; /* Ensure table takes full width */
+        }
+        .badge {
+            padding: 1px;
+            font-size: 0.9em;
+        }
+        .row {
+            width: 100%; /* Ensure rows take full width */
+            margin-left: 0; /* Remove default negative margins */
+            margin-right: 0;
+        }
+        @media (max-width: 768px) {
+            .col-md-3 {
+                width: 100%; /* Full width columns on mobile */
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Sidebar -->
     @include('nav_aside')
 
-    <!-- Main Content -->
-    <main>
-        <div class="container-fluid">
-            <!-- Filter Section -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="filter-card p-4 shadow-sm">
-                        <form id="filterForm">
-                            <div class="row g-3">
-                                <div class="col-12 col-md-3">
-                                    <input type="text" class="form-control date-range-input" id="daterange" placeholder="Select Date Range" value="{{ request('daterange') }}">
+    <main class="container-fluid">
+        <!-- Filter Section -->
+        <div class="card mb-4 shadow-sm card-stat">
+            <div class="card-body">
+                <form method="GET">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3 col-12">
+                            <label class="form-label">Date Range</label>
+                            <input type="text" class="form-control" id="daterange" name="daterange"
+                                   value="{{ request('daterange') }}" placeholder="Select date range">
+                        </div>
+                        <div class="col-md-3 col-12">
+                            <label class="form-label">Course</label>
+                            <select class="form-select" name="course_id">
+                                <option value="">All Courses</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                                        {{ $course->course_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-12">
+                            <label class="form-label">Student</label>
+                            <select class="form-select" name="student_id">
+                                <option value="">All Students</option>
+                                @foreach($students as $student)
+                                    <option value="{{ $student->id }}" {{ request('student_id') == $student->id ? 'selected' : '' }}>
+                                        {{ $student->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-12 d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-filter me-2"></i>Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Filter Feedback -->
+        @if(!request()->filled('course_id') && !request()->filled('student_id') && !request()->filled('daterange'))
+            <div class="alert alert-info mb-4">
+                Showing today's attendance records ({{ now()->format('M d, Y') }})
+            </div>
+        @else
+            <div class="alert alert-success mb-4">
+                Showing filtered results
+                @if(request('daterange'))
+                    (Date Range: {{ request('daterange') }})
+                @endif
+            </div>
+        @endif
+
+        <!-- Statistics Cards -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+            @foreach([
+                'total' => ['title' => 'Total Records', 'icon' => 'clipboard-list', 'color' => 'primary'],
+                'present' => ['title' => 'Present', 'icon' => 'check-circle', 'color' => 'success'],
+                'absent' => ['title' => 'Absent', 'icon' => 'times-circle', 'color' => 'danger'],
+                'average' => ['title' => 'Attendance Rate', 'icon' => 'chart-pie', 'color' => 'info'],
+                'unique_students' => ['title' => 'Unique Students', 'icon' => 'users', 'color' => 'warning'],
+                'unique_courses' => ['title' => 'Unique Courses', 'icon' => 'book', 'color' => 'secondary']
+            ] as $key => $config)
+                <div class="col">
+                    <div class="card text-white bg-{{ $config['color'] }} shadow-sm card-stat">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">{{ $config['title'] }}</h5>
+                                    <h2 class="mb-0">
+                                        @if($key === 'average')
+                                            {{ number_format($stats[$key] * 100, 1) }}%
+                                        @else
+                                            {{ $stats[$key] }}
+                                        @endif
+                                    </h2>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <select class="form-select" name="course_id">
-                                        <option value="">All Courses</option>
-                                        @foreach($courses as $course)
-                                            <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
-                                                {{ $course->course_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <select class="form-select" name="student_id">
-                                        <option value="">All Students</option>
-                                        @foreach($students as $student)
-                                            <option value="{{ $student->id }}" {{ request('student_id') == $student->id ? 'selected' : '' }}>
-                                                {{ $student->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-3 d-grid">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-filter me-2"></i>Filter
-                                    </button>
-                                </div>
+                                <i class="fas fa-{{ $config['icon'] }} fa-2x opacity-50"></i>
                             </div>
-                        </form>
+                            @if($key === 'average')
+                                <div class="progress mt-3" style="height: 5px;">
+                                    <div class="progress-bar" style="width: {{ $stats[$key] * 100 }}%"></div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
+        </div>
 
-            <!-- Statistics Cards -->
-            <div class="row mb-4">
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="stat-card bg-primary text-white p-4 shadow">
-                        <h5 class="mb-3">Today's Attendance</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h2>{{ $stats['today'] }}</h2>
-                            <i class="fas fa-calendar-day fa-3x opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="stat-card bg-danger text-white p-4 shadow">
-                        <h5 class="mb-3">Today's Absences</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h2>{{ $stats['absences'] }}</h2>
-                            <i class="fas fa-user-slash fa-3x opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="stat-card bg-success text-white p-4 shadow">
-                        <h5 class="mb-3">Monthly Average</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h2>{{ number_format($stats['monthly'] * 100, 1) }}%</h2>
-                            <i class="fas fa-chart-line fa-3x opacity-50"></i>
-                        </div>
-                        <div class="progress mt-2">
-                            <div class="progress-bar" role="progressbar" style="width: {{ $stats['monthly'] * 100 }}%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="stat-card bg-info text-white p-4 shadow">
-                        <h5 class="mb-3">Class Average</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h2>{{ number_format($stats['class_avg'] * 100, 1) }}%</h2>
-                            <i class="fas fa-chalkboard-teacher fa-3x opacity-50"></i>
-                        </div>
-                        <div class="progress mt-2">
-                            <div class="progress-bar" role="progressbar" style="width: {{ $stats['class_avg'] * 100 }}%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Attendance Table -->
-            <div class="card shadow">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table attendance-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Student</th>
-                                    <th>Course</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Marked At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($attendance as $record)
+        <!-- Attendance Table -->
+        <div class="card shadow card-stat attendance-table">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Recorded At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($attendance as $record)
                                 <tr>
                                     <td>{{ $record->student->name }}</td>
                                     <td>{{ $record->course->course_name }}</td>
@@ -205,57 +176,40 @@
                                     </td>
                                     <td>{{ $record->created_at->diffForHumans() }}</td>
                                 </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">No attendance records found</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <!-- Pagination -->
-            <div class="mt-4">
-                {{ $attendance->links() }}
-            </div>
+        <!-- Pagination -->
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $attendance->links() }}
         </div>
     </main>
 
-    <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Initialize date range picker
-        const datePicker = flatpickr('#daterange', {
+        flatpickr('#daterange', {
             mode: "range",
             dateFormat: "Y-m-d",
             defaultDate: "{{ request('daterange') }}"
         });
 
-        // Handle form submission
-        $('#filterForm').on('submit', function(e) {
-            e.preventDefault();
-            const params = new URLSearchParams($(this).serialize());
-            window.location.href = `{{ route('admin.attendance') }}?${params.toString()}`;
+        document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            const mainHeader = document.getElementById('mainHeader');
+            sidebar.classList.toggle('hidden');
+            mainHeader.classList.toggle('collapsed');
+            // No need to adjust margin here as CSS handles it
         });
-
-        // Mobile sidebar toggle synchronization
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            const main = document.querySelector('main');
-            main.style.marginLeft = main.style.marginLeft === '0px' ? '250px' : '0';
-        });
-
-        // Responsive table adjustments
-        function handleResponsive() {
-            if (window.innerWidth < 768) {
-                $('.attendance-table').addClass('table-sm');
-            } else {
-                $('.attendance-table').removeClass('table-sm');
-            }
-        }
-
-        // Initial call and update on window resize
-        handleResponsive();
-        window.addEventListener('resize', handleResponsive);
     </script>
 </body>
 </html>

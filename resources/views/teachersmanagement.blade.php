@@ -8,8 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        /* Base styles */
         .content-wrapper {
             margin-left: 260px;
+            width: calc(100% - 260px);
             padding: 25px;
         }
         .card-shadow {
@@ -39,6 +41,38 @@
         }
         .pagination {
             margin-bottom: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0;
+                width: 100%;
+                padding: 10px;
+            }
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .form-select, .input-group {
+                width: 100%;
+            }
+            .table-responsive {
+                overflow-x: auto;
+            }
+            .modal-dialog {
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .modal-body .row {
+                --bs-gutter-x: 1.5rem;
+            }
+            .modal-body .col-md-6 {
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
@@ -97,7 +131,8 @@
                                     <th>#</th>
                                     <th>Photo</th>
                                     <th>Name</th>
-                                    <th>Subject</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Status</th>
@@ -112,7 +147,8 @@
                                             <img src="{{ $teacher->photo_url }}" class="teacher-photo rounded-circle border" alt="{{ $teacher->Teacher_Name }}">
                                         </td>
                                         <td>{{ $teacher->Teacher_Name }}</td>
-                                        <td>{{ $teacher->Subject }}</td>
+                                        <td>{{ $teacher->Username }}</td>
+                                        <td>{{ $teacher->Password }}</td>
                                         <td>{{ $teacher->Email }}</td>
                                         <td>{{ $teacher->Phone_Number }}</td>
                                         <td>

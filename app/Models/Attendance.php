@@ -14,6 +14,12 @@ class Attendance extends Model
         'date',        // Add if exists in DB
         'status'
     ];
+    // app/Models/Attendance.php
+    protected $casts = [
+        'date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
     // Optionally, you can specify which attributes should be hidden in arrays (e.g., for API responses)
     protected $hidden = [
         // 'some_column',  // Add columns to hide from JSON output

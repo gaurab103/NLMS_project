@@ -12,30 +12,38 @@ class AdminAttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        // Get filtered attendance records
-        $attendance = Attendance::with(['student', 'course'])
+        // Build the attendance query with filters
+        $attendanceQuery = Attendance::with(['student', 'course'])
             ->when($request->course_id, fn($q) => $q->where('course_id', $request->course_id))
             ->when($request->student_id, fn($q) => $q->where('student_id', $request->student_id))
             ->when($request->date, fn($q) => $q->whereDate('date', $request->date))
             ->when($request->daterange, function ($q) use ($request) {
-                $dates = explode(' - ', $request->daterange);
+                // Corrected date range separator to 'to'
+                $dates = explode(' to ', $request->daterange);
                 $q->whereBetween('date', [
                     Carbon::parse($dates[0])->startOfDay(),
                     Carbon::parse($dates[1])->endOfDay()
                 ]);
-            })
-            ->orderByDesc('date')
-            ->paginate(30);
+            });
 
-        // Calculate statistics
-        $todayRecords = Attendance::whereDate('date', today())->get();
-        $monthlyRecords = Attendance::whereBetween('date', [now()->subDays(30), now()])->get();
+        // Default to today's date if no filters are applied
+        if (!$request->course_id && !$request->student_id && !$request->date && !$request->daterange) {
+            $attendanceQuery->whereDate('date', today());
+        }
 
+        // Paginate the filtered records
+        $attendance = $attendanceQuery->orderByDesc('date')->paginate(30);
+
+        // Calculate statistics based on the filtered query
         $stats = [
-            'today' => $todayRecords->count(),
-            'absences' => $todayRecords->where('status', 'absent')->count(),
-            'monthly' => $this->calculateAverage($monthlyRecords),
-            'class_avg' => $this->calculateClassAverage($request)
+            'total' => $attendanceQuery->count(),
+            'present' => $attendanceQuery->clone()->where('status', 'present')->count(),
+            'absent' => $attendanceQuery->clone()->where('status', 'absent')->count(),
+            'average' => $attendanceQuery->count() > 0
+                ? $attendanceQuery->clone()->where('status', 'present')->count() / $attendanceQuery->count()
+                : 0,
+            'unique_students' => $attendanceQuery->distinct('student_id')->count('student_id'),
+            'unique_courses' => $attendanceQuery->distinct('course_id')->count('course_id')
         ];
 
         return view('admin_attendance', [
@@ -44,33 +52,5 @@ class AdminAttendanceController extends Controller
             'students' => Student::all(),
             'stats' => $stats
         ]);
-    }
-
-    private function calculateClassAverage(Request $request)
-    {
-        return Course::withCount(['attendances as present_count' => function($q) {
-                $q->where('status', 'present');
-            }])
-            ->when($request->filled('daterange'), function($q) use ($request) {
-                $dates = explode(' - ', $request->daterange);
-                $q->whereHas('attendances', function($q) use ($dates) {
-                    $q->whereBetween('date', [
-                        Carbon::parse($dates[0])->startOfDay(),
-                        Carbon::parse($dates[1])->endOfDay()
-                    ]);
-                });
-            })
-            ->get()
-            ->avg(function($course) {
-                return $course->present_count / max($course->attendances_count, 1);
-            });
-    }
-
-    private function calculateAverage($records)
-    {
-        if ($records->isEmpty()) return 0;
-
-        $presentCount = $records->filter(fn($record) => $record->status === 'present')->count();
-        return $presentCount / $records->count();
     }
 }

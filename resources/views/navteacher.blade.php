@@ -8,7 +8,7 @@
     <style>
         /* Navbar Styling */
         .navbar {
-            
+
             padding: 12px 20px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -48,12 +48,12 @@
             background-color: #007bff;
             color: white;
         }
-        
+
         .logo{
             margin-left:17%;
-            
+
         }
-        
+
         @media (max-width: 768px) {
             .sidebar {
                 left: -250px;
@@ -76,7 +76,7 @@
                font-size: 1rem;
                top:20px;
                right:20px;
-              
+
             }
         }
     </style>
@@ -99,7 +99,7 @@
         <a href="{{ route('teacher.dashboard') }}" class="{{ $active === 'home' ? 'active' : '' }}">
             <i class="fas fa-home"></i> Home
         </a>
-        <a href="{{ route('teacher.attendance') }}" class="{{ $active === 'attendance' ? 'active' : '' }}">
+        <a href="{{ route('teacher.attendance.create') }}" class="{{ $active === 'attendance' ? 'active' : '' }}">
             <i class="fas fa-clipboard-check"></i> Attendance
         </a>
         <a href="{{ route('teacher.notes') }}" class="{{ $active === 'notes' ? 'active' : '' }}">

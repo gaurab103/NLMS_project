@@ -35,33 +35,28 @@ class TeacherAttendanceController extends Controller
             ->with(['attendances' => function($query) use ($request) {
                 $query->whereDate('date', $request->date);
             }])
-            ->get(['id', 'name']);
+            ->get(['id', 'name', 'photo']);
 
         return response()->json($students);
     }
 
     public function store(Request $request)
     {
-        // Validate request input
         $validated = $request->validate([
             'date' => 'required|date',
             'course_id' => 'required|exists:courses,id',
             'students' => 'required|array'
         ]);
 
-        // Find the course by ID
         $course = Course::findOrFail($validated['course_id']);
 
-        // Iterate through the students and update/create attendance records
         foreach ($validated['students'] as $studentId => $data) {
             $student = Student::findOrFail($studentId);
 
-            // Ensure the student is part of the course
             if (!$course->students->contains($student)) {
                 return back()->withErrors(['students' => 'Invalid student for this course']);
             }
 
-            // Update or create the attendance record for the student
             Attendance::updateOrCreate(
                 [
                     'student_id' => $studentId,
@@ -69,7 +64,7 @@ class TeacherAttendanceController extends Controller
                     'date' => $validated['date']
                 ],
                 [
-                    'status' => $data['status'], // Store the attendance status (present/absent)
+                    'status' => $data['status'],
                 ]
             );
         }

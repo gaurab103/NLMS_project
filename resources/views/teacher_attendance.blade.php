@@ -7,46 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Navigation Styles */
         body {
             margin-left: 250px;
             background-color: #f8f9fa;
             overflow-y: auto;
         }
-
-        .section {
-            height: 100vh;
-            width: 250px;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            padding-top: 86px;
-            background-color: whitesmoke;
-        }
-        .section a {
-            padding: 15px;
-            font-size: 18px;
-            color: #333;
-            display: block;
-            text-decoration: none;
-            text-align: center;
-        }
-        .section a:hover {
-            color: white;
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-        .mobile-menu-btn, .back-btn {
-            display: none;
-            margin: 15px;
-            background-color: #5e5d5d;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
         .attendance-card {
             max-width: 800px;
             margin: 2rem auto;
@@ -84,8 +49,6 @@
     </style>
 </head>
 <body>
-    @include('navteacher', ['active' => 'attendance'])
-
     <div class="container py-4">
         <div class="attendance-card card">
             <div class="card-header bg-primary text-white">
@@ -148,6 +111,15 @@
                             <strong><span id="selectedDate"></span></strong>
                         </div>
 
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-success me-2" onclick="markAll('present')">
+                                <i class="fas fa-check me-2"></i>Mark All Present
+                            </button>
+                            <button type="button" class="btn btn-danger me-2" onclick="markAll('absent')">
+                                <i class="fas fa-times me-2"></i>Mark All Absent
+                            </button>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-borderless">
                                 <thead class="bg-light">
@@ -194,43 +166,47 @@
             $.ajax({
                 url: `/teacher/attendance/students/${courseId}?date=${date}`,
                 method: 'GET',
-                method: 'GET',
                 success: function(response) {
                     const tbody = $('#attendanceRows');
                     tbody.empty();
 
                     if (response.length === 0) {
                         tbody.append(`
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            No students found in this class
-                        </td>
-                    </tr>
-                `);
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    No students found in this class
+                                </td>
+                            </tr>
+                        `);
                     } else {
                         response.forEach(student => {
                             const status = student.attendances.length > 0 ?
                                 student.attendances[0].status : 'present';
 
                             const row = `
-                        <tr>
-                            <td>${student.name}</td>
-                            <td>
-                                <input type="hidden"
-                                       name="students[${student.id}][student_id]"
-                                       value="${student.id}">
-                                <select name="students[${student.id}][status]"
-                                        class="form-select">
-                                    <option value="present" ${status === 'present' ? 'selected' : ''}>
-                                        Present
-                                    </option>
-                                    <option value="absent" ${status === 'absent' ? 'selected' : ''}>
-                                        Absent
-                                    </option>
-                                </select>
-                            </td>
-                        </tr>
-                    `;
+                                <tr class="student-row">
+                                    <td>
+                                        <img src="${student.photo || '/default-photo.jpg'}"
+                                             alt="${student.name}"
+                                             style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                                        ${student.name}
+                                    </td>
+                                    <td>
+                                        <input type="hidden"
+                                               name="students[${student.id}][student_id]"
+                                               value="${student.id}">
+                                        <select name="students[${student.id}][status]"
+                                                class="form-select status-select">
+                                            <option value="present" ${status === 'present' ? 'selected' : ''}>
+                                                Present
+                                            </option>
+                                            <option value="absent" ${status === 'absent' ? 'selected' : ''}>
+                                                Absent
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            `;
                             tbody.append(row);
                         });
                     }
@@ -248,12 +224,15 @@
             });
         }
 
+        function markAll(status) {
+            $('.status-select').val(status).trigger('change');
+        }
+
         function addStatusListeners() {
             $('.status-select').on('change', function() {
                 $(this).removeClass('present absent')
-                       .addClass($(this).val())
-                       .blur();
-            });
+                       .addClass($(this).val());
+            }).trigger('change');
         }
     </script>
 </body>

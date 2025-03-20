@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management</title>
-    {{-- Bootstrap 5 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
     <style>
         .content-wrapper {
             margin-left: 260px;
+            width: calc(100% - 260px);
             padding: 25px;
         }
         .card-shadow {
@@ -43,6 +41,37 @@
         .pagination {
             margin-bottom: 0;
         }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0;
+                width: 100%;
+                padding: 10px;
+            }
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .form-select, .input-group {
+                width: 100%;
+            }
+            .table-responsive {
+                overflow-x: auto;
+            }
+            .modal-dialog {
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .modal-body .row {
+                --bs-gutter-x: 1.5rem;
+            }
+            .modal-body .col-md-6 {
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -66,8 +95,7 @@
                         </button>
                         <div class="d-flex align-items-center gap-3">
                             <div class="filter-container">
-                                {{-- Search by name --}}
-                                <form method="GET" class="d-flex mb-2 mb-md-0">
+                                <form method="GET" class="mb-2 mb-md-0">
                                     <div class="input-group">
                                         <input type="text" name="search" class="form-control" placeholder="Search by name..." value="{{ request('search') }}">
                                         <button type="submit" class="btn btn-primary">
@@ -77,7 +105,7 @@
                                 </form>
                                 <form method="GET" class="ms-2">
                                     <select name="course_id" class="form-select" onchange="this.form.submit()">
-                                        <option value="">All Courses</option>
+                                        <option value="">All Classes</option>
                                         @foreach($courses as $course)
                                             <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
                                                 {{ $course->course_name }}
@@ -93,7 +121,7 @@
                         <table class="table table-hover table-striped align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>#</th>
+                                    <th>S.N</th>
                                     <th>Photo</th>
                                     <th>Name</th>
                                     <th>Username</th>
@@ -160,14 +188,12 @@
                             </tbody>
                         </table>
 
-                        {{-- Pagination --}}
                         @if($students->hasPages())
                             <div class="mt-3 d-flex justify-content-between align-items-center">
                                 <div class="text-muted small">
                                     Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} entries
                                 </div>
                                 <nav>
-                                    {{-- Use Bootstrap 5 pagination view --}}
                                     {{ $students->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </nav>
                             </div>
@@ -178,7 +204,7 @@
         </div>
     </div>
 
-    {{-- Add Student Modal --}}
+    <!-- Add Student Modal -->
     <div class="modal fade" id="addStudentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -253,7 +279,7 @@
         </div>
     </div>
 
-    {{-- Edit Student Modal --}}
+    <!-- Edit Student Modal -->
     <div class="modal fade" id="editStudentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -333,7 +359,6 @@
         </div>
     </div>
 
-    {{-- JavaScript --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -345,7 +370,6 @@
                     const updateUrl = `{{ route('students.update', ':id') }}`.replace(':id', studentId);
                     document.getElementById('editStudentForm').action = updateUrl;
 
-                    // Populate the edit form fields
                     document.getElementById('edit_name').value = this.dataset.name;
                     document.getElementById('edit_username').value = this.dataset.username;
                     document.getElementById('edit_password').value = this.dataset.password;
@@ -357,18 +381,15 @@
                     document.getElementById('edit_address').value = this.dataset.address;
                     document.getElementById('edit_stats').value = this.dataset.stats;
 
-                    // Set photo preview
                     const photoPreview = document.getElementById('currentPhotoPreview');
                     photoPreview.src = this.dataset.photo
                         ? `/storage/${this.dataset.photo}`
                         : '/images/default-user.png';
 
-                    // Clear file input
                     document.getElementById('edit_photo').value = '';
                 });
             });
 
-            // Update photo preview when a new file is selected in the edit modal
             document.getElementById('edit_photo').addEventListener('change', function(e) {
                 const reader = new FileReader();
                 reader.onload = function(event) {

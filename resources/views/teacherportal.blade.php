@@ -37,7 +37,7 @@
         .search .form-control:focus {
             width: 250px;
         }
-        
+
         .box {
             border-radius: 25px;
             background: red;
@@ -78,7 +78,7 @@
             background-color: #b8b8b8d5;
             cursor: pointer;
         }
-        
+
         .mobile-menu-btn {
             display: none;
             margin: 15px;
@@ -112,23 +112,23 @@
 <body>
     @include('navteacher', ['active' => 'home'])
 
-    <div class="search">    
+    <div class="search">
         <form class="d-flex" role="search" onsubmit="event.preventDefault(); filterItems()">
             <input id="search-bar" class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        
+
     </div>
-            
+
     <div class="box">
         <h1>Welcome Teacher</h1>
         <img src="{{ asset('images/teacherportal.png') }}" alt="Teacher">
     </div>
     <div class="grid-container">
         <div class="row">
-            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.attendance') }}">Attendance</div>
+            <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.attendance.create') }}">Attendance</div>
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.notes') }}">Notes</div>
-        
+
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('assignments.index') }}">Assignment</div>
             <div class="col-md-5 grid-item mx-auto" data-href="{{ route('teacher.news') }}">News</div>
         </div>
@@ -161,12 +161,12 @@
 </body>
 </html>
 
-    
+
 
 
 
 <script>
-    
+
 
     function closeSidebar() {
         const sidebar = document.querySelector('.section');

@@ -7,36 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    protected $fillable = [
-        'name',
-        'description',
-        'course_id',
-        'teacher_id',
-        'admin_id'
-    ];
+    use HasFactory;
+
+    protected $fillable = ['name', 'description', 'course_id', 'teacher_id', 'admin_id'];
 
     public function course()
     {
-        return $this->belongsTo(Course::class);  // Course relationship
+        return $this->belongsTo(Course::class);
     }
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);  // Teacher relationship
+        return $this->belongsTo(Teacher::class);
     }
 
     public function admin()
     {
-        return $this->belongsTo(Admin::class);  // Admin relationship
+        return $this->belongsTo(Admin::class);
     }
 
     public function notes()
     {
-        return $this->hasMany(Note::class);  // Notes relationship
+        return $this->hasMany(Note::class);
     }
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class);  // Assignments relationship
+        return $this->hasMany(Assignment::class);
     }
 }

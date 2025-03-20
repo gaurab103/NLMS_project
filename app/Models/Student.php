@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class Student extends Authenticatable
 {
@@ -12,7 +13,7 @@ class Student extends Authenticatable
     protected $table = 'students';
 
     protected $fillable = [
-        'name', 'dob', 'Address', 'Parent_Name', 'Contact_No', 'Email', 'Stats', 'Username', 'Password', 'photo'
+        'name', 'dob', 'Address', 'Parent_Name', 'Contact_No', 'Email', 'Stats', 'Username', 'Password', 'photo', 'C_ID'
     ];
 
     protected $hidden = ['Password'];
@@ -24,6 +25,15 @@ class Student extends Authenticatable
     public function getAuthPassword()
     {
         return $this->Password;
+    }
+
+    // Photo URL accessor
+    public function getPhotoUrlAttribute()
+    {
+        if ($this->photo) {
+            return asset('storage/' . $this->photo);
+        }
+        return asset('images/default-user.png');
     }
 
     // Relationship to Course

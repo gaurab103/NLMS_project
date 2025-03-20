@@ -16,18 +16,13 @@ class Course extends Model
         return $this->hasMany(Subject::class);
     }
 
-    public function assignments()
+    public function students()
     {
-        return $this->hasMany(Assignment::class);
-    }
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Student::class, 'C_ID');
     }
 
     public function admin()
     {
         return $this->belongsTo(Admin::class, 'A_ID');
     }
-
 }
