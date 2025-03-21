@@ -17,26 +17,23 @@ class SubjectController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        try {
-            Subject::create([
-                'name' => $request->name,
-                'description' => $request->description,
-                'course_id' => $request->class_id,
-                'teacher_id' => $request->teacher_id,
-                'admin_id' => auth('admin')->id()
-            ]);
+        Subject::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'course_id' => $request->class_id,
+            'teacher_id' => $request->teacher_id,
+            'admin_id' => auth('admin')->id()
+        ]);
 
-            return redirect()->back()->with('success', 'Subject created successfully');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error creating subject: ' . $e->getMessage());
-        }
+        return redirect()->back()->with('success', 'Subject created successfully');
     }
 
     public function update(Request $request, Subject $subject)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'teacher_id' => 'required|exists:teachers,id'
+            'teacher_id' => 'required|exists:teachers,id',
+            'description' => 'nullable|string'
         ]);
 
         $subject->update($request->only(['name', 'teacher_id', 'description']));

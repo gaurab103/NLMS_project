@@ -5,32 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Course;
 use App\Models\Subject;
+use App\Models\AssignmentSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
 
 class AssignmentController extends Controller
 {
     public function index()
     {
         $teacherId = Auth::guard('teacher')->id();
-
         $assignments = Assignment::with(['subject', 'course', 'submissions'])
-            ->where('teacher_id', $teacherId)
-            ->latest()
-            ->get();
-
-        $classes = Course::whereHas('subjects', function($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })->get();
-
-        $subjects = Subject::where('teacher_id', $teacherId)->get();
+                                 ->where('teacher_id', $teacherId)
+                                 ->latest()
+                                 ->get();
+        $classes = Course::whereHas('subjects', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })->get();
 
         return view('assignmentportalteacher', [
             'assignments' => $assignments,
             'classes' => $classes,
-            'subjects' => $subjects,
             'active' => 'assignments'
         ]);
     }
@@ -40,8 +35,9 @@ class AssignmentController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'nullable|file|max:2048',
-            'due_date' => 'required|date',
+            'file' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+            'due_date' => 'required|date|after:now',
+            'max_marks' => 'required|integer|min:1',
             'class_id' => 'required|exists:courses,id',
             'subject_id' => 'required|exists:subjects,id'
         ]);
@@ -55,26 +51,25 @@ class AssignmentController extends Controller
             'description' => $validated['description'],
             'file_path' => $filePath,
             'due_date' => $validated['due_date'],
+            'max_marks' => $validated['max_marks'],
             'course_id' => $validated['class_id'],
             'subject_id' => $validated['subject_id'],
             'teacher_id' => Auth::guard('teacher')->id()
         ]);
 
-        return redirect()->route('assignments.index')
-            ->with('success', 'Assignment created successfully');
+        return redirect()->route('assignments.index')->with('success', 'Assignment created successfully');
     }
 
     public function edit(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
-        $classes = Course::whereHas('subjects', function($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })->get();
-
+        $classes = Course::whereHas('subjects', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })->get();
         $subjects = Subject::where('teacher_id', $teacherId)->get();
 
         return view('assignmentportalteacher', [
@@ -89,14 +84,15 @@ class AssignmentController extends Controller
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'nullable|file|max:2048',
-            'due_date' => 'required|date',
+            'file' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+            'due_date' => 'required|date|after:now',
+            'max_marks' => 'required|integer|min:1',
             'class_id' => 'required|exists:courses,id',
             'subject_id' => 'required|exists:subjects,id'
         ]);
@@ -115,19 +111,19 @@ class AssignmentController extends Controller
             'description' => $validated['description'],
             'file_path' => $filePath,
             'due_date' => $validated['due_date'],
+            'max_marks' => $validated['max_marks'],
             'course_id' => $validated['class_id'],
             'subject_id' => $validated['subject_id']
         ]);
 
-        return redirect()->route('assignments.index')
-            ->with('success', 'Assignment updated successfully');
+        return redirect()->route('assignments.index')->with('success', 'Assignment updated successfully');
     }
 
     public function destroy(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         if ($assignment->file_path) {
@@ -135,30 +131,36 @@ class AssignmentController extends Controller
         }
 
         $assignment->delete();
-        return redirect()->route('assignments.index')
-            ->with('success', 'Assignment deleted successfully');
+        return redirect()->route('assignments.index')->with('success', 'Assignment deleted successfully');
     }
 
-    public function show(Assignment $assignment)
+    public function showSubmissions(Assignment $assignment)
     {
         $teacherId = Auth::guard('teacher')->id();
         if ($assignment->teacher_id !== $teacherId) {
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
-        $selectedAssignment = $assignment->load('submissions.student');
-        $assignments = Assignment::with(['subject', 'course', 'submissions'])
-            ->where('teacher_id', $teacherId)
-            ->latest()
-            ->get();
-        $classes = Course::all();
-        $subjects = Subject::where('teacher_id', $teacherId)->get();
-        return view('assignmentportalteacher', [
-            'selectedAssignment' => $selectedAssignment,
-            'assignments' => $assignments,
-            'classes' => $classes,
-            'subjects' => $subjects,
-            'active' => 'assignments' // Highlights "Assignments" in nav
+        $submissions = $assignment->submissions()->with('student')->get();
+        return view('assignment_submissions', [
+            'assignment' => $assignment,
+            'submissions' => $submissions,
+            'active' => 'assignments'
         ]);
+    }
+
+    public function evaluateSubmission(Request $request, AssignmentSubmission $submission)
+    {
+        $teacherId = Auth::guard('teacher')->id();
+        if ($submission->assignment->teacher_id !== $teacherId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'marks_obtained' => 'required|integer|min:0|max:' . $submission->assignment->max_marks
+        ]);
+
+        $submission->update(['marks_obtained' => $validated['marks_obtained']]);
+        return redirect()->back()->with('success', 'Marks updated successfully');
     }
 }

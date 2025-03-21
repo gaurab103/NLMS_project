@@ -6,21 +6,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Navbar Styling */
         .navbar {
-
             padding: 12px 20px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-/* Brand Logo */
         .navbar-brand {
-            margin-left:25px;
+            margin-left: 25px;
             font-size: 1.5rem;
             font-weight: bold;
             color: #333 !important;
         }
-
         .sidebar {
             height: 100%;
             width: 250px;
@@ -48,12 +43,13 @@
             background-color: #007bff;
             color: white;
         }
-
-        .logo{
-            margin-left:17%;
-
+        .logo {
+            margin-left: 17%;
         }
-
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 left: -250px;
@@ -62,21 +58,19 @@
                 left: 0;
             }
             .navbar {
-                margin:0;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                margin: 0;
             }
-            .logo{
-                margin:0;
-
+            .logo {
+                margin: 0;
             }
-
-            /* Brand Logo */
             .navbar-brand {
-               position: absolute;
-               font-size: 1rem;
-               top:20px;
-               right:20px;
-
+                position: absolute;
+                font-size: 1rem;
+                top: 20px;
+                right: 20px;
+            }
+            .content {
+                margin-left: 0;
             }
         }
     </style>
@@ -86,9 +80,8 @@
         <div class="logo">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" width="60">
         </div>
-            <div class="container d-flex align-items-center justify-content-between">
-                <a class="navbar-brand" href="#">Naragram Learning Management System</a>
-            </div>
+        <div class="container d-flex align-items-center justify-content-between">
+            <a class="navbar-brand" href="#">Naragram LMS</a>
             <button class="navbar-toggler mobile-menu-btn" type="button" onclick="toggleSidebar()">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -117,6 +110,10 @@
         <form id="logout-form" action="{{ route('teacher.logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
+    </div>
+
+    <div class="content">
+        <!-- Content will be injected here -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

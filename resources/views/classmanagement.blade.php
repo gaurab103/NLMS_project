@@ -33,35 +33,11 @@
             font-size: 0.9rem;
             padding: 0.5em 0.75em;
         }
-        .subject-card .d-flex {
-            flex-wrap: wrap;
-        }
         @media (max-width: 768px) {
             .content-wrapper {
                 margin-left: 0;
                 width: 100%;
                 padding: 10px;
-            }
-        }
-        @media (max-width: 576px) {
-            .class-card .d-flex {
-                flex-direction: column;
-            }
-            .class-card .btn {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-            .subject-card .d-flex {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .subject-card .btn-group {
-                margin-top: 10px;
-            }
-            .modal-dialog {
-                margin: 0;
-                width: 100%;
-                max-width: 100%;
             }
         }
     </style>
@@ -144,7 +120,7 @@
                                                             <div>
                                                                 <h6 class="mb-1">{{ $subject->name }}</h6>
                                                                 <small class="text-muted">
-                                                                    Teacher: {{ $subject->teacher->Teacher_Name }}
+                                                                    Teacher: {{ $subject->teacher->Teacher_Name ?? 'N/A' }}
                                                                 </small>
                                                             </div>
                                                             <div class="btn-group">

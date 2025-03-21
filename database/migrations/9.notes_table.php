@@ -15,10 +15,11 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('file_path')->nullable();
-            $table->string('title');       // Note title
-            $table->text('content');       // Note content
-            $table->unsignedBigInteger('subject_id'); // References subjects.id
-            $table->unsignedBigInteger('teacher_id')->nullable(); // References teachers.id
+            $table->string('title');
+            $table->string('chapter_name')->nullable();
+            $table->text('content');
+            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('teacher_id')->nullable();
             $table->timestamps();
 
             // Foreign key constraints

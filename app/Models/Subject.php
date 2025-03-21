@@ -21,11 +21,6 @@ class Subject extends Model
         return $this->belongsTo(Teacher::class);
     }
 
-    public function admin()
-    {
-        return $this->belongsTo(Admin::class);
-    }
-
     public function notes()
     {
         return $this->hasMany(Note::class);

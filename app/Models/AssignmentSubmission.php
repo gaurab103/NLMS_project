@@ -9,7 +9,9 @@ class AssignmentSubmission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['assignment_id', 'student_id', 'file_path', 'submitted_at'];
+    protected $fillable = [
+        'assignment_id', 'student_id', 'file_path', 'submitted_at', 'marks_obtained'
+    ];
 
     protected $casts = ['submitted_at' => 'datetime'];
 

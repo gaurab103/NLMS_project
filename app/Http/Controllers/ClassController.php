@@ -11,9 +11,9 @@ class ClassController extends Controller
     public function index()
     {
         $classes = Course::with(['subjects.teacher', 'students'])
-            ->withCount(['subjects', 'students'])
-            ->where('A_ID', auth('admin')->id())
-            ->get();
+                         ->withCount(['subjects', 'students'])
+                         ->where('A_ID', auth('admin')->id())
+                         ->get();
         $teachers = Teacher::all();
 
         return view('classmanagement', compact('classes', 'teachers'));

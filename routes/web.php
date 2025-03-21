@@ -74,26 +74,24 @@ Route::prefix('teacher')->group(function () {
             return view('teacherportal', ['active' => 'home']);
         })->name('teacher.dashboard');
 
-        Route::resource('assignments', AssignmentController::class)->except(['create']);
-
-        Route::get('/notesteacher', function () {
-            $teacher = auth()->guard('teacher')->user();
-            $classes = \App\Models\Course::whereHas('subjects', function ($query) use ($teacher) {
-                $query->where('teacher_id', $teacher->id);
-            })->get();
-            $subjects = \App\Models\Subject::where('teacher_id', $teacher->id)->get();
-            return view('notesteacher', compact('classes', 'subjects'));
-        })->name('teacher.notes');
+        Route::get('/notes', [NotesController::class, 'teacherNotes'])->name('teacher.notes');
         Route::post('/notes', [NotesController::class, 'store'])->name('teacher.notes.store');
-
+        Route::resource('assignments', AssignmentController::class)->except(['create']);
+        Route::get('/assignments/{assignment}/submissions', [AssignmentController::class, 'showSubmissions'])->name('assignments.submissions');
+        Route::post('/assignments/submissions/{submission}/evaluate', [AssignmentController::class, 'evaluateSubmission'])->name('assignments.submissions.evaluate');
+        Route::get('/subjects-by-class/{classId}', function ($classId) {
+            $subjects = \App\Models\Subject::where('course_id', $classId)
+                                           ->where('teacher_id', auth()->guard('teacher')->id())
+                                           ->get(['id', 'name']);
+            return response()->json($subjects);
+        })->name('subjects.by.class');
+    });
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance.create');
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
-        Route::get('/news', [NewsController::class, 'index'])->name('teacher.news');
+        Route::get('/news', [NewsController::class, 'TeacherIndex'])->name('teacher.news');
     });
-});
 
-// Student Routes (unchanged)
 Route::prefix('student')->group(function () {
     Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
     Route::post('/login', [StudentAuthController::class, 'login']);

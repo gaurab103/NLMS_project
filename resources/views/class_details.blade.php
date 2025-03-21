@@ -31,7 +31,7 @@
                                     <div class="card subject-card mb-3">
                                         <div class="card-body">
                                             <h5>{{ $subject->name }}</h5>
-                                            <p>Teacher: {{ $subject->teacher->Teacher_Name }}</p>
+                                            <p>Teacher: {{ $subject->teacher->Teacher_Name ?? 'N/A' }}</p>
                                             <a href="{{ route('classes.subjects.show', [$class->id, $subject->id]) }}"
                                                class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye me-2"></i>View Details

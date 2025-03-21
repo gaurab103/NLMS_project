@@ -21,7 +21,7 @@
                     <h3 class="mb-0"><i class="fas fa-book-open me-2"></i>{{ $subject->name }} - Subject Details</h3>
                 </div>
                 <div class="card-body">
-                    <p><strong>Teacher:</strong> {{ $subject->teacher->Teacher_Name }}</p>
+                    <p><strong>Teacher:</strong> {{ $subject->teacher->Teacher_Name ?? 'N/A' }}</p>
                     <p><strong>Description:</strong> {{ $subject->description ?? 'No description provided.' }}</p>
 
                     <h4><i class="fas fa-sticky-note me-2"></i>Notes</h4>
@@ -30,8 +30,11 @@
                             @foreach($subject->notes as $note)
                                 <li class="list-group-item note-item mb-2">
                                     <strong>{{ $note->title }}</strong> - {{ $note->content }}
+                                    @if($note->file_path)
+                                        <br><a href="{{ Storage::url($note->file_path) }}" target="_blank">Download File</a>
+                                    @endif
                                     <br>
-                                    <small>Posted by: {{ $note->teacher->Teacher_Name }} on {{ $note->created_at->format('M d, Y') }}</small>
+                                    <small>Posted by: {{ $note->teacher->Teacher_Name ?? 'N/A' }} on {{ $note->created_at->format('M d, Y') }}</small>
                                 </li>
                             @endforeach
                         </ul>
@@ -47,8 +50,11 @@
                                     {{ $assignment->title }} - Due: {{ $assignment->due_date->format('M d, Y') }}
                                 </div>
                                 <div class="card-body">
-                                    <p>{{ $assignment->description }}</p>
-                                    <h5>Submissions</h5>
+                                    <p>{{ $assignment->description ?? 'No description.' }}</p>
+                                    @if($assignment->file_path)
+                                        <a href="{{ Storage::url($assignment->file_path) }}" target="_blank">Download File</a>
+                                    @endif
+                                    <h5 class="mt-3">Submissions</h5>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>

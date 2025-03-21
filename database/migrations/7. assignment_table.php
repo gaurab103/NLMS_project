@@ -13,6 +13,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('file_path')->nullable();
             $table->dateTime('due_date');
+            $table->integer('max_marks')->nullable();
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->foreignId('teacher_id')->nullable()->constrained('teachers')->onDelete('set null');

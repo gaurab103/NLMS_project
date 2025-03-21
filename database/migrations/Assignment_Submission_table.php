@@ -21,6 +21,7 @@ return new class extends Migration
                   ->onDelete('cascade');
 
             $table->string('file_path')->nullable();
+            $table->integer('marks_obtained')->nullable();
             $table->timestamp('submitted_at');
             $table->timestamps();
         });

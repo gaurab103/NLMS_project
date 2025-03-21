@@ -13,7 +13,7 @@ class Course extends Model
 
     public function subjects()
     {
-        return $this->hasMany(Subject::class);
+        return $this->hasMany(Subject::class, 'course_id');
     }
 
     public function students()
@@ -21,8 +21,8 @@ class Course extends Model
         return $this->hasMany(Student::class, 'C_ID');
     }
 
-    public function admin()
+    public function assignments()
     {
-        return $this->belongsTo(Admin::class, 'A_ID');
+        return $this->hasMany(Assignment::class);
     }
 }

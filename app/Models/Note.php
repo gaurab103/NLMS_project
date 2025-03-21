@@ -10,18 +10,8 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'content',
-        'file_path',
-        'course_id',
-        'subject_id',
-        'teacher_id'
+        'title', 'chapter_name', 'content', 'file_path', 'subject_id', 'teacher_id'
     ];
-
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
 
     public function subject()
     {

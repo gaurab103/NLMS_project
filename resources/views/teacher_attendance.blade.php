@@ -49,106 +49,117 @@
     </style>
 </head>
 <body>
-    <div class="container py-4">
-        <div class="attendance-card card">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0 text-center"><i class="fas fa-clipboard-list me-2"></i>Mark Attendance</h3>
-            </div>
+    <!-- Include the navigation sidebar, setting 'attendance' as the active item -->
+    @include('navteacher', ['active' => 'attendance'])
 
-            <div class="card-body">
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <strong>Validation Errors:</strong>
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <form id="attendanceForm" method="POST" action="{{ route('teacher.attendance.store') }}">
-                    @csrf
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-5">
-                            <label class="form-label fw-bold"><i class="fas fa-calendar-day me-2"></i>Date</label>
-                            <input type="date" name="date" class="form-control"
-                                   value="{{ old('date', now()->format('Y-m-d')) }}"
-                                   max="{{ now()->format('Y-m-d') }}" required>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="form-label fw-bold"><i class="fas fa-users me-2"></i>Class</label>
-                            <select name="course_id" class="form-select" required>
-                                <option value="">Select Class</option>
-                                @foreach ($courses as $course)
-                                    <option value="{{ $course->id }}"
-                                        {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                        {{ $course->course_name }}
-                                    </option>
+    <!-- Main content area -->
+    <div class="content">
+        <div class="container py-4">
+            <div class="attendance-card card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-center"><i class="fas fa-clipboard-list me-2"></i>Mark Attendance</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Display validation errors if any -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <strong>Validation Errors:</strong>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
                                 @endforeach
-                            </select>
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="button" class="btn btn-primary w-100" onclick="loadStudents()">
-                                <i class="fas fa-sync me-2"></i>Load
-                            </button>
-                        </div>
-                    </div>
+                    @endif
 
-                    <div id="studentsSection" class="d-none">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            Showing attendance for:
-                            <strong><span id="selectedCourse"></span></strong> on
-                            <strong><span id="selectedDate"></span></strong>
+                    <!-- Display success message if present -->
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    <!-- Attendance form -->
+                    <form id="attendanceForm" method="POST" action="{{ route('teacher.attendance.store') }}">
+                        @csrf
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-5">
+                                <label class="form-label fw-bold"><i class="fas fa-calendar-day me-2"></i>Date</label>
+                                <input type="date" name="date" class="form-control"
+                                       value="{{ old('date', now()->format('Y-m-d')) }}"
+                                       max="{{ now()->format('Y-m-d') }}" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-bold"><i class="fas fa-users me-2"></i>Class</label>
+                                <select name="course_id" class="form-select" required>
+                                    <option value="">Select Class</option>
+                                    @foreach ($courses as $course)
+                                        <option value="{{ $course->id }}"
+                                            {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                            {{ $course->course_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary w-100" onclick="loadStudents()">
+                                    <i class="fas fa-sync me-2"></i>Load
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-success me-2" onclick="markAll('present')">
-                                <i class="fas fa-check me-2"></i>Mark All Present
-                            </button>
-                            <button type="button" class="btn btn-danger me-2" onclick="markAll('absent')">
-                                <i class="fas fa-times me-2"></i>Mark All Absent
-                            </button>
-                        </div>
+                        <!-- Students section, hidden until loaded -->
+                        <div id="studentsSection" class="d-none">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Showing attendance for:
+                                <strong><span id="selectedCourse"></span></strong> on
+                                <strong><span id="selectedDate"></span></strong>
+                            </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-borderless">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="w-50">Student Name</th>
-                                        <th>Attendance Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="attendanceRows" class="bg-white"></tbody>
-                            </table>
-                        </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success me-2" onclick="markAll('present')">
+                                    <i class="fas fa-check me-2"></i>Mark All Present
+                                </button>
+                                <button type="button" class="btn btn-danger me-2" onclick="markAll('absent')">
+                                    <i class="fas fa-times me-2"></i>Mark All Absent
+                                </button>
+                            </div>
 
-                        <div class="mt-4 text-center">
-                            <button type="submit" class="btn btn-success btn-lg px-5">
-                                <i class="fas fa-save me-2"></i>Save Attendance
-                            </button>
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="w-50">Student Name</th>
+                                            <th>Attendance Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceRows" class="bg-white"></tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-4 text-center">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-save me-2"></i>Save Attendance
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Loading overlay -->
     <div class="loading-overlay">
         <div class="d-flex justify-content-center align-items-center h-100">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -216,11 +227,13 @@
                     $('#studentsSection').removeClass('d-none');
                     addStatusListeners();
                 },
-                error: (xhr) => {
+                error: function(xhr) {
                     console.error(xhr);
                     alert('Error loading students. Please try again.');
                 },
-                complete: () => $('.loading-overlay').hide()
+                complete: function() {
+                    $('.loading-overlay').hide();
+                }
             });
         }
 
