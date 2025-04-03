@@ -55,4 +55,17 @@ class NotesController extends Controller
 
         return redirect()->route('teacher.notes')->with('success', 'Note uploaded successfully');
     }
+    public function notes()
+    {
+        try {
+            $studentId = auth()->guard('student')->id();
+            $notes = Note::select(['id', 'content', 'subject_id', 'created_at'])
+                ->where('student_id', $studentId)
+                ->get();
+            return view('notes', compact('notes'));
+        } catch (\Exception $e) {
+            $notes = collect();
+            return view('notes', compact('notes'))->with('error', 'Error loading notes: ' . $e->getMessage());
+        }
+    }
 }

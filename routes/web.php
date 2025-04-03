@@ -116,7 +116,7 @@ Route::prefix('student')->group(function () {
 
         Route::get('/notes', [NotesController::class, 'notes'])->name('student.notes');
 
-        Route::get('/assignments', [AssignmentController::class, 'studentIndex'])->name('student.assignments');
+        Route::get('/assignments', [AssignmentController::class, 'showForStudent'])->name('student.assignments');
 
         Route::get('/messages', function () {
             return view('messages');
