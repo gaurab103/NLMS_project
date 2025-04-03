@@ -261,10 +261,6 @@ aside .box i {
                 <i class="fas fa-book"></i>
                 <h6>Assignments</h6>
             </div>
-            <div class="col-md-4 box" data-title="Messages">
-                <i class="fas fa-comments"></i>
-                <h6>Messages</h6>
-            </div>
             <div class="col-md-4 box" data-title="Subjects">
                 <i class="fas fa-chalkboard-teacher"></i>
                 <h6>Subjects</h6>
@@ -338,10 +334,6 @@ aside .box i {
                 <div class="col-md-4 box" data-title="Assignments">
                     <i class="fas fa-book"></i>
                     <h5>Assignments</h5>
-                </div>
-                <div class="col-md-4 box" data-title="Messages">
-                    <i class="fas fa-comments"></i>
-                    <h5>Messages</h5>
                 </div>
                 <div class="col-md-4 box" data-title="Subjects">
                     <i class="fas fa-chalkboard-teacher"></i>

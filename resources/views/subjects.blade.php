@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Your Subjects in {{ $course->course_name }}</h1>
+        <h1>Your Subjects in {{ $courses->implode('course_name', ', ') }}</h1>
 
         <!-- Display error message if any -->
         @if(session('error'))
@@ -49,7 +49,7 @@
             @endforeach
         @else
             <div class="alert alert-info">
-                You have no subjects in this course.
+                You have no subjects in your courses.
             </div>
         @endif
     </div>

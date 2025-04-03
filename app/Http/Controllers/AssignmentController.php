@@ -163,30 +163,33 @@ class AssignmentController extends Controller
         $submission->update(['marks_obtained' => $validated['marks_obtained']]);
         return redirect()->back()->with('success', 'Marks updated successfully');
     }
-public function showForStudent(Assignment $assignment)
+    public function showForStudent(Request $request, Assignment $assignment)
 {
     $studentId = Auth::guard('student')->id();
 
-    // Check if the assignment is submitted by the student
-    $submission = $assignment->submissions()->where('student_id', $studentId)->first();
+    if (!$studentId) {
+        return redirect()->route('login')->with('error', 'Please log in to view assignments.');
+    }
 
-    $assignments = Assignment::with(['subject', 'course', 'submissions'])
-        ->whereHas('submissions', function ($query) use ($studentId) {
+    $submission = $assignment->submissions()
+        ->where('student_id', $studentId)
+        ->first();
+
+    $assignments = Assignment::with(['subject', 'course', 'submissions' => function ($query) use ($studentId) {
             $query->where('student_id', $studentId);
-        })
+        }])
         ->latest()
         ->get();
-    
-    $classes = Course::all();
-    $subjects = Subject::all(); // You can limit this if necessary
 
-    return view('assignments', [
-        'selectedAssignment' => $assignment,
-        'submission' => $submission,
-        'assignments' => $assignments,
-        'classes' => $classes,
-        'subjects' => $subjects,
-        'active' => 'assignments' // Highlights "Assignments" in nav
-    ]);
+    $classes = Course::all();
+    $subjects = Subject::all();
+
+    return view('assignments', compact(
+        'assignment', 
+        'submission', 
+        'assignments', 
+        'classes', 
+        'subjects'
+    ))->with('active', 'assignments');
 }
 }

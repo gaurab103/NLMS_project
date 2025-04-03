@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Subject;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class NotesController extends Controller
 {
@@ -55,17 +56,26 @@ class NotesController extends Controller
 
         return redirect()->route('teacher.notes')->with('success', 'Note uploaded successfully');
     }
-    public function notes()
-    {
-        try {
-            $studentId = auth()->guard('student')->id();
-            $notes = Note::select(['id', 'content', 'subject_id', 'created_at'])
-                ->where('student_id', $studentId)
-                ->get();
-            return view('notes', compact('notes'));
-        } catch (\Exception $e) {
-            $notes = collect();
-            return view('notes', compact('notes'))->with('error', 'Error loading notes: ' . $e->getMessage());
-        }
+    public function notes(Request $request, Note $notes)
+{
+    $studentId = Auth::guard('student')->id();
+
+    if (!$studentId) {
+        return redirect()->route('login')->with('error', 'Please log in to view notes.');
     }
+
+    $notes = Note::with(['subject' => function ($query){
+        }])
+        ->latest()
+        ->get();
+
+    // $classes = Course::all();
+    $subjects = Subject::all();
+
+    return view('notes', compact(
+        'notes', 
+        'notes', 
+        'subjects'
+    ))->with('active', 'notes');
+}
 }
