@@ -15,13 +15,13 @@ class StudentController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%')
-                  ->orWhere('Email', 'like', '%'.$search.'%')
-                  ->orWhere('Parent_Name', 'like', '%'.$search.'%')
-                  ->orWhere('Contact_No', 'like', '%'.$search.'%')
-                  ->orWhere('Username', 'like', '%'.$search.'%')
-                  ->orWhere('Address', 'like', '%'.$search.'%');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('Email', 'like', '%' . $search . '%')
+                    ->orWhere('Parent_Name', 'like', '%' . $search . '%')
+                    ->orWhere('Contact_No', 'like', '%' . $search . '%')
+                    ->orWhere('Username', 'like', '%' . $search . '%')
+                    ->orWhere('Address', 'like', '%' . $search . '%');
             });
         }
 
@@ -52,7 +52,7 @@ class StudentController extends Controller
             'stats' => 'required|in:Active,Inactive',
             'username' => 'required|unique:students,Username',
             'password' => 'required|min:8',
-            'photo' => 'required|image|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $photoPath = $request->file('photo')->store('students', 'public');
@@ -82,10 +82,10 @@ class StudentController extends Controller
             'parent_name' => 'required|string|max:255',
             'address' => 'required|string|max:500',
             'contact_no' => 'required|string|max:15',
-            'email' => 'required|email|unique:students,Email,'.$student->id,
+            'email' => 'required|email|unique:students,Email,' . $student->id,
             'course_id' => 'required|exists:courses,id',
             'stats' => 'required|in:Active,Inactive',
-            'username' => 'required|unique:students,Username,'.$student->id,
+            'username' => 'required|unique:students,Username,' . $student->id,
             'password' => 'nullable|min:8',
             'photo' => 'nullable|image|max:2048',
         ]);
@@ -107,7 +107,7 @@ class StudentController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            Storage::delete('public/'.$student->photo);
+            Storage::delete('public/' . $student->photo);
             $updateData['photo'] = $request->file('photo')->store('students', 'public');
         }
 
@@ -118,7 +118,7 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
-        Storage::delete('public/'.$student->photo);
+        Storage::delete('public/' . $student->photo);
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Student deleted successfully');
     }

@@ -8,48 +8,26 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Your Subjects in {{ $courses->implode('course_name', ', ') }}</h1>
+        <h1>Your Subjects in {{ $course->course_name ?? 'No Course' }}</h1>
 
-        <!-- Display error message if any -->
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
 
-        <!-- Check if there are subjects to display -->
         @if($subjects->isNotEmpty())
-            @foreach($subjects as $subject)
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h3>{{ $subject->name }}</h3>
+            <div class="list-group">
+                @foreach($subjects as $subject)
+                    <div class="list-group-item">
+                        <h4>{{ $subject->name }}</h4>
+                        <p>{{ $subject->description }}</p>
                     </div>
-                    <div class="card-body">
-                        <!-- Displaying all subject data -->
-                        <ul class="list-group">
-                            @foreach($subject->getAttributes() as $key => $value)
-                                @if($key != 'file_path') <!-- Skip file_path to display later if necessary -->
-                                    <li class="list-group-item">
-                                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong> 
-                                        {{ $value }}
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-
-                        <!-- If there's an attached file, provide a link to download -->
-                        @if($subject->file_path)
-                            <p>
-                                <strong>Attachment:</strong>
-                                <a href="{{ Storage::url($subject->file_path) }}" class="btn btn-primary btn-sm" target="_blank">Download Attachment</a>
-                            </p>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         @else
             <div class="alert alert-info">
-                You have no subjects in your courses.
+                You have no subjects in your course.
             </div>
         @endif
     </div>

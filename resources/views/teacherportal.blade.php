@@ -121,7 +121,7 @@
     </div>
 
     <div class="box">
-        <h1>Welcome Teacher</h1>
+        <h1>Welcome, {{ Auth::guard('teacher')->user()->Teacher_Name }} Sir</h1>
         <img src="{{ asset('images/teacherportal.png') }}" alt="Teacher">
     </div>
     <div class="grid-container">

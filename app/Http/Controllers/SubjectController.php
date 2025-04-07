@@ -63,24 +63,23 @@ class SubjectController extends Controller
         return view('subject_details', compact('subject', 'class'));
     }
     public function studentshow()
-    {
-        // Fetch the logged-in student
-        $studentId = Auth::guard('student')->id();
+{
+    $student = Auth::guard('student')->user();
 
-        if (!$studentId) {
-            return redirect()->route('login')->with('error', 'Please log in to view your subjects.');
-        }
-
-        // Fetch the course(s) the student is enrolled in from the students table
-        $student = Student::find($studentId);
-
-        // Fetch the courses the student is enrolled in
-        $courses = Course::where('id', $student->course_id)->get();
-
-        // Fetch the subjects for those courses
-        $subjects = Subject::whereIn('course_id', $courses->pluck('id'))->get();
-
-        // Return the view with the subjects and courses
-        return view('subjects', compact('subjects', 'courses'));
+    if (!$student) {
+        return redirect()->route('login')->with('error', 'Please log in to view your subjects.');
     }
+    $subjects = Subject::where('course_id', $student->course_id)
+                ->select('name', 'description')
+                ->get();
+
+    if (!$student->course) {
+        return back()->with('error', 'You are not enrolled in any course.');
+    }
+
+    return view('subjects', [
+        'subjects' => $student->course->subjects,
+        'course' => $student->course
+    ]);
+}
 }
