@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Your Assignments</h1>
-        
+
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -34,12 +36,24 @@
                         <td>{{ $assignment->due_date }}</td>
                         <td>
                             @if ($assignment->file_path)
-                                <a href="{{ Storage::url($assignment->file_path) }}" target="_blank" class="btn btn-primary">Download</a>
+                                <a href="{{ Storage::url($assignment->file_path) }}" target="_blank"
+                                    class="btn btn-primary">Download</a>
                             @else
                                 No file
                             @endif
                         </td>
                         <td>{{ $assignment->created_at }}</td>
+                        <td>{{ $assignment->created_at }}</td>
+                        <td>
+                            <form action="{{ route('submit.assignment') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+                                <div class="form-group">
+                                    <input type="file" name="file" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-success mt-2">Submit Assignment</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -52,4 +66,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

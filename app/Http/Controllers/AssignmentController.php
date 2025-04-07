@@ -16,9 +16,9 @@ class AssignmentController extends Controller
     {
         $teacherId = Auth::guard('teacher')->id();
         $assignments = Assignment::with(['subject', 'course', 'submissions'])
-                                 ->where('teacher_id', $teacherId)
-                                 ->latest()
-                                 ->get();
+            ->where('teacher_id', $teacherId)
+            ->latest()
+            ->get();
         $classes = Course::whereHas('subjects', function ($query) use ($teacherId) {
             $query->where('teacher_id', $teacherId);
         })->get();
@@ -46,9 +46,9 @@ class AssignmentController extends Controller
 
         // Check if the subject belongs to the teacher and matches the class
         $subject = Subject::where('id', $validated['subject_id'])
-                          ->where('teacher_id', $teacherId)
-                          ->where('course_id', $validated['class_id'])
-                          ->first();
+            ->where('teacher_id', $teacherId)
+            ->where('course_id', $validated['class_id'])
+            ->first();
 
         if (!$subject) {
             return back()->withErrors(['subject_id' => 'You are not authorized to add assignments for this subject or class.'])->withInput();
@@ -111,9 +111,9 @@ class AssignmentController extends Controller
 
         // Check if the subject belongs to the teacher and matches the class
         $subject = Subject::where('id', $validated['subject_id'])
-                          ->where('teacher_id', $teacherId)
-                          ->where('course_id', $validated['class_id'])
-                          ->first();
+            ->where('teacher_id', $teacherId)
+            ->where('course_id', $validated['class_id'])
+            ->first();
 
         if (!$subject) {
             return back()->withErrors(['subject_id' => 'You are not authorized to update assignments for this subject or class.'])->withInput();
@@ -186,32 +186,58 @@ class AssignmentController extends Controller
         return redirect()->back()->with('success', 'Marks updated successfully');
     }
     public function showForStudent(Request $request, Assignment $assignment)
-{
-    $studentId = Auth::guard('student')->id();
+    {
+        $studentId = Auth::guard(name: 'student')->id();
 
-    if (!$studentId) {
-        return redirect()->route('login')->with('error', 'Please log in to view assignments.');
+        if (!$studentId) {
+            return redirect()->route('login')->with('error', 'Please log in to view assignments.');
+        }
+
+        $submission = $assignment->submissions()
+            ->where('student_id', $studentId)
+            ->first();
+
+        $assignments = Assignment::with([
+            'subject',
+            'course',
+            'submissions' => function ($query) use ($studentId) {
+                $query->where('student_id', $studentId);
+            }
+        ])
+            ->latest()
+            ->get();
+
+        $classes = Course::all();
+        $subjects = Subject::all();
+
+        return view('assignments', compact(
+            'assignment',
+            'submission',
+            'assignments',
+            'classes',
+            'subjects'
+        ))->with('active', 'assignments');
     }
+    public function submitAssignment(Request $request)
+    {
+        // Validate the uploaded file
+        $validated = $request->validate([
+            'file' => 'required|file|mimes:pdf,docx,doc,jpg,png|max:2048', // Customize file validation as needed
+            'assignment_id' => 'required|exists:assignments,id',
+        ]);
 
-    $submission = $assignment->submissions()
-        ->where('student_id', $studentId)
-        ->first();
+        // Store the file in the 'assignments' directory
+        $filePath = $request->file('file')->store('assignments');
 
-    $assignments = Assignment::with(['subject', 'course', 'submissions' => function ($query) use ($studentId) {
-            $query->where('student_id', $studentId);
-        }])
-        ->latest()
-        ->get();
+        // Create the submission record in the database, attaching the logged-in student's ID
+        AssignmentSubmission::create([
+            'assignment_id' => $validated['assignment_id'],
+            'file_path' => $filePath,
+            'student_id' => Auth::guard(name: 'student')->id(),
+            'submitted_at' => now(),
+        ]);
 
-    $classes = Course::all();
-    $subjects = Subject::all();
-
-    return view('assignments', compact(
-        'assignment', 
-        'submission', 
-        'assignments', 
-        'classes', 
-        'subjects'
-    ))->with('active', 'assignments');
-}
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Assignment submitted successfully!');
+    }
 }

@@ -209,8 +209,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/home/sushant/Desktop/NLMS_project-1/storage/framework/cache/data',
-        'lock_path' => '/home/sushant/Desktop/NLMS_project-1/storage/framework/cache/data',
+        'path' => '/home/sushant/Desktop/NLMS_project/storage/framework/cache/data',
+        'lock_path' => '/home/sushant/Desktop/NLMS_project/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -382,14 +382,14 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/home/sushant/Desktop/NLMS_project-1/storage/app/private',
+        'root' => '/home/sushant/Desktop/NLMS_project/storage/app/private',
         'serve' => true,
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/home/sushant/Desktop/NLMS_project-1/storage/app/public',
+        'root' => '/home/sushant/Desktop/NLMS_project/storage/app/public',
         'url' => 'https://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -409,7 +409,7 @@
     ),
     'links' => 
     array (
-      '/home/sushant/Desktop/NLMS_project-1/public/storage' => '/home/sushant/Desktop/NLMS_project-1/storage/app/public',
+      '/home/sushant/Desktop/NLMS_project/public/storage' => '/home/sushant/Desktop/NLMS_project/storage/app/public',
     ),
   ),
   'logging' => 
@@ -434,14 +434,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/home/sushant/Desktop/NLMS_project-1/storage/logs/laravel.log',
+        'path' => '/home/sushant/Desktop/NLMS_project/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/home/sushant/Desktop/NLMS_project-1/storage/logs/laravel.log',
+        'path' => '/home/sushant/Desktop/NLMS_project/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -506,7 +506,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/home/sushant/Desktop/NLMS_project-1/storage/logs/laravel.log',
+        'path' => '/home/sushant/Desktop/NLMS_project/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -582,7 +582,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/home/sushant/Desktop/NLMS_project-1/resources/views/vendor/mail',
+        0 => '/home/sushant/Desktop/NLMS_project/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -677,7 +677,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/home/sushant/Desktop/NLMS_project-1/storage/framework/sessions',
+    'files' => '/home/sushant/Desktop/NLMS_project/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -698,9 +698,9 @@
   array (
     'paths' => 
     array (
-      0 => '/home/sushant/Desktop/NLMS_project-1/resources/views',
+      0 => '/home/sushant/Desktop/NLMS_project/resources/views',
     ),
-    'compiled' => '/home/sushant/Desktop/NLMS_project-1/storage/framework/views',
+    'compiled' => '/home/sushant/Desktop/NLMS_project/storage/framework/views',
   ),
   'broadcasting' => 
   array (

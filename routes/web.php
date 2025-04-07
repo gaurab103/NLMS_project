@@ -126,6 +126,8 @@ Route::prefix('student')->group(function () {
         Route::get('/subjects', [SubjectController::class, 'studentshow'])->name('student.subject');
 
         Route::get('news', [NewsController::class, 'studentIndex'])->name('student.news');
+        
+        Route::post('/submit-assignment', [AssignmentController::class, 'submitAssignment'])->name('submit.assignment');
     });
 });
 
