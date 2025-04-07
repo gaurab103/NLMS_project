@@ -63,7 +63,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// Teacher Routes (unchanged)
+// Teacher Routes
 Route::prefix('teacher')->group(function () {
     Route::get('/login', [TeacherAuthController::class, 'showLoginForm'])->name('teacher.login');
     Route::post('/login', [TeacherAuthController::class, 'login']);
@@ -85,13 +85,14 @@ Route::prefix('teacher')->group(function () {
                                            ->get(['id', 'name']);
             return response()->json($subjects);
         })->name('subjects.by.class');
-    });
         Route::get('/attendance', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance.create');
         Route::get('/attendance/students/{course}', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendance.students');
         Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
         Route::get('/news', [NewsController::class, 'TeacherIndex'])->name('teacher.news');
     });
+});
 
+// Student Routes
 Route::prefix('student')->group(function () {
     Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
     Route::post('/login', [StudentAuthController::class, 'login']);

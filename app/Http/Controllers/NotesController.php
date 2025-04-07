@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Subject;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class NotesController extends Controller
 {
     public function teacherNotes()
     {
-        $teacherId = auth()->guard('teacher')->id();
+        $teacherId = Auth::guard('teacher')->id();
         $notes = Note::with(['subject'])
                      ->where('teacher_id', $teacherId)
                      ->latest()
@@ -38,12 +39,28 @@ class NotesController extends Controller
             'file' => 'nullable|file|max:2048|mimes:pdf,doc,docx'
         ]);
 
+        $teacherId = Auth::guard('teacher')->id();
+
+        // Check if the subject belongs to the teacher
+        $subject = Subject::where('id', $request->subject_id)
+                          ->where('teacher_id', $teacherId)
+                          ->first();
+
+        if (!$subject) {
+            return back()->withErrors(['subject_id' => 'You are not authorized to add notes for this subject.'])->withInput();
+        }
+
+        // Ensure the subject's course matches the selected class
+        if ($subject->course_id != $request->class_id) {
+            return back()->withErrors(['class_id' => 'The selected class does not match the subject\'s class.'])->withInput();
+        }
+
         $note = new Note([
             'title' => $request->title,
             'chapter_name' => $request->chapter_name,
             'content' => $request->content,
             'subject_id' => $request->subject_id,
-            'teacher_id' => auth()->guard('teacher')->id(),
+            'teacher_id' => $teacherId,
         ]);
 
         if ($request->hasFile('file')) {

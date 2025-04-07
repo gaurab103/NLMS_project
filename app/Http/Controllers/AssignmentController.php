@@ -42,6 +42,18 @@ class AssignmentController extends Controller
             'subject_id' => 'required|exists:subjects,id'
         ]);
 
+        $teacherId = Auth::guard('teacher')->id();
+
+        // Check if the subject belongs to the teacher and matches the class
+        $subject = Subject::where('id', $validated['subject_id'])
+                          ->where('teacher_id', $teacherId)
+                          ->where('course_id', $validated['class_id'])
+                          ->first();
+
+        if (!$subject) {
+            return back()->withErrors(['subject_id' => 'You are not authorized to add assignments for this subject or class.'])->withInput();
+        }
+
         $filePath = $request->hasFile('file')
             ? $request->file('file')->store('assignments', 'public')
             : null;
@@ -54,7 +66,7 @@ class AssignmentController extends Controller
             'max_marks' => $validated['max_marks'],
             'course_id' => $validated['class_id'],
             'subject_id' => $validated['subject_id'],
-            'teacher_id' => Auth::guard('teacher')->id()
+            'teacher_id' => $teacherId
         ]);
 
         return redirect()->route('assignments.index')->with('success', 'Assignment created successfully');
@@ -96,6 +108,16 @@ class AssignmentController extends Controller
             'class_id' => 'required|exists:courses,id',
             'subject_id' => 'required|exists:subjects,id'
         ]);
+
+        // Check if the subject belongs to the teacher and matches the class
+        $subject = Subject::where('id', $validated['subject_id'])
+                          ->where('teacher_id', $teacherId)
+                          ->where('course_id', $validated['class_id'])
+                          ->first();
+
+        if (!$subject) {
+            return back()->withErrors(['subject_id' => 'You are not authorized to update assignments for this subject or class.'])->withInput();
+        }
 
         if ($request->hasFile('file')) {
             if ($assignment->file_path) {
