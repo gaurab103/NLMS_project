@@ -22,4 +22,8 @@ class Note extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+    public function student()
+{
+    return $this->belongsTo(Student::class);
+}
 }

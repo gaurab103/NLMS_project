@@ -185,4 +185,33 @@ class AssignmentController extends Controller
         $submission->update(['marks_obtained' => $validated['marks_obtained']]);
         return redirect()->back()->with('success', 'Marks updated successfully');
     }
+    public function showForStudent(Request $request, Assignment $assignment)
+{
+    $studentId = Auth::guard('student')->id();
+
+    if (!$studentId) {
+        return redirect()->route('login')->with('error', 'Please log in to view assignments.');
+    }
+
+    $submission = $assignment->submissions()
+        ->where('student_id', $studentId)
+        ->first();
+
+    $assignments = Assignment::with(['subject', 'course', 'submissions' => function ($query) use ($studentId) {
+            $query->where('student_id', $studentId);
+        }])
+        ->latest()
+        ->get();
+
+    $classes = Course::all();
+    $subjects = Subject::all();
+
+    return view('assignments', compact(
+        'assignment', 
+        'submission', 
+        'assignments', 
+        'classes', 
+        'subjects'
+    ))->with('active', 'assignments');
+}
 }

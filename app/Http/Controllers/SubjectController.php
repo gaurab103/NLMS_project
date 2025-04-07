@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
+
 
 class SubjectController extends Controller
 {
@@ -59,4 +62,24 @@ class SubjectController extends Controller
         ]);
         return view('subject_details', compact('subject', 'class'));
     }
+    public function studentshow()
+{
+    $student = Auth::guard('student')->user();
+
+    if (!$student) {
+        return redirect()->route('login')->with('error', 'Please log in to view your subjects.');
+    }
+    $subjects = Subject::where('course_id', $student->course_id)
+                ->select('name', 'description')
+                ->get();
+
+    if (!$student->course) {
+        return back()->with('error', 'You are not enrolled in any course.');
+    }
+
+    return view('subjects', [
+        'subjects' => $student->course->subjects,
+        'course' => $student->course
+    ]);
+}
 }

@@ -72,4 +72,26 @@ class NotesController extends Controller
 
         return redirect()->route('teacher.notes')->with('success', 'Note uploaded successfully');
     }
+    public function notes(Request $request, Note $notes)
+{
+    $studentId = Auth::guard('student')->id();
+
+    if (!$studentId) {
+        return redirect()->route('login')->with('error', 'Please log in to view notes.');
+    }
+
+    $notes = Note::with(['subject' => function ($query){
+        }])
+        ->latest()
+        ->get();
+
+    // $classes = Course::all();
+    $subjects = Subject::all();
+
+    return view('notes', compact(
+        'notes', 
+        'notes', 
+        'subjects'
+    ))->with('active', 'notes');
+}
 }
